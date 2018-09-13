@@ -2,7 +2,8 @@ package random;
 
 import java.util.List;
 
-import random.sequenceur.LecteurDeNombreBER;
+import random.sequenceur.NombreBER;
+import random.sequenceur.TailleChaine;
 
 public class Main {
 	
@@ -19,13 +20,12 @@ public class Main {
 		
 		LecteurDeBytes lecteur = new LecteurDeBytes(map01);
 		
-		long nombreDeBytes = lecteur.sequencer(new LecteurDeNombreBER());
+		/*
+		String type = lecteur.sequencer(new TailleChaine());
 		
-		System.out.println(nombreDeBytes);
+		System.out.println(type);
+		*/
 		
-		
-		if (true)
-			return;
 		List<Byte> map02 = lecture.mapToBytes("A:\\Dev\\AA\\Map0002.lmu");
 		
 		Map map01J = construireMap(map01.toArray(new Byte[0]));

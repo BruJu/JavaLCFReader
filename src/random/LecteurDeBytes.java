@@ -14,7 +14,7 @@ public class LecteurDeBytes {
 	}
 	
 	public <T> T sequencer(LecteurDeSequence<T> lecteur) {
-		while (lecteur.lireByte(bytes.get(position))) {
+		while (lecteur.lireOctet(bytes.get(position))) {
 			position++;
 		}
 		
