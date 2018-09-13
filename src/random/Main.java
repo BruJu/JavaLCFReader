@@ -18,7 +18,16 @@ public class Main {
 		
 		List<Byte> map01 = lecture.mapToBytes("A:\\Dev\\AA\\Map0001.lmu");
 		
-		LecteurDeBytes lecteur = new LecteurDeBytes(map01);
+
+		afficherByte(map01.get(10));
+		afficherByte(map01.get(11));
+		afficherByte(map01.get(12));
+		afficherByte(map01.get(13));
+		System.out.println();
+		
+		afficherBitsDesMaps(11, new String[] {"Map0001.lmu", "Map0002.lmu", "Map0003.lmu", "Map0004.lmu", "Map0005.lmu", "Map0006.lmu"});
+		
+		//LecteurDeBytes lecteur = new LecteurDeBytes(map01);
 		
 		/*
 		String type = lecteur.sequencer(new TailleChaine());
@@ -41,6 +50,21 @@ public class Main {
 		
 		
 	}
+
+	private static void afficherBitsDesMaps(int i, String[] strings) {
+		Lecture lecture = new Lecture();
+		
+		for (String chemin : strings) {
+			List<Byte> map = lecture.mapToBytes("A:\\Dev\\AA\\" + chemin);
+			
+			System.out.print(chemin + " : ");
+			afficherByte(map.get(i));
+			System.out.println();
+		}
+
+		System.out.println();
+	}
+
 
 	private static Map construireMap(Byte[] bytes) {
 		// Header
