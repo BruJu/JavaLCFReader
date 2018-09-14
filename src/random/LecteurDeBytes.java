@@ -14,10 +14,13 @@ public class LecteurDeBytes {
 	}
 	
 	public <T> T sequencer(LecteurDeSequence<T> lecteur) {
-		while (lecteur.lireOctet(bytes.get(position))) {
-			position++;
+		while (lecteur.lireOctet(bytes.get(position++))) {
 		}
 		
 		return lecteur.getResultat();
+	}
+	
+	public int getPosition() {
+		return position;
 	}
 }

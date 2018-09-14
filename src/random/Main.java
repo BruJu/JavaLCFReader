@@ -2,6 +2,7 @@ package random;
 
 import java.util.List;
 
+import random.sequenceur.DecodageBER;
 import random.sequenceur.NombreBER;
 import random.sequenceur.TailleChaine;
 
@@ -16,8 +17,8 @@ public class Main {
 		
 		Lecture lecture = new Lecture();
 		
-		List<Byte> map01 = lecture.mapToBytes("A:\\Dev\\AA\\Map0001.lmu");
-		
+		List<Byte> map01 = lecture.mapToBytes("A:\\Users\\SquonK\\Downloads\\Aedemphia\\ressources\\Map0452.lmu");
+		afficherBytes(map01, 50);
 
 		afficherByte(map01.get(10));
 		afficherByte(map01.get(11));
@@ -27,6 +28,19 @@ public class Main {
 		
 		afficherBitsDesMaps(11, new String[] {"Map0001.lmu", "Map0002.lmu", "Map0003.lmu", "Map0004.lmu", "Map0005.lmu", "Map0006.lmu"});
 		
+		LecteurDeBytes lecteur = new LecteurDeBytes(map01);
+		String type = lecteur.sequencer(new TailleChaine());
+		
+		System.out.println(type);
+		System.out.println(lecteur.getPosition());
+		afficherByte(map01.get(lecteur.getPosition()));
+		System.out.println();
+		
+		for (int i = 0 ; i != 50 ; i++)
+			System.out.println(lecteur.sequencer(new DecodageBER()));
+		
+		
+		
 		//LecteurDeBytes lecteur = new LecteurDeBytes(map01);
 		
 		/*
@@ -35,6 +49,7 @@ public class Main {
 		System.out.println(type);
 		*/
 		
+		/*
 		List<Byte> map02 = lecture.mapToBytes("A:\\Dev\\AA\\Map0002.lmu");
 		
 		Map map01J = construireMap(map01.toArray(new Byte[0]));
@@ -47,7 +62,7 @@ public class Main {
 		afficherDifferences(map01, map02);
 		
 		afficherByte(map01.get(12));
-		
+		*/
 		
 	}
 
@@ -122,12 +137,27 @@ public class Main {
 		
 	}
 
-	private static void afficherBytes(List<Byte> bytes) {
+	private static void afficherBytes(List<Byte> bytes, int nbDeLignes) {
+		
+		for (int i = 0 ; i != 16; i++) {
+			System.out.print(String.format("%02X ", i));
+		}
+		System.out.println();
+		for (int i = 0 ; i != 16 ; i++) {
+			System.out.print("---");
+		}
+		System.out.println();
+		
 		for (int i = 0 ; i != bytes.size() ; i++) {
 			System.out.print(String.format("%02X", bytes.get(i))+ " ");
 			
 			if (i % 16 == 15) {
 				System.out.println();
+				
+				nbDeLignes --;
+				
+				if (nbDeLignes == 0)
+					return;
 			}
 			
 		}
