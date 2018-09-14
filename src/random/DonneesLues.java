@@ -45,4 +45,8 @@ public class DonneesLues {
 	public void afficher() {
 		donnees.forEach(data -> System.out.println(data.champ.getRepresentation() + " -> " + data.value.toString()));
 	}
+
+	public void push(Data<?> blocData) {
+		donnees.add(blocData);
+	}
 }

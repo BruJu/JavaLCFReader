@@ -16,7 +16,7 @@ public class Champ<T> {
 
 	
 	public String getRepresentation() {
-		return String.format("%02X", index) + " " + nom + " " + bloc.getRepresentation();
+		return String.format("%02X", index) + " " + nom + " " + bloc.getRepresentation() + " " + sized;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -37,5 +37,10 @@ public class Champ<T> {
 			return new Champ(index, nom, sized, bloc);
 		else
 			return null;
+	}
+
+
+	public Data<T> creerDonnees(byte[] bytes) {
+		return new Data<T>(this, bloc.convertir(bytes));
 	}
 }

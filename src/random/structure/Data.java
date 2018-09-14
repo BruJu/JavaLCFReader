@@ -9,4 +9,10 @@ public class Data<T> {
 		this.champ = champ;
 		value = null;
 	}
+	
+
+	public Data(Champ<T> champ, T value) {
+		this.champ = champ;
+		this.value = value;
+	}
 }

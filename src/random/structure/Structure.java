@@ -14,4 +14,14 @@ public class Structure {
 	public void ajouterChamp(String[] donnees) {
 		champs.add(Champ.instancier(donnees));
 	}
+
+	public Champ<?> trouverChampIndex(byte octet) {
+		for (Champ<?> champ : champs) {
+			if (champ.index == octet) {
+				return champ;
+			}
+		}
+		
+		return null;
+	}
 }
