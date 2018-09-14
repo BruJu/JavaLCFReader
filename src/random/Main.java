@@ -2,9 +2,6 @@ package random;
 
 import java.util.List;
 
-import random.sequenceur.DecodageBER;
-import random.sequenceur.NombreBER;
-import random.sequenceur.TailleChaine;
 
 public class Main {
 	
@@ -14,7 +11,23 @@ public class Main {
 
 	
 	public static void main(String[] args) {
+		Codes codesConnus = new Codes();
+		codesConnus.remplirStructures("ressources\\liblcf\\fields.csv");
 		
+		codesConnus.structures.get("Map").champs
+		.forEach(champ -> {
+		
+		if (champ == null)
+			System.out.println("null");
+		else
+			System.out.println(champ.index + " " + champ.nom);
+		
+				
+		});
+		
+		
+		
+		/*
 		Lecture lecture = new Lecture();
 		
 		List<Byte> map01 = lecture.mapToBytes("A:\\Users\\SquonK\\Downloads\\Aedemphia\\ressources\\Map0452.lmu");
