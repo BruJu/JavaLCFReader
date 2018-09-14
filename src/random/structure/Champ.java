@@ -1,5 +1,6 @@
 package random.structure;
 
+import random.structure.blocs.Bloc;
 
 public class Champ<T> {
 	public final int index;

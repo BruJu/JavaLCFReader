@@ -23,8 +23,6 @@ public class SequenceurViaLCF implements LecteurDeSequence<Void> {
 
 	@Override
 	public boolean lireOctet(byte octet) {
-		System.out.print("[" + etat + "] " + String.format("%02X", octet) + " - " + octet);
-		
 		if (etat == null) {
 			return false;
 		}
@@ -44,8 +42,6 @@ public class SequenceurViaLCF implements LecteurDeSequence<Void> {
 			break;
 		}
 		
-		System.out.println();
-		
 		return true;
 	}
 
@@ -63,8 +59,6 @@ public class SequenceurViaLCF implements LecteurDeSequence<Void> {
 		
 		this.champ = champ;
 		
-		System.out.print(" " + champ.getRepresentation());
-		
 		if (champ.sized) {
 			return Etat.LIRE_BYTES_A_TAILLE_INCONNUE;
 		} else {
@@ -74,7 +68,7 @@ public class SequenceurViaLCF implements LecteurDeSequence<Void> {
 	}
 	
 	private Etat lireNbOctets(byte octet) {
-		nbOctets = nbOctets * 0x80 + (octet & 0x79);
+		nbOctets = nbOctets * 0x80 + (octet & 0x7F);
 		
 		if ((octet & 0x80) != 0) {
 			return etat;

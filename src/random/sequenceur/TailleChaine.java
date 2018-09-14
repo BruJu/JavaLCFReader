@@ -22,6 +22,6 @@ public class TailleChaine implements LecteurDeSequence<String> {
 
 	@Override
 	public String getResultat() {
-		return (String) lecteurActuel.getResultat();
+		return lecteurActuel.getResultat().toString();
 	}
 }

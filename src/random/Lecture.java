@@ -31,6 +31,7 @@ public class Lecture {
 			
 			return bytes;
 		} catch (IOException e) {
+			e.printStackTrace();
 			return null;
 		}
 	}

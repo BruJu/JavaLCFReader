@@ -15,7 +15,9 @@ public class NombreBER implements LecteurDeSequence<Long> {
 	@Override
 	public boolean lireOctet(byte byteLu) {
 		nombre = nombre * 0x80 + (byteLu & 0x7F);
-		return (byteLu & 0x80) != 0;
+		boolean r = (byteLu & 0x80) != 0;
+		
+		return r;
 	}
 
 	@Override

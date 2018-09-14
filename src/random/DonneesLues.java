@@ -30,7 +30,7 @@ public class DonneesLues {
 			nomStruct = "Map";
 			break;
 		default: // Type Inconnu
-			System.out.println(type);
+			System.out.println("Inconnu " + type);
 			return null;
 		
 		}
@@ -43,7 +43,7 @@ public class DonneesLues {
 	}
 
 	public void afficher() {
-		donnees.forEach(data -> System.out.println(data.champ.getRepresentation() + " -> " + data.value.toString()));
+		donnees.forEach(data -> System.out.println(data.champ.getRepresentation() + " -> " + data.valueToString()));
 	}
 
 	public void push(Data<?> blocData) {

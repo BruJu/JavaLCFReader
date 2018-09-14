@@ -16,6 +16,8 @@ public class Main {
 		BaseDeDonneesDesStructures codesConnus = new BaseDeDonneesDesStructures();
 		codesConnus.remplirStructures("ressources\\liblcf\\fields.csv");
 		
+		
+		System.out.println("}}-- Codes connus pour Map --{{");
 		codesConnus.structures.get("Map").champs
 		.forEach(champ -> {
 		
@@ -23,10 +25,11 @@ public class Main {
 			System.out.println("null");
 		else
 			System.out.println(champ.getRepresentation());
-		
-				
 		});
+
 		
+		System.out.println();
+		System.out.println("}}-- Map0452.lmu --{{");
 		
 		DonneesLues map = DonneesLues.lireFichier("A:\\Dev\\Map0452.lmu", codesConnus);
 		

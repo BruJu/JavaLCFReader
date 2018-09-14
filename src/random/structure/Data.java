@@ -15,4 +15,9 @@ public class Data<T> {
 		this.champ = champ;
 		this.value = value;
 	}
+
+
+	public String valueToString() {
+		return champ.bloc.valueToString(value);
+	}
 }
