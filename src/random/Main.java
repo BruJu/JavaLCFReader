@@ -20,7 +20,7 @@ public class Main {
 		if (champ == null)
 			System.out.println("null");
 		else
-			System.out.println(champ.index + " " + champ.nom);
+			System.out.println(champ.getRepresentation());
 		
 				
 		});

@@ -69,15 +69,18 @@ public class Codes {
 		public final int index;
 		public final String nom;
 		public final boolean sized;
-		public final T valeurParDefaut;
-		public final Function<byte[], T> methodeDeLecture;
+		public final Bloc<T> bloc;
 		
-		public Champ(int index, String nom, boolean sized, T valeurParDefaut, Function<byte[], T> methodeDeLecture) {
+		public Champ(int index, String nom, boolean sized, Bloc<T> bloc) {
 			this.index = index;
 			this.nom = nom;
 			this.sized = sized;
-			this.valeurParDefaut = valeurParDefaut;
-			this.methodeDeLecture = methodeDeLecture;
+			this.bloc = bloc;
+		}
+
+		
+		public String getRepresentation() {
+			return String.format("%02X", index) + " " + nom + " " + bloc.getRepresentation();
 		}
 
 		@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -95,7 +98,7 @@ public class Codes {
 			Bloc<?> bloc = Bloc.genererBloc(type, donnees[5]);
 			
 			if (bloc != null)
-				return new Champ(index, nom, sized, bloc.defaut(), bloc.fonction());
+				return new Champ(index, nom, sized, bloc);
 			else
 				return null;
 		}
@@ -121,13 +124,29 @@ public class Codes {
 			
 			
 			default:
-				return null;
+				return new BlocInconnu();
 			}
 		}
 
-		public Function<byte[], T> fonction();
+		public String getRepresentation();
 
-		public T defaut();
+		public T convertir(byte[] bytes);
+
+		public default T defaut() {
+			return null;
+		}
+		
+		public static class BlocInconnu implements Bloc<byte[]> {
+			@Override
+			public String getRepresentation() {
+				return "Inconnu";
+			}
+
+			@Override
+			public byte[] convertir(byte[] bytes) {
+				return bytes;
+			}
+		}
 		
 		
 		public static class BlocInt32 implements Bloc<Integer> {
@@ -145,13 +164,8 @@ public class Codes {
 					this.defaut = Integer.parseInt(defaut);
 				}
 			}
-
+			
 			@Override
-			public Function<byte[], Integer> fonction() {
-				return this::convertir;
-			}
-			
-			
 			public Integer convertir(byte[] bytes) {
 				int valeur = 0;
 				
@@ -165,6 +179,11 @@ public class Codes {
 			@Override
 			public Integer defaut() {
 				return defaut;
+			}
+
+			@Override
+			public String getRepresentation() {
+				return "Integer(" + defaut + ")";
 			}
 		}
 		
