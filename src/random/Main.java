@@ -2,6 +2,8 @@ package random;
 
 import java.util.List;
 
+import random.structure.BaseDeDonneesDesStructures;
+
 
 public class Main {
 	
@@ -11,7 +13,7 @@ public class Main {
 
 	
 	public static void main(String[] args) {
-		Codes codesConnus = new Codes();
+		BaseDeDonneesDesStructures codesConnus = new BaseDeDonneesDesStructures();
 		codesConnus.remplirStructures("ressources\\liblcf\\fields.csv");
 		
 		codesConnus.structures.get("Map").champs
@@ -25,12 +27,16 @@ public class Main {
 				
 		});
 		
+		DonneesLues map = DonneesLues.lireFichier("A:\\Dev\\Map0452.lmu", codesConnus);
 		
+		map.afficher();
+		
+		 
 		
 		/*
 		Lecture lecture = new Lecture();
 		
-		List<Byte> map01 = lecture.mapToBytes("A:\\Users\\SquonK\\Downloads\\Aedemphia\\ressources\\Map0452.lmu");
+		List<Byte> map01 = lecture.mapToBytes("A:\\Dev\\Map0452.lmu");
 		afficherBytes(map01, 50);
 
 		afficherByte(map01.get(10));
