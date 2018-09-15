@@ -23,6 +23,12 @@ public class BlocInconnu implements Bloc<byte[]> {
 	public String valueToString(byte[] value) {
 		return value.length + ">" + Arrays.toString(value);
 	}
+	
+
+	@Override
+	public Handler<byte[]> getHandler(Champ<byte[]> champ, int tailleLue, BaseDeDonneesDesStructures codes) {
+		return new BlocHandler(champ, tailleLue);
+	}
 
 	public static class BlocHandler implements Handler<byte[]> {
 		private Champ<byte[]> champ;
@@ -42,11 +48,4 @@ public class BlocInconnu implements Bloc<byte[]> {
 			return (i == octets.length) ? new Data<byte[]>(champ, octets) : null;
 		}
 	}
-
-	@Override
-	public Handler<byte[]> getHandler(Champ<byte[]> champ, int tailleLue, BaseDeDonneesDesStructures codes) {
-		return new BlocHandler(champ, tailleLue);
-	}
-	
-	
 }

@@ -19,12 +19,12 @@ public interface Bloc<T> {
 		*/
 		
 		switch (type) {
-		/*
+		
 		case "Int32":
 			return new BlocInt32(defaut);
 		case "Vector<Int16>":
 			return new VectorInt16(defaut);
-			*/
+			
 		default:
 			return new BlocInconnu(type);
 		}
