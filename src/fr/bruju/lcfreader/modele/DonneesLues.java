@@ -14,7 +14,7 @@ public class DonneesLues {
 	private List<Data<?>> donnees;
 	public final String nomStruct;
 	
-	private DonneesLues(String nomStruct) {
+	public DonneesLues(String nomStruct) {
 		donnees = new ArrayList<>();
 		this.nomStruct = nomStruct;
 	}
