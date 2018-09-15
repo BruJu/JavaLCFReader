@@ -1,5 +1,9 @@
 package fr.bruju.lcfreader.structure.blocs;
 
+import fr.bruju.lcfreader.sequenceur.sequences.Handler;
+import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
+import fr.bruju.lcfreader.structure.Champ;
+
 public class BlocInt32 implements Bloc<Integer> {
 	private Integer defaut;
 	
@@ -17,17 +21,6 @@ public class BlocInt32 implements Bloc<Integer> {
 	}
 	
 	@Override
-	public Integer convertir(byte[] bytes) {
-		int valeur = 0;
-		
-		for (byte octet : bytes) {
-			valeur = valeur * 0x80 + (octet & 0x7F);
-		}
-		
-		return valeur;
-	}
-
-	@Override
 	public Integer defaut() {
 		return defaut;
 	}
@@ -40,5 +33,10 @@ public class BlocInt32 implements Bloc<Integer> {
 	@Override
 	public String valueToString(Integer value) {
 		return value.toString();
+	}
+
+	@Override
+	public Handler<Integer> getHandler(Champ<Integer> champ, int tailleLue, BaseDeDonneesDesStructures codes) {
+		return null;
 	}
 }

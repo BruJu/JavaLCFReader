@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.modele.DonneesLues;
+import fr.bruju.lcfreader.sequenceur.sequences.Handler;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
+import fr.bruju.lcfreader.structure.Champ;
 import fr.bruju.lcfreader.structure.Structure;
 
 public class BlocArray implements Bloc<ArrayList<DonneesLues>> {
@@ -28,15 +30,6 @@ public class BlocArray implements Bloc<ArrayList<DonneesLues>> {
 		return structure == null ? null : new BlocArray(structure);
 	}
 
-	@Override
-	public ArrayList<DonneesLues> convertir(byte[] bytes) {
-		
-		
-		
-		
-		
-		return null;
-	}
 
 	@Override
 	public String valueToString(ArrayList<DonneesLues> value) {
@@ -45,6 +38,12 @@ public class BlocArray implements Bloc<ArrayList<DonneesLues>> {
 	
 	private String dataToString(DonneesLues data) {
 		return data.getRepresentation();
+	}
+
+	@Override
+	public Handler<ArrayList<DonneesLues>> getHandler(Champ<ArrayList<DonneesLues>> champ, int tailleLue,
+			BaseDeDonneesDesStructures codes) {
+		return null;
 	}
 
 }

@@ -40,12 +40,9 @@ public class Champ<T> {
 	}
 
 
-	public Data<T> creerDonnees(byte[] bytes) {
-		return new Data<T>(this, bloc.convertir(bytes));
-	}
 
 
-	public Handler getHandler(int tailleLue) {
-		return null;
+	public Handler<T> getHandler(int tailleLue, BaseDeDonneesDesStructures codes) {
+		return bloc.getHandler(this, tailleLue, codes);
 	}
 }
