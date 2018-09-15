@@ -1,5 +1,6 @@
 package fr.bruju.lcfreader.structure;
 
+import fr.bruju.lcfreader.sequenceur.sequences.Handler;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 
 public class Champ<T> {
@@ -41,5 +42,10 @@ public class Champ<T> {
 
 	public Data<T> creerDonnees(byte[] bytes) {
 		return new Data<T>(this, bloc.convertir(bytes));
+	}
+
+
+	public Handler getHandler(int tailleLue) {
+		return null;
 	}
 }

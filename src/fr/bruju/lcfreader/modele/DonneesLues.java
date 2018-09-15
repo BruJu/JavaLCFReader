@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import fr.bruju.lcfreader.sequenceur.LecteurDeFichierOctetParOctet;
-import fr.bruju.lcfreader.sequenceur.SequenceurViaLCF;
-import fr.bruju.lcfreader.sequenceur.TailleChaine;
+import fr.bruju.lcfreader.sequenceur.lecteurs.LecteurDeFichierOctetParOctet;
+import fr.bruju.lcfreader.sequenceur.sequences.SequenceurViaLCF;
+import fr.bruju.lcfreader.sequenceur.sequences.TailleChaine;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Data;
 

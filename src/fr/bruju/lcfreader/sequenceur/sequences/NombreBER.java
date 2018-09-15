@@ -1,4 +1,4 @@
-package fr.bruju.lcfreader.sequenceur;
+package fr.bruju.lcfreader.sequenceur.sequences;
 
 /**
  * Lit un nombre encodé avec un nombre indéfini d'octets. Les nombre sont encodés avec le premier octet qui indique

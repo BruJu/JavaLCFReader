@@ -1,4 +1,4 @@
-package fr.bruju.lcfreader.sequenceur;
+package fr.bruju.lcfreader.sequenceur.sequences;
 
 /**
  * Un lecteur de séquence traite tous les octets qu'il reçoit. Il peut renvoyer false pour demander à ne pas recevoir

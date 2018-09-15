@@ -1,4 +1,4 @@
-package fr.bruju.lcfreader.sequenceur;
+package fr.bruju.lcfreader.sequenceur.sequences;
 
 import java.util.ArrayList;
 import java.util.List;

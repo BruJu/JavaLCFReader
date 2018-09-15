@@ -1,4 +1,4 @@
-package fr.bruju.lcfreader.sequenceur;
+package fr.bruju.lcfreader.sequenceur.sequences;
 
 import fr.bruju.lcfreader.debug.BytePrinter;
 import fr.bruju.lcfreader.modele.DonneesLues;
@@ -38,6 +38,12 @@ public class SequenceurViaLCF implements LecteurDeSequence<Void> {
 			etat = traiterLireInconnu(octet);
 			break;
 		case LIRE_CODE:
+			
+			if (octet == 0) {
+				BytePrinter.printByte(octet, '©');
+				return false;
+			}
+
 			BytePrinter.printByte(octet, 'C');
 			etat = lireCode(octet);
 			break;

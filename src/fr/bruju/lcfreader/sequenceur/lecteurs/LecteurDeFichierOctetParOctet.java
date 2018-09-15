@@ -1,9 +1,11 @@
-package fr.bruju.lcfreader.sequenceur;
+package fr.bruju.lcfreader.sequenceur.lecteurs;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
 
 /**
  * Lecteur de fichier qui lit les fichiers octets par octets en donnant les octets lus à un objet qui traite l'octet
@@ -13,7 +15,7 @@ import java.io.IOException;
  * @author Bruju
  *
  */
-public class LecteurDeFichierOctetParOctet {
+public class LecteurDeFichierOctetParOctet implements Desequenceur {
 	/** Flux de données */
 	private FileInputStream stream;
 
@@ -41,12 +43,14 @@ public class LecteurDeFichierOctetParOctet {
 		}
 	}
 	
+
 	/**
 	 * Lance la lecteur d'octets en utilisant le sequenceur donné. La lecteur se fait jusqu'à que le sequenceur
 	 * renvoie faux ou que l'on arrive à la fin du fichier. Dans ce dernier cas, le flux est fermé.
 	 * @param sequenceur Le sequenceur
 	 * @return Le résultat du séquenceur, ou null si une erreur se produit
 	 */
+	@Override
 	public <T> T sequencer(LecteurDeSequence<T> sequenceur) {
 		int byteLu;
 		
