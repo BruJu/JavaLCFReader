@@ -30,8 +30,6 @@ public class Champ<T> {
 		
 		int index = Integer.decode(donnees[4]);
 		
-		//byte index = Byte.parseByte(donnees[4]);
-		
 		Bloc<?> bloc = Bloc.genererBloc(type, donnees[5]);
 		
 		if (bloc != null)

@@ -18,7 +18,7 @@ public class VectorInt16 implements Bloc<short[]> {
 		short[] tableau = new short[bytes.length / 2];
 		
 		for (int i = 0 ; i != tableau.length ; i++) {
-			tableau[i] = (short) (Short.toUnsignedInt(bytes[i*2 + 1]) * 0x100 + Short.toUnsignedInt(bytes[i*2]));
+			tableau[i] = (short) (Byte.toUnsignedInt(bytes[i*2 + 1]) * 0x100 + Byte.toUnsignedInt(bytes[i*2]));
 		}
 		
 		return tableau;

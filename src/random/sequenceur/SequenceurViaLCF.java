@@ -1,5 +1,6 @@
 package random.sequenceur;
 
+import random.BytePrinter;
 import random.DonneesLues;
 import random.structure.BaseDeDonneesDesStructures;
 import random.structure.Champ;
@@ -29,15 +30,19 @@ public class SequenceurViaLCF implements LecteurDeSequence<Void> {
 		
 		switch (etat) {
 		case LIRE_BYTES:
+			BytePrinter.printByte(octet, '~');
 			etat = traiterLire(octet);
 			break;
 		case LIRE_BYTES_A_TAILLE_INCONNUE:
+			BytePrinter.printByte(octet, '?');
 			etat = traiterLireInconnu(octet);
 			break;
 		case LIRE_CODE:
+			BytePrinter.printByte(octet, 'C');
 			etat = lireCode(octet);
 			break;
 		case LIRE_NOMBRE_DE_BYTES:
+			BytePrinter.printByte(octet, 'N');
 			etat = lireNbOctets(octet);
 			break;
 		}

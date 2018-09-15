@@ -15,24 +15,14 @@ public class Main {
 	public static void main(String[] args) {
 		BaseDeDonneesDesStructures codesConnus = new BaseDeDonneesDesStructures();
 		codesConnus.remplirStructures("ressources\\liblcf\\fields.csv");
-		
-		
-		System.out.println("}}-- Codes connus pour Map --{{");
-		codesConnus.structures.get("Map").champs
-		.forEach(champ -> {
-		
-		if (champ == null)
-			System.out.println("null");
-		else
-			System.out.println(champ.getRepresentation());
-		});
 
 		
-		System.out.println();
-		System.out.println("}}-- Map0452.lmu --{{");
 		
 		DonneesLues map = DonneesLues.lireFichier("A:\\Dev\\Map0452.lmu", codesConnus);
-		
+
+		System.out.println();
+		System.out.println();
+		System.out.println("}}-- Map0452.lmu --{{");
 		map.afficher();
 		
 		 
@@ -104,23 +94,6 @@ public class Main {
 	}
 
 
-	private static Map construireMap(Byte[] bytes) {
-		// Header
-		if (bytes[0] != 0x0A) {
-			return null;
-		}
-		
-		// LCFMapUnit
-		if (!"LcfMapUnit".equals(extraireChaine(bytes, 1, 10))) {
-			return null;
-		}
-		
-		// continuer
-		
-		
-		return new Map(bytes);
-	}
-
 	private static String extraireChaine(Byte[] bytes, int debut, int fin) {
 		StringBuilder sb = new StringBuilder();
 		
@@ -186,13 +159,5 @@ public class Main {
 		}
 	}
 	
-	
-	public static class Map {
-
-		public Map(Byte[] bytes) {
-		}
-		
-		
-	}
 
 }

@@ -1,27 +1,35 @@
 package random.structure;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 
+/**
+ * L'ensemble des associations index - champs pour un type de données
+ * 
+ * @author Bruju
+ *
+ */
 public class Structure {
-	public List<Champ<?>> champs = new ArrayList<>();
+	/** Liste des champs connus */
+	private Map<Integer, Champ<?>> champs = new TreeMap<>();
 	
-	public List<Data<?>> getData() {
-		return champs.stream().map(champ -> new Data<>(champ)).collect(Collectors.toList());
+	/** Donne la liste des champs */
+	public Collection<Champ<?>> getChamps() {
+		return champs.values();
 	}
 
+	/** Ajoute un champ */
 	public void ajouterChamp(String[] donnees) {
-		champs.add(Champ.instancier(donnees));
+		Champ<?> champ = Champ.instancier(donnees);
+		
+		if (champ != null) {
+			champs.put(champ.index, champ);
+		}
 	}
 
+	/** Donne le champ ayant l'index donné */
 	public Champ<?> trouverChampIndex(byte octet) {
-		for (Champ<?> champ : champs) {
-			if (champ.index == octet) {
-				return champ;
-			}
-		}
-		
-		return null;
+		return champs.get((int) octet);
 	}
 }
