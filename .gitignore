@@ -8,3 +8,4 @@ target/
 .git
 bin/
 
+*.~lock*
