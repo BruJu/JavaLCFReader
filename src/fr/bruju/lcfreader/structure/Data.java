@@ -1,4 +1,4 @@
-package random.structure;
+package fr.bruju.lcfreader.structure;
 
 
 public class Data<T> {

@@ -1,10 +1,10 @@
-package random.sequenceur;
+package fr.bruju.lcfreader.sequenceur;
 
-import random.BytePrinter;
-import random.DonneesLues;
-import random.structure.BaseDeDonneesDesStructures;
-import random.structure.Champ;
-import random.structure.Data;
+import fr.bruju.lcfreader.debug.BytePrinter;
+import fr.bruju.lcfreader.modele.DonneesLues;
+import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
+import fr.bruju.lcfreader.structure.Champ;
+import fr.bruju.lcfreader.structure.Data;
 
 public class SequenceurViaLCF implements LecteurDeSequence<Void> {
 	private DonneesLues data;

@@ -1,4 +1,4 @@
-package random.structure.blocs;
+package fr.bruju.lcfreader.structure.blocs;
 
 import java.util.Arrays;
 

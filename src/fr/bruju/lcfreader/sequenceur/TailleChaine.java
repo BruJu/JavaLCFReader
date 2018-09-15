@@ -1,4 +1,4 @@
-package random.sequenceur;
+package fr.bruju.lcfreader.sequenceur;
 
 public class TailleChaine implements LecteurDeSequence<String> {
 	private int etape = 0;

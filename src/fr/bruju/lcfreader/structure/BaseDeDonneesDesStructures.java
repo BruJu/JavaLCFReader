@@ -1,4 +1,4 @@
-package random.structure;
+package fr.bruju.lcfreader.structure;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,7 +12,13 @@ public class BaseDeDonneesDesStructures {
 	
 	
 	
-	public void remplirStructures(String fichier) {
+	public BaseDeDonneesDesStructures(String fichier) {
+		remplirStructures(fichier);
+	}
+
+
+
+	private void remplirStructures(String fichier) {
 		File file = new File(fichier);
 		
 		structures = new HashMap<>();

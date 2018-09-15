@@ -1,4 +1,4 @@
-package random.sequenceur;
+package fr.bruju.lcfreader.sequenceur;
 
 /**
  * Cherche une chaîne dont la taille est connue

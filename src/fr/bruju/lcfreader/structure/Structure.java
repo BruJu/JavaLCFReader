@@ -1,4 +1,4 @@
-package random.structure;
+package fr.bruju.lcfreader.structure;
 
 import java.util.Collection;
 import java.util.Map;

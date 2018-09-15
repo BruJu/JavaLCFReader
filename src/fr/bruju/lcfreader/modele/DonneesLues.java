@@ -1,12 +1,13 @@
-package random;
+package fr.bruju.lcfreader.modele;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import random.sequenceur.SequenceurViaLCF;
-import random.sequenceur.TailleChaine;
-import random.structure.BaseDeDonneesDesStructures;
-import random.structure.Data;
+import fr.bruju.lcfreader.sequenceur.LecteurDeFichierOctetParOctet;
+import fr.bruju.lcfreader.sequenceur.SequenceurViaLCF;
+import fr.bruju.lcfreader.sequenceur.TailleChaine;
+import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
+import fr.bruju.lcfreader.structure.Data;
 
 public class DonneesLues {
 	private List<Data<?>> donnees;
@@ -20,7 +21,8 @@ public class DonneesLues {
 	public static DonneesLues lireFichier(String chemin, BaseDeDonneesDesStructures codes) {
 		
 		// Connaître le type de fichier
-		LecteurDeBytes lecteur = new LecteurDeBytes(new Lecture().mapToBytes(chemin));
+		LecteurDeFichierOctetParOctet lecteur = LecteurDeFichierOctetParOctet.instancier(chemin);
+		
 		String type = lecteur.sequencer(new TailleChaine());
 		
 		String nomStruct;

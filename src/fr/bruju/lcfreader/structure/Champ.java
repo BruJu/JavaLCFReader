@@ -1,6 +1,6 @@
-package random.structure;
+package fr.bruju.lcfreader.structure;
 
-import random.structure.blocs.Bloc;
+import fr.bruju.lcfreader.structure.blocs.Bloc;
 
 public class Champ<T> {
 	public final int index;

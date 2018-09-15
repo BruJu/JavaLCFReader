@@ -1,4 +1,4 @@
-package random.sequenceur;
+package fr.bruju.lcfreader.sequenceur;
 
 import java.util.ArrayList;
 import java.util.List;
