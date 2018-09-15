@@ -8,15 +8,15 @@ public interface Bloc<T> {
 
 	static Bloc<?> genererBloc(String type, String defaut, BaseDeDonneesDesStructures codes) {
 		
-		/*
+		
 		if (type.startsWith("Array<") && type.endsWith(">")) {
 			Bloc<?> bloc = BlocArray.essayer(type, codes);
 			
 			if (bloc != null)
-				return null;
+				return bloc;
 		}
 		
-		*/
+		
 		
 		switch (type) {
 		

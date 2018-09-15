@@ -1,11 +1,11 @@
 package fr.bruju.lcfreader.structure.blocs;
 
-import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.modele.DonneesLues;
 import fr.bruju.lcfreader.sequenceur.sequences.Handler;
+import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Champ;
 import fr.bruju.lcfreader.structure.Data;
@@ -25,7 +25,7 @@ public class BlocArray implements Bloc<TreeMap<Integer, DonneesLues>> {
 	}
 
 	public static Bloc<?> essayer(String type, BaseDeDonneesDesStructures codes) {
-		String vraiType = type.substring(6, -1); // Array<X>
+		String vraiType = type.substring(6, type.length() - 1); // Array<X>
 		
 		Structure structure = codes.structures.get(vraiType);
 		
@@ -57,7 +57,7 @@ public class BlocArray implements Bloc<TreeMap<Integer, DonneesLues>> {
 		private Etat etat;
 		private TreeMap<Integer, DonneesLues> map;
 		
-		private DonneesLues donneeCourante;
+		private SequenceurLCFAEtat sequenceur;
 		
 
 		public H(Champ<TreeMap<Integer, DonneesLues>> champ, BaseDeDonneesDesStructures codes) {
@@ -73,15 +73,25 @@ public class BlocArray implements Bloc<TreeMap<Integer, DonneesLues>> {
 			case LireTaille:
 				map = new TreeMap<Integer, DonneesLues>();
 				etat = Etat.LireIndex;
+				System.out.println("Taille lue : " + octet);
 				break;
 			case LireIndex:
 				if (octet == 0) {
 					return new Data<>(champ, map);
 				} else {
-					donneeCourante = new DonneesLues(nomStructure);
+					DonneesLues donneeCourante = new DonneesLues(nomStructure);
+					System.out.println(nomStructure + " push " + octet);
+					map.put((int) octet, donneeCourante);
+					sequenceur = new SequenceurLCFAEtat(donneeCourante, codes);
+					etat = Etat.LireDonnees;
+					System.out.println("<" + nomStructure +">");
 				}
 				break;
 			case LireDonnees:
+				if (!sequenceur.lireOctet(octet)) {
+					System.out.println("</" + nomStructure +">");
+					etat = Etat.LireIndex;
+				}
 				break;
 			}
 			
