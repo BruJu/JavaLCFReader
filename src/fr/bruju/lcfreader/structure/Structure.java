@@ -11,9 +11,19 @@ import java.util.TreeMap;
  *
  */
 public class Structure {
+	/** Base de données rattachée à la structure */
+	public final BaseDeDonneesDesStructures codes;
 	/** Liste des champs connus */
 	private Map<Integer, Champ<?>> champs = new TreeMap<>();
 	
+	/**
+	 * Crée la structure
+	 * @param codes
+	 */
+	public Structure(BaseDeDonneesDesStructures codes) {
+		this.codes = codes;
+	}
+
 	/** Donne la liste des champs */
 	public Collection<Champ<?>> getChamps() {
 		return champs.values();
@@ -21,7 +31,7 @@ public class Structure {
 
 	/** Ajoute un champ */
 	public void ajouterChamp(String[] donnees) {
-		Champ<?> champ = Champ.instancier(donnees);
+		Champ<?> champ = Champ.instancier(donnees, codes);
 		
 		if (champ != null) {
 			champs.put(champ.index, champ);

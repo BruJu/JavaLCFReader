@@ -2,6 +2,7 @@ package fr.bruju.lcfreader.modele;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.sequenceur.LecteurDeFichierOctetParOctet;
 import fr.bruju.lcfreader.sequenceur.SequenceurViaLCF;
@@ -50,5 +51,12 @@ public class DonneesLues {
 
 	public void push(Data<?> blocData) {
 		donnees.add(blocData);
+	}
+
+	public String getRepresentation() {
+		return nomStruct + " -> " +
+			donnees.stream()
+				   .map(d -> d.champ.nom + ":" + d.valueToString())
+				   .collect(Collectors.joining(" ; "));
 	}
 }

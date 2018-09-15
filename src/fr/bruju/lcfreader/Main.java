@@ -8,12 +8,20 @@ public class Main {
 	public static void main(String[] args) {
 		BaseDeDonneesDesStructures codesConnus = new BaseDeDonneesDesStructures("ressources\\liblcf\\fields.csv");
 		
-		DonneesLues map = DonneesLues.lireFichier("A:\\Dev\\Map0452.lmu", codesConnus);
+		// afficherMap("Map0452", codesConnus);
+		afficherMap("Map0001", codesConnus);
+		afficherMap("Map0003", codesConnus);
+		
+		
+	}
+
+	private static void afficherMap(String nom, BaseDeDonneesDesStructures codesConnus) {
+		
+		DonneesLues map = DonneesLues.lireFichier("A:\\Dev\\"+nom+".lmu", codesConnus);
 
 		System.out.println();
 		System.out.println();
-		System.out.println("}}-- Map0452.lmu --{{");
+		System.out.println("}}-- "+nom+" --{{");
 		map.afficher();
-		
 	}	
 }

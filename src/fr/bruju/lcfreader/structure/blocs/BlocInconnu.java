@@ -21,6 +21,6 @@ public class BlocInconnu implements Bloc<byte[]> {
 
 	@Override
 	public String valueToString(byte[] value) {
-		return Arrays.toString(value);
+		return value.length + ">" + Arrays.toString(value);
 	}
 }

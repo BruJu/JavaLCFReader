@@ -21,7 +21,7 @@ public class Champ<T> {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static <T> Champ<?> instancier(String[] donnees) {
+	public static <T> Champ<?> instancier(String[] donnees, BaseDeDonneesDesStructures codes) {
 		String nom = donnees[1];
 		boolean sized = donnees[2].equals("t");
 		String type = donnees[3];
@@ -30,7 +30,7 @@ public class Champ<T> {
 		
 		int index = Integer.decode(donnees[4]);
 		
-		Bloc<?> bloc = Bloc.genererBloc(type, donnees[5]);
+		Bloc<?> bloc = Bloc.genererBloc(type, donnees[5], codes);
 		
 		if (bloc != null)
 			return new Champ(index, nom, sized, bloc);
