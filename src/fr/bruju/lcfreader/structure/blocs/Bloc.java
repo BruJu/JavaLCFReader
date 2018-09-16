@@ -1,6 +1,7 @@
 package fr.bruju.lcfreader.structure.blocs;
 
 import fr.bruju.lcfreader.sequenceur.sequences.Handler;
+import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 //import fr.bruju.lcfreader.structure.Champ;
 import fr.bruju.lcfreader.structure.Champ;
 
@@ -34,6 +35,9 @@ public abstract class Bloc<T> {
 		bloc = BlocArray.essayer(type);
 		if (bloc != null) return bloc;
 		
+		if (BaseDeDonneesDesStructures.getInstance().get(type) != null) {
+			return new BlocCode(type);
+		}
 		
 		
 		switch (type) {

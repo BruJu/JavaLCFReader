@@ -10,12 +10,12 @@ public class Main {
 	public static void main(String[] args) {
 		BaseDeDonneesDesStructures.initialiser("ressources\\liblcf\\fields.csv");
 		
-		//afficherMap("Map0452", DonneesLues::afficher);
+		afficherMap("Map0452", DonneesLues::afficher);
 		//afficherMap("Map0001", DonneesLues::afficher);
 		//afficherMap("Map0003", DonneesLues::afficher);
 
 		
-		afficherMap("Map0452", DonneesLues::afficherArchi);
+		//afficherMap("Map0452", DonneesLues::afficherArchi);
 		
 	}
 

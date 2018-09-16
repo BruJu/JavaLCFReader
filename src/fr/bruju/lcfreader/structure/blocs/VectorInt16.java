@@ -4,8 +4,9 @@ import java.util.Arrays;
 
 import fr.bruju.lcfreader.sequenceur.sequences.Handler;
 import fr.bruju.lcfreader.structure.Data;
+import fr.bruju.lcfreader.structure.types.PrimitifCpp;
 
-public class VectorInt16 extends Bloc<short[]> {
+public class VectorInt16 extends Bloc<int[]> {
 	
 	@Override
 	public String getRepresentation() {
@@ -14,36 +15,48 @@ public class VectorInt16 extends Bloc<short[]> {
 
 
 	@Override
-	public String valueToString(short[] values) {
+	public String valueToString(int[] values) {
 		return Arrays.toString(values);
 	}
 
 	@Override
-	public Handler<short[]> getHandler(int tailleLue) {
+	public Handler<int[]> getHandler(int tailleLue) {
 		return new H(tailleLue);
 	}
 	
 	
-	public class H implements Handler<short[]> {
-		private short[] donnees;
-		private int index = 0;
-		private int acc = -1;
+	public class H implements Handler<int[]> {
+		PrimitifCpp primitif = PrimitifCpp.map.get("Int16");
+		
+		private int[] donnees;
+		private int iDonnees = 0;
+		
+		private byte[] octets;
+		private int iByte;
 
 		public H(int tailleLue) {
-			this.donnees = new short[tailleLue / 2];
+			this.octets = new byte[primitif.getNombreDOctets()];
+			this.iByte = 0;
+			
+			this.donnees = new int[tailleLue / primitif.getNombreDOctets()];
 		}
 
 		@Override
-		public Data<short[]> traiter(byte octet) {
-			if (acc == -1) {
-				acc = Byte.toUnsignedInt(octet);
-				return null;
-			} else {
-				donnees[index++] = (short) (acc + Byte.toUnsignedInt(octet) * 0x100);
+		public Data<int[]> traiter(byte octet) {
+			octets[iByte++] = octet;
+			
+			if (iByte == octets.length) {
+				iByte = 0;
 				
-				acc = -1;
-				return index == donnees.length ? new Data<short[]>(VectorInt16.this, donnees) : null;
+				donnees[iDonnees++] = primitif.convertir(octets);
+				
+				if (iDonnees == donnees.length) {
+					return new Data<int[]>(VectorInt16.this, donnees);
+				}
+				
 			}
+			
+			return null;
 		}
 
 	}
