@@ -97,7 +97,7 @@ public class BaseDeDonneesDesStructures {
 				
 				String[] donnees = line.split(",", -1);
 				
-				structures.putIfAbsent(donnees[0], new Structure(this));
+				structures.putIfAbsent(donnees[0], new Structure());
 				
 				structures.get(donnees[0]).ajouterChamp(donnees);
 			}

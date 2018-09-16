@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 
+import fr.bruju.lcfreader.structure.blocs.Bloc;
+
 /**
  * L'ensemble des associations index - champs pour un type de données
  * 
@@ -11,35 +13,25 @@ import java.util.TreeMap;
  *
  */
 public class Structure {
-	/** Base de données rattachée à la structure */
-	public final BaseDeDonneesDesStructures codes;
 	/** Liste des champs connus */
-	private Map<Integer, Champ<?>> champs = new TreeMap<>();
-	
-	/**
-	 * Crée la structure
-	 * @param codes
-	 */
-	public Structure(BaseDeDonneesDesStructures codes) {
-		this.codes = codes;
-	}
+	private Map<Integer, Bloc<?>> champs = new TreeMap<>();
 
-	/** Donne la liste des champs */
-	public Collection<Champ<?>> getChamps() {
+	/** Donne la liste des blocs */
+	private Collection<Bloc<?>> getBlocs() {
 		return champs.values();
 	}
 
 	/** Ajoute un champ */
 	public void ajouterChamp(String[] donnees) {
-		Champ<?> champ = Champ.instancier(donnees, codes);
+		Bloc<?> bloc = Bloc.instancier(donnees);
 		
-		if (champ != null) {
-			champs.put(champ.index, champ);
+		if (bloc != null) {
+			champs.put(bloc.champ.index, bloc);
 		}
 	}
 
 	/** Donne le champ ayant l'index donné */
-	public Champ<?> trouverChampIndex(byte octet) {
+	public Bloc<?> trouverChampIndex(byte octet) {
 		return champs.get((int) octet);
 	}
 }

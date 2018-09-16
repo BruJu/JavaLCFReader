@@ -6,7 +6,7 @@ import fr.bruju.lcfreader.sequenceur.sequences.Handler;
 import fr.bruju.lcfreader.structure.Champ;
 import fr.bruju.lcfreader.structure.Data;
 
-public class VectorInt16 implements Bloc<short[]> {
+public class VectorInt16 extends Bloc<short[]> {
 	
 	public VectorInt16(String defaut) {
 		
@@ -24,19 +24,17 @@ public class VectorInt16 implements Bloc<short[]> {
 	}
 
 	@Override
-	public Handler<short[]> getHandler(Champ<short[]> champ, int tailleLue) {
-		return new H(champ, tailleLue);
+	public Handler<short[]> getHandler(int tailleLue) {
+		return new H(tailleLue);
 	}
 	
 	
-	public static class H implements Handler<short[]> {
-		private Champ<short[]> champ;
+	public class H implements Handler<short[]> {
 		private short[] donnees;
 		private int index = 0;
 		private int acc = -1;
 
-		public H(Champ<short[]> champ, int tailleLue) {
-			this.champ = champ;
+		public H(int tailleLue) {
 			this.donnees = new short[tailleLue / 2];
 		}
 
@@ -49,7 +47,7 @@ public class VectorInt16 implements Bloc<short[]> {
 				donnees[index++] = (short) (acc + Byte.toUnsignedInt(octet) * 0x100);
 				
 				acc = -1;
-				return index == donnees.length ? new Data<short[]>(champ, donnees) : null;
+				return index == donnees.length ? new Data<short[]>(VectorInt16.this, donnees) : null;
 			}
 		}
 

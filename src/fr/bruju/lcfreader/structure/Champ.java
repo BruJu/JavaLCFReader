@@ -1,48 +1,17 @@
 package fr.bruju.lcfreader.structure;
 
-import fr.bruju.lcfreader.sequenceur.sequences.Handler;
-import fr.bruju.lcfreader.structure.blocs.Bloc;
-
-public class Champ<T> {
+public class Champ {
 	public final int index;
 	public final String nom;
 	public final boolean sized;
-	public final Bloc<T> bloc;
 	
-	public Champ(int index, String nom, boolean sized, Bloc<T> bloc) {
+	public Champ(int index, String nom, boolean sized) {
 		this.index = index;
 		this.nom = nom;
 		this.sized = sized;
-		this.bloc = bloc;
 	}
-
 	
-	public String getRepresentation() {
-		return String.format("%02X", index) + " " + nom + " " + bloc.getRepresentation() + " " + sized;
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static <T> Champ<?> instancier(String[] donnees, BaseDeDonneesDesStructures codes) {
-		String nom = donnees[1];
-		boolean sized = donnees[2].equals("t");
-		String type = donnees[3];
-		if (donnees[4].equals(""))
-			return null;
-		
-		int index = Integer.decode(donnees[4]);
-		
-		Bloc<?> bloc = Bloc.genererBloc(type, donnees[5]);
-		
-		if (bloc != null)
-			return new Champ(index, nom, sized, bloc);
-		else
-			return null;
-	}
-
-
-
-
-	public Handler<T> getHandler(int tailleLue) {
-		return bloc.getHandler(this, tailleLue);
+	public String getRepresentation(String representationBloc) {
+		return String.format("%02X", index) + " " + nom + " " + representationBloc + " " + sized;
 	}
 }

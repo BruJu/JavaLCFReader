@@ -5,7 +5,7 @@ import fr.bruju.lcfreader.sequenceur.sequences.NombreBER;
 import fr.bruju.lcfreader.structure.Champ;
 import fr.bruju.lcfreader.structure.Data;
 
-public class BlocInt32 implements Bloc<Integer> {
+public class BlocInt32 extends Bloc<Integer> {
 	private Integer defaut;
 	
 	public BlocInt32(String defaut) {
@@ -37,18 +37,16 @@ public class BlocInt32 implements Bloc<Integer> {
 	}
 
 	@Override
-	public Handler<Integer> getHandler(Champ<Integer> champ, int tailleLue) {
-		return new H(champ);
+	public Handler<Integer> getHandler(int tailleLue) {
+		return new H();
 	}
 	
 	
 	public class H implements Handler<Integer> {
-		private Champ<Integer> champ;
 		
 		private NombreBER accumulateur;
 
-		public H(Champ<Integer> champ) {
-			this.champ = champ;
+		public H() {
 			accumulateur = new NombreBER();
 		}
 
@@ -56,7 +54,7 @@ public class BlocInt32 implements Bloc<Integer> {
 		public Data<Integer> traiter(byte octet) {
 			boolean b = accumulateur.lireOctet(octet);
 			
-			return b ? null : new Data<>(champ, accumulateur.getResultat().intValue());
+			return b ? null : new Data<>(BlocInt32.this, accumulateur.getResultat().intValue());
 		}
 	}
 }

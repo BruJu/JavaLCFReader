@@ -7,11 +7,10 @@ import fr.bruju.lcfreader.modele.DonneesLues;
 import fr.bruju.lcfreader.sequenceur.sequences.Handler;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
-import fr.bruju.lcfreader.structure.Champ;
 import fr.bruju.lcfreader.structure.Data;
 import fr.bruju.lcfreader.structure.Structure;
 
-public class BlocArray implements Bloc<TreeMap<Integer, DonneesLues>> {
+public class BlocArray extends Bloc<TreeMap<Integer, DonneesLues>> {
 	
 	private String nomStructure;
 
@@ -43,14 +42,13 @@ public class BlocArray implements Bloc<TreeMap<Integer, DonneesLues>> {
 	}
 
 	@Override
-	public Handler<TreeMap<Integer, DonneesLues>> getHandler(Champ<TreeMap<Integer, DonneesLues>> champ, int tailleLue) {
-		return new H(champ);
+	public Handler<TreeMap<Integer, DonneesLues>> getHandler(int tailleLue) {
+		return new H();
 	}
 	
 	
 	public class H implements Handler<TreeMap<Integer, DonneesLues>> {
 
-		private Champ<TreeMap<Integer, DonneesLues>> champ;
 		private int nombreDElements;
 		
 		private Etat etat;
@@ -59,9 +57,7 @@ public class BlocArray implements Bloc<TreeMap<Integer, DonneesLues>> {
 		private SequenceurLCFAEtat sequenceur;
 		
 
-		public H(Champ<TreeMap<Integer, DonneesLues>> champ) {
-			this.champ = champ;
-
+		public H() {
 			etat = Etat.LireTaille;
 		}
 
@@ -82,7 +78,7 @@ public class BlocArray implements Bloc<TreeMap<Integer, DonneesLues>> {
 			case LireDonnees:
 				if (!sequenceur.lireOctet(octet)) {
 					if (map.size() == nombreDElements) {
-						return new Data<>(champ, map);
+						return new Data<>(BlocArray.this, map);
 					} else {
 						etat = Etat.LireIndex;
 					}

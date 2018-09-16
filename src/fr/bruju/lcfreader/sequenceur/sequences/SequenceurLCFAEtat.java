@@ -3,9 +3,9 @@ package fr.bruju.lcfreader.sequenceur.sequences;
 import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.modele.DonneesLues;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
-import fr.bruju.lcfreader.structure.Champ;
 import fr.bruju.lcfreader.structure.Data;
 import fr.bruju.lcfreader.structure.Structure;
+import fr.bruju.lcfreader.structure.blocs.Bloc;
 
 /**
  * Lit des blocs de la forme [code] [taille] [données] jusqu'à trouver le code 0.
@@ -61,14 +61,14 @@ public class SequenceurLCFAEtat implements LecteurDeSequence<Void> {
 				return null;
 			}
 			
-			Champ<?> champ = structure.trouverChampIndex(octet);
+			Bloc<?> bloc = structure.trouverChampIndex(octet);
 			
-			if (champ == null) {
+			if (bloc == null) {
 				System.out.println("Pas de champ trouvé " + Utilitaire.toHex(octet));
 				return null;
 			}
 			
-			return new EtatLireTaille(champ);
+			return new EtatLireTaille(bloc);
 		}
 	}
 	
@@ -78,7 +78,7 @@ public class SequenceurLCFAEtat implements LecteurDeSequence<Void> {
 	 */
 	private class EtatLireTaille implements Etat {
 		/** Le champ en cours de lecture */
-		private Champ<?> champ;
+		private Bloc<?> bloc;
 		/** La taille en cours de construction */
 		private int tailleLue;
 
@@ -86,15 +86,15 @@ public class SequenceurLCFAEtat implements LecteurDeSequence<Void> {
 		 * Crée un état dont le but est de lire le nombre d'octets du champ
 		 * @param champ Le champ
 		 */
-		public EtatLireTaille(Champ<?> champ) {
-			this.champ = champ;
+		public EtatLireTaille(Bloc<?> bloc) {
+			this.bloc = bloc;
 			this.tailleLue = 0;
 		}
 
 		@Override
 		public Etat lireOctet(byte octet) {
 			tailleLue = tailleLue * 0x80 + (octet & 0x7F);
-			return ((octet & 0x80) == 0) ? new EtatLireDonnees<>(champ, tailleLue) : this;
+			return ((octet & 0x80) == 0) ? new EtatLireDonnees<>(bloc, tailleLue) : this;
 		}
 	}
 	
@@ -113,8 +113,8 @@ public class SequenceurLCFAEtat implements LecteurDeSequence<Void> {
 		 * @param champ Le champ en cours de lecture
 		 * @param tailleLue Le nombre d'octets
 		 */
-		public EtatLireDonnees(Champ<T> champ, int tailleLue) {
-			handler = champ.getHandler(tailleLue);
+		public EtatLireDonnees(Bloc<T> bloc, int tailleLue) {
+			handler = bloc.getHandler(tailleLue);
 		}
 
 		@Override

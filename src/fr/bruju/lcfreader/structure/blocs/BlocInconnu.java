@@ -3,10 +3,9 @@ package fr.bruju.lcfreader.structure.blocs;
 import java.util.Arrays;
 
 import fr.bruju.lcfreader.sequenceur.sequences.Handler;
-import fr.bruju.lcfreader.structure.Champ;
 import fr.bruju.lcfreader.structure.Data;
 
-public class BlocInconnu implements Bloc<byte[]> {
+public class BlocInconnu extends Bloc<byte[]> {
 	public final String type;
 	
 	public BlocInconnu(String type) {
@@ -25,17 +24,15 @@ public class BlocInconnu implements Bloc<byte[]> {
 	
 
 	@Override
-	public Handler<byte[]> getHandler(Champ<byte[]> champ, int tailleLue) {
-		return new BlocHandler(champ, tailleLue);
+	public Handler<byte[]> getHandler(int tailleLue) {
+		return new BlocHandler(tailleLue);
 	}
 
-	public static class BlocHandler implements Handler<byte[]> {
-		private Champ<byte[]> champ;
+	public class BlocHandler implements Handler<byte[]> {
 		private byte[] octets;
 		private int i;
 
-		public BlocHandler(Champ<byte[]> champ, int tailleLue) {
-			this.champ = champ;
+		public BlocHandler(int tailleLue) {
 			octets = new byte[tailleLue];
 			i = 0;
 		}
@@ -44,7 +41,7 @@ public class BlocInconnu implements Bloc<byte[]> {
 		public Data<byte[]> traiter(byte octet) {
 			octets[i++] = octet;
 			
-			return (i == octets.length) ? new Data<byte[]>(champ, octets) : null;
+			return (i == octets.length) ? new Data<byte[]>(BlocInconnu.this, octets) : null;
 		}
 	}
 }

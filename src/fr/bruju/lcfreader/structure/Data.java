@@ -1,23 +1,24 @@
 package fr.bruju.lcfreader.structure;
 
+import fr.bruju.lcfreader.structure.blocs.Bloc;
 
 public class Data<T> {
-	public Champ<T> champ;
+	public Bloc<T> bloc;
 	public T value;
 	
-	public Data(Champ<T> champ) {
-		this.champ = champ;
+	public Data(Bloc<T> bloc) {
+		this.bloc = bloc;
 		value = null;
 	}
 	
 
-	public Data(Champ<T> champ, T value) {
-		this.champ = champ;
+	public Data(Bloc<T> bloc, T value) {
+		this.bloc = bloc;
 		this.value = value;
 	}
 
 
 	public String valueToString() {
-		return champ.bloc.valueToString(value);
+		return bloc.valueToString(value);
 	}
 }

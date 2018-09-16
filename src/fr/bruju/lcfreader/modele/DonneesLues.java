@@ -45,7 +45,7 @@ public class DonneesLues {
 	}
 
 	public void afficher() {
-		donnees.forEach(data -> System.out.println(data.champ.getRepresentation() + " -> " + data.valueToString()));
+		donnees.forEach(data -> System.out.println(data.bloc.getTrueRepresetantion() + " -> " + data.valueToString()));
 	}
 
 	public void push(Data<?> blocData) {
@@ -55,7 +55,7 @@ public class DonneesLues {
 	public String getRepresentation() {
 		return nomStruct + " -> " +
 			donnees.stream()
-				   .map(d -> d.champ.nom + ":" + d.valueToString())
+				   .map(d -> d.bloc.champ.nom + ":" + d.valueToString())
 				   .collect(Collectors.joining(" ; "));
 	}
 }

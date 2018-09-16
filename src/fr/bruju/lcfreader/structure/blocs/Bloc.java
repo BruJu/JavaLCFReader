@@ -1,14 +1,34 @@
 package fr.bruju.lcfreader.structure.blocs;
 
 import fr.bruju.lcfreader.sequenceur.sequences.Handler;
+//import fr.bruju.lcfreader.structure.Champ;
 import fr.bruju.lcfreader.structure.Champ;
 
-public interface Bloc<T> {
+public abstract class Bloc<T> {
 
-	static Bloc<?> genererBloc(String type, String defaut) {
+	public Champ champ;
+	
+	public static Bloc<?> instancier(String[] donnees) {
+		String nom = donnees[1];
+		boolean sized = donnees[2].equals("t");
+		String type = donnees[3];
 		
+		if (donnees[4].equals(""))
+			return null;
+		int index = Integer.decode(donnees[4]);
+		
+		Bloc<?> bloc = Bloc.genererBloc(type, donnees[5]);
+
+		bloc.champ = new Champ(index, nom, sized);
+		
+		return bloc;
+	}
+	
+	static Bloc<?> genererBloc(String type, String defaut) {
 		if (type.startsWith("Array<") && type.endsWith(">")) {
 			Bloc<?> bloc = BlocArray.essayer(type);
+			
+			
 			
 			if (bloc != null)
 				return bloc;
@@ -26,14 +46,18 @@ public interface Bloc<T> {
 		}
 	}
 	
-	public String getRepresentation();
+	public final String getTrueRepresetantion() {
+		return champ.getRepresentation(getRepresentation());
+	}
+	
+	public abstract String getRepresentation();
 
-	public default T defaut() {
+	public T defaut() {
 		return null;
 	}
 
-	public String valueToString(T value);
+	public abstract String valueToString(T value);
 
-	public Handler<T> getHandler(Champ<T> champ, int tailleLue);
+	public abstract Handler<T> getHandler(int tailleLue);
 	
 }
