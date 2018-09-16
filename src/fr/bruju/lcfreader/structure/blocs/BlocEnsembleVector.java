@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
@@ -51,12 +52,27 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 		public void fournirTailles(Integer taille) {
 			this.taille = taille;
 			this.ensembles = new ArrayList<>(this.taille);
-			System.out.println("Recoit une taille de " + taille);
+			System.out.println("Recoit une taille de " + taille + " " + nomStructure);
 		}
 
 		@Override
 		public Donnee<List<EnsembleDeDonnees>> accumuler(byte octet) {
-			//if (sequenceur == )
+			System.out.println(Utilitaire.toHex(octet));
+			
+			if (sequenceur == null) {
+				if ((octet & 0x80) == 0) {
+					sequenceur = new SequenceurLCFAEtat(new EnsembleDeDonnees(nomStructure));
+				}
+			} else {
+				if (!sequenceur.lireOctet(octet)) {
+					ensembles.add(sequenceur.data);
+					sequenceur = null;
+					
+					if (ensembles.size() == taille) {
+						return new Donnee<>(BlocEnsembleVector.this, ensembles);
+					}
+				}
+			}
 			
 			return null;
 		}

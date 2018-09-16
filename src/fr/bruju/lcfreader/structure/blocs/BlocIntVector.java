@@ -16,20 +16,15 @@ public class BlocIntVector extends Bloc<int[]> {
 		// Extraction de la chaîne entre Vector< et >
 		String sousType = type.substring(7, type.length() - 1);
 		
-		if (PrimitifCpp.map.get(sousType) == null) {
-			
-			if (BaseDeDonneesDesStructures.getInstance().get(sousType) != null) {
-				System.out.println("woot " + sousType);
-				// return new BlocEnsembleVector(sousType);
-			} else {
-				System.out.println("null and void " + sousType + " @ ");
-			}
-			
-			
-			return null;
-		} else {
+		if (PrimitifCpp.map.get(sousType) != null) {
 			return new BlocIntVector(sousType);
 		}
+		
+		if (BaseDeDonneesDesStructures.getInstance().get(sousType) != null) {
+			return new BlocEnsembleVector(sousType);
+		}
+		
+		return null;
 	}
 	
 	

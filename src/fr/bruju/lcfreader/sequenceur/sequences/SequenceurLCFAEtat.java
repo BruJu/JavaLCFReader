@@ -17,6 +17,8 @@ import fr.bruju.lcfreader.structure.blocs.Bloc;
  */
 
 public class SequenceurLCFAEtat implements LecteurDeSequence<Void> {
+	// TODO : changer le comportemnet si structure.estSerie()
+	
 	/** Donnée en cours de construction */
 	public final EnsembleDeDonnees data;
 	/** Structure contenant les codes de la donnée en cours de construction */
