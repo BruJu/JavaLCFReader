@@ -11,6 +11,28 @@ import fr.bruju.lcfreader.structure.Data;
 import fr.bruju.lcfreader.structure.Structure;
 
 public class BlocArray extends Bloc<TreeMap<Integer, DonneesLues>> {
+	/* ======
+	 * STATIC
+	 * ====== */
+	
+	/**
+	 * Crée un bloc "tableau" si le type est Array<TypeDansLaBase>
+	 * @param type Le type
+	 * @return Un bloc tableau si c'est pertinent
+	 */
+	public static Bloc<?> essayer(String type) {
+		if (!type.startsWith("Array<") || !type.endsWith(">"))
+			return null;
+		
+		String vraiType = type.substring(6, type.length() - 1); // Array<X>
+		Structure structure = BaseDeDonneesDesStructures.getInstance().get(vraiType);
+		return structure == null ? null : new BlocArray(vraiType);
+	}
+	
+	
+	/*
+	 * 
+	 */
 	
 	private String nomStructure;
 
@@ -23,13 +45,6 @@ public class BlocArray extends Bloc<TreeMap<Integer, DonneesLues>> {
 		return "TableauDeDonnees[" + nomStructure + "]";
 	}
 
-	public static Bloc<?> essayer(String type) {
-		String vraiType = type.substring(6, type.length() - 1); // Array<X>
-		
-		Structure structure = BaseDeDonneesDesStructures.getInstance().get(vraiType);
-		
-		return structure == null ? null : new BlocArray(vraiType);
-	}
 
 
 	@Override
@@ -44,6 +59,11 @@ public class BlocArray extends Bloc<TreeMap<Integer, DonneesLues>> {
 	@Override
 	public Handler<TreeMap<Integer, DonneesLues>> getHandler(int tailleLue) {
 		return new H();
+	}
+	
+	public void afficherSousArchi(int niveau, TreeMap<Integer, DonneesLues> value) {
+		value.values().forEach(data -> data.afficherArchi(niveau));
+		
 	}
 	
 	

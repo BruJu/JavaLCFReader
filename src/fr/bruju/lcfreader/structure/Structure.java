@@ -1,6 +1,5 @@
 package fr.bruju.lcfreader.structure;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -16,17 +15,12 @@ public class Structure {
 	/** Liste des champs connus */
 	private Map<Integer, Bloc<?>> champs = new TreeMap<>();
 
-	/** Donne la liste des blocs */
-	private Collection<Bloc<?>> getBlocs() {
-		return champs.values();
-	}
-
 	/** Ajoute un champ */
 	public void ajouterChamp(String[] donnees) {
 		Bloc<?> bloc = Bloc.instancier(donnees);
 		
 		if (bloc != null) {
-			champs.put(bloc.champ.index, bloc);
+			champs.put(bloc.getChamp().index, bloc);
 		}
 	}
 

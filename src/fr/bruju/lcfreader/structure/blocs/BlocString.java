@@ -9,7 +9,7 @@ import fr.bruju.lcfreader.structure.Data;
  * @author Bruju
  *
  */
-public class BlocInt32 extends Bloc<Integer> {
+public class BlocString extends Bloc<Integer> {
 	/** Valeur par défaut */
 	private Integer defaut;
 	
@@ -17,7 +17,7 @@ public class BlocInt32 extends Bloc<Integer> {
 	 * Construit le bloc contenant un entier avec la valeur par défaut donnée
 	 * @param defaut La valeur par défaut. Si de la forme a|b, prend b.
 	 */
-	public BlocInt32(String defaut) {
+	public BlocString(String defaut) {
 		if (!defaut.equals("")) {
 			// On prend la valeur par défaut pour RPG Maker 2003
 			if (defaut.contains("|")) {
@@ -56,7 +56,7 @@ public class BlocInt32 extends Bloc<Integer> {
 		public Data<Integer> traiter(byte octet) {
 			boolean b = accumulateur.lireOctet(octet);
 			
-			return b ? null : new Data<>(BlocInt32.this, accumulateur.getResultat().intValue());
+			return b ? null : new Data<>(BlocString.this, accumulateur.getResultat().intValue());
 		}
 	}
 }

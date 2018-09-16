@@ -3,15 +3,10 @@ package fr.bruju.lcfreader.structure.blocs;
 import java.util.Arrays;
 
 import fr.bruju.lcfreader.sequenceur.sequences.Handler;
-import fr.bruju.lcfreader.structure.Champ;
 import fr.bruju.lcfreader.structure.Data;
 
 public class VectorInt16 extends Bloc<short[]> {
 	
-	public VectorInt16(String defaut) {
-		
-	}
-
 	@Override
 	public String getRepresentation() {
 		return "Vector<Int16> {" + "" + "}";

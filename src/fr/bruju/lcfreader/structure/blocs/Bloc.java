@@ -6,7 +6,11 @@ import fr.bruju.lcfreader.structure.Champ;
 
 public abstract class Bloc<T> {
 
-	public Champ champ;
+	private Champ champ;
+	
+	public Champ getChamp() {
+		return champ;
+	}
 	
 	public static Bloc<?> instancier(String[] donnees) {
 		String nom = donnees[1];
@@ -25,21 +29,19 @@ public abstract class Bloc<T> {
 	}
 	
 	static Bloc<?> genererBloc(String type, String defaut) {
-		if (type.startsWith("Array<") && type.endsWith(">")) {
-			Bloc<?> bloc = BlocArray.essayer(type);
-			
-			
-			
-			if (bloc != null)
-				return bloc;
-		}
+		Bloc<?> bloc;
+		
+		bloc = BlocArray.essayer(type);
+		if (bloc != null) return bloc;
+		
+		
 		
 		switch (type) {
 		
 		case "Int32":
 			return new BlocInt32(defaut);
 		case "Vector<Int16>":
-			return new VectorInt16(defaut);
+			return new VectorInt16();
 			
 		default:
 			return new BlocInconnu(type);
@@ -56,8 +58,13 @@ public abstract class Bloc<T> {
 		return null;
 	}
 
-	public abstract String valueToString(T value);
+	public String valueToString(T value) {
+		return value.toString();
+	}
 
 	public abstract Handler<T> getHandler(int tailleLue);
+
+	public void afficherSousArchi(int niveau, T value) {
+	}
 	
 }

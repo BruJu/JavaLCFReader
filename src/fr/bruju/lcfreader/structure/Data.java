@@ -21,4 +21,9 @@ public class Data<T> {
 	public String valueToString() {
 		return bloc.valueToString(value);
 	}
+
+
+	public void afficherSousArchi(int i) {
+		bloc.afficherSousArchi(i, value);
+	}
 }

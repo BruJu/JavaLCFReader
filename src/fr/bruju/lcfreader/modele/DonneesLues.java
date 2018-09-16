@@ -47,6 +47,28 @@ public class DonneesLues {
 	public void afficher() {
 		donnees.forEach(data -> System.out.println(data.bloc.getTrueRepresetantion() + " -> " + data.valueToString()));
 	}
+	
+	public void afficherArchi() {
+		afficherArchi(0);
+	}
+	
+	
+
+	public void afficherArchi(int niveau) {
+		tab(niveau);
+		System.out.println(nomStruct);
+		donnees.forEach(data -> {
+			tab(niveau);
+			System.out.println(data.bloc.getTrueRepresetantion());
+			data.afficherSousArchi(niveau+1);
+		});
+	}
+	
+	private static void tab(int niveau) {
+		for (int i = 0 ; i != niveau ; i++)
+			System.out.print("  ");
+	}
+	
 
 	public void push(Data<?> blocData) {
 		donnees.add(blocData);
@@ -55,7 +77,7 @@ public class DonneesLues {
 	public String getRepresentation() {
 		return nomStruct + " -> " +
 			donnees.stream()
-				   .map(d -> d.bloc.champ.nom + ":" + d.valueToString())
+				   .map(d -> d.bloc.getChamp().nom + ":" + d.valueToString())
 				   .collect(Collectors.joining(" ; "));
 	}
 }

@@ -60,7 +60,6 @@ public class BaseDeDonneesDesStructures {
 	/** Association nom de la structure - codes qu'elle contient */
 	private Map<String, Structure> structures;
 	
-	
 	/**
 	 * Donne la structure contenant les codes pour la structure demandée
 	 * @param nomStructure Le nom de la structure
@@ -69,7 +68,6 @@ public class BaseDeDonneesDesStructures {
 	public Structure get(String nomStructure) {
 		return structures.get(nomStructure);
 	}
-	
 	
 	/**
 	 * Rempli la structure avec le fichier donné
