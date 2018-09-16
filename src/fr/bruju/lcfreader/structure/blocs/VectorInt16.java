@@ -28,32 +28,31 @@ public class VectorInt16 extends Bloc<int[]> {
 	public class H implements Handler<int[]> {
 		PrimitifCpp primitif = PrimitifCpp.map.get("Int16");
 		
-		private int[] donnees;
-		private int iDonnees = 0;
+		private int[] nombres;
+		private int iNombres = 0;
 		
-		private byte[] octets;
-		private int iByte;
+		private byte[] octetsNombreEnCours;
+		private int iOctetNombreEnCours;
 
 		public H(int tailleLue) {
-			this.octets = new byte[primitif.getNombreDOctets()];
-			this.iByte = 0;
+			this.octetsNombreEnCours = new byte[primitif.getNombreDOctets()];
+			this.iOctetNombreEnCours = 0;
 			
-			this.donnees = new int[tailleLue / primitif.getNombreDOctets()];
+			this.nombres = new int[tailleLue / primitif.getNombreDOctets()];
 		}
 
 		@Override
-		public Data<int[]> traiter(byte octet) {
-			octets[iByte++] = octet;
+		public Data<int[]> traiter(byte octetRecu) {
+			octetsNombreEnCours[iOctetNombreEnCours++] = octetRecu;
 			
-			if (iByte == octets.length) {
-				iByte = 0;
+			if (iOctetNombreEnCours == octetsNombreEnCours.length) {
+				iOctetNombreEnCours = 0;
 				
-				donnees[iDonnees++] = primitif.convertir(octets);
+				nombres[iNombres++] = primitif.convertir(octetsNombreEnCours);
 				
-				if (iDonnees == donnees.length) {
-					return new Data<int[]>(VectorInt16.this, donnees);
+				if (iNombres == nombres.length) {
+					return new Data<int[]>(VectorInt16.this, nombres);
 				}
-				
 			}
 			
 			return null;
