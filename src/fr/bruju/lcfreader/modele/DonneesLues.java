@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import fr.bruju.lcfreader.sequenceur.lecteurs.LecteurDeFichierOctetParOctet;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
 import fr.bruju.lcfreader.sequenceur.sequences.TailleChaine;
-import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Data;
 
 public class DonneesLues {
@@ -19,7 +18,7 @@ public class DonneesLues {
 		this.nomStruct = nomStruct;
 	}
 	
-	public static DonneesLues lireFichier(String chemin, BaseDeDonneesDesStructures codes) {
+	public static DonneesLues lireFichier(String chemin) {
 		
 		// Connaître le type de fichier
 		LecteurDeFichierOctetParOctet lecteur = LecteurDeFichierOctetParOctet.instancier(chemin);
@@ -40,7 +39,7 @@ public class DonneesLues {
 
 		DonneesLues data = new DonneesLues(nomStruct);
 		
-		lecteur.sequencer(new SequenceurLCFAEtat(data, codes));
+		lecteur.sequencer(new SequenceurLCFAEtat(data));
 		
 		return data;
 	}

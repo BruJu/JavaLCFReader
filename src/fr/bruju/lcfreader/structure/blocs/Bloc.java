@@ -1,22 +1,18 @@
 package fr.bruju.lcfreader.structure.blocs;
 
 import fr.bruju.lcfreader.sequenceur.sequences.Handler;
-import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Champ;
 
 public interface Bloc<T> {
 
-	static Bloc<?> genererBloc(String type, String defaut, BaseDeDonneesDesStructures codes) {
-		
+	static Bloc<?> genererBloc(String type, String defaut) {
 		
 		if (type.startsWith("Array<") && type.endsWith(">")) {
-			Bloc<?> bloc = BlocArray.essayer(type, codes);
+			Bloc<?> bloc = BlocArray.essayer(type);
 			
 			if (bloc != null)
 				return bloc;
 		}
-		
-		
 		
 		switch (type) {
 		
@@ -38,6 +34,6 @@ public interface Bloc<T> {
 
 	public String valueToString(T value);
 
-	public Handler<T> getHandler(Champ<T> champ, int tailleLue, BaseDeDonneesDesStructures codes);
+	public Handler<T> getHandler(Champ<T> champ, int tailleLue);
 	
 }

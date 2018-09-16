@@ -2,7 +2,6 @@ package fr.bruju.lcfreader.structure.blocs;
 
 import fr.bruju.lcfreader.sequenceur.sequences.Handler;
 import fr.bruju.lcfreader.sequenceur.sequences.NombreBER;
-import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Champ;
 import fr.bruju.lcfreader.structure.Data;
 
@@ -38,7 +37,7 @@ public class BlocInt32 implements Bloc<Integer> {
 	}
 
 	@Override
-	public Handler<Integer> getHandler(Champ<Integer> champ, int tailleLue, BaseDeDonneesDesStructures codes) {
+	public Handler<Integer> getHandler(Champ<Integer> champ, int tailleLue) {
 		return new H(champ);
 	}
 	

@@ -24,10 +24,10 @@ public class BlocArray implements Bloc<TreeMap<Integer, DonneesLues>> {
 		return "TableauDeDonnees[" + nomStructure + "]";
 	}
 
-	public static Bloc<?> essayer(String type, BaseDeDonneesDesStructures codes) {
+	public static Bloc<?> essayer(String type) {
 		String vraiType = type.substring(6, type.length() - 1); // Array<X>
 		
-		Structure structure = codes.structures.get(vraiType);
+		Structure structure = BaseDeDonneesDesStructures.getInstance().structures.get(vraiType);
 		
 		return structure == null ? null : new BlocArray(vraiType);
 	}
@@ -43,16 +43,14 @@ public class BlocArray implements Bloc<TreeMap<Integer, DonneesLues>> {
 	}
 
 	@Override
-	public Handler<TreeMap<Integer, DonneesLues>> getHandler(Champ<TreeMap<Integer, DonneesLues>> champ, int tailleLue,
-			BaseDeDonneesDesStructures codes) {
-		return new H(champ, codes);
+	public Handler<TreeMap<Integer, DonneesLues>> getHandler(Champ<TreeMap<Integer, DonneesLues>> champ, int tailleLue) {
+		return new H(champ);
 	}
 	
 	
 	public class H implements Handler<TreeMap<Integer, DonneesLues>> {
 
 		private Champ<TreeMap<Integer, DonneesLues>> champ;
-		private BaseDeDonneesDesStructures codes;
 		private int nombreDElements;
 		
 		private Etat etat;
@@ -61,10 +59,9 @@ public class BlocArray implements Bloc<TreeMap<Integer, DonneesLues>> {
 		private SequenceurLCFAEtat sequenceur;
 		
 
-		public H(Champ<TreeMap<Integer, DonneesLues>> champ, BaseDeDonneesDesStructures codes) {
+		public H(Champ<TreeMap<Integer, DonneesLues>> champ) {
 			this.champ = champ;
-			this.codes = codes;
-			
+
 			etat = Etat.LireTaille;
 		}
 
@@ -77,16 +74,10 @@ public class BlocArray implements Bloc<TreeMap<Integer, DonneesLues>> {
 				etat = Etat.LireIndex;
 				break;
 			case LireIndex:
-				
-				/*
-				if (octet == 0) {
-					return new Data<>(champ, map);
-				} else {*/
-					DonneesLues donneeCourante = new DonneesLues(nomStructure);
-					map.put((int) octet, donneeCourante);
-					sequenceur = new SequenceurLCFAEtat(donneeCourante, codes);
-					etat = Etat.LireDonnees;
-				//}
+				DonneesLues donneeCourante = new DonneesLues(nomStructure);
+				map.put((int) octet, donneeCourante);
+				sequenceur = new SequenceurLCFAEtat(donneeCourante);
+				etat = Etat.LireDonnees;
 				break;
 			case LireDonnees:
 				if (!sequenceur.lireOctet(octet)) {

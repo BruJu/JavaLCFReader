@@ -3,7 +3,6 @@ package fr.bruju.lcfreader.structure.blocs;
 import java.util.Arrays;
 
 import fr.bruju.lcfreader.sequenceur.sequences.Handler;
-import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Champ;
 import fr.bruju.lcfreader.structure.Data;
 
@@ -25,7 +24,7 @@ public class VectorInt16 implements Bloc<short[]> {
 	}
 
 	@Override
-	public Handler<short[]> getHandler(Champ<short[]> champ, int tailleLue, BaseDeDonneesDesStructures codes) {
+	public Handler<short[]> getHandler(Champ<short[]> champ, int tailleLue) {
 		return new H(champ, tailleLue);
 	}
 	

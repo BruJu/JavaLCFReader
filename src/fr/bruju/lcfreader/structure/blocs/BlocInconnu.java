@@ -3,7 +3,6 @@ package fr.bruju.lcfreader.structure.blocs;
 import java.util.Arrays;
 
 import fr.bruju.lcfreader.sequenceur.sequences.Handler;
-import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Champ;
 import fr.bruju.lcfreader.structure.Data;
 
@@ -26,7 +25,7 @@ public class BlocInconnu implements Bloc<byte[]> {
 	
 
 	@Override
-	public Handler<byte[]> getHandler(Champ<byte[]> champ, int tailleLue, BaseDeDonneesDesStructures codes) {
+	public Handler<byte[]> getHandler(Champ<byte[]> champ, int tailleLue) {
 		return new BlocHandler(champ, tailleLue);
 	}
 

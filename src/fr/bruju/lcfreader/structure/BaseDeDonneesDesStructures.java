@@ -7,14 +7,39 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 
+ * <br>Non design pattern utilisé :
+ * Pseudo singeleton
+ * 
+ * @author Bruju
+ *
+ */
 public class BaseDeDonneesDesStructures {
+	
+	public static void initialiser(String fichier) {
+		if (instance != null) {
+			return;
+		}
+		
+		instance = new BaseDeDonneesDesStructures();
+		instance.remplirStructures(fichier);
+	}
+	
+	private static BaseDeDonneesDesStructures instance;
+
+	private BaseDeDonneesDesStructures() {
+	}
+
+	public static BaseDeDonneesDesStructures getInstance() {
+		return instance;
+	}
+	
+	
+	
+	
 	public Map<String, Structure> structures;
 	
-	
-	
-	public BaseDeDonneesDesStructures(String fichier) {
-		remplirStructures(fichier);
-	}
 
 
 

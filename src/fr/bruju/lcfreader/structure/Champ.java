@@ -31,7 +31,7 @@ public class Champ<T> {
 		
 		int index = Integer.decode(donnees[4]);
 		
-		Bloc<?> bloc = Bloc.genererBloc(type, donnees[5], codes);
+		Bloc<?> bloc = Bloc.genererBloc(type, donnees[5]);
 		
 		if (bloc != null)
 			return new Champ(index, nom, sized, bloc);
@@ -42,7 +42,7 @@ public class Champ<T> {
 
 
 
-	public Handler<T> getHandler(int tailleLue, BaseDeDonneesDesStructures codes) {
-		return bloc.getHandler(this, tailleLue, codes);
+	public Handler<T> getHandler(int tailleLue) {
+		return bloc.getHandler(this, tailleLue);
 	}
 }

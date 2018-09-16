@@ -22,9 +22,6 @@ public class SequenceurLCFAEtat implements LecteurDeSequence<Void> {
 	/** Structure contenant les codes de la donnée en cours de construction */
 	private final Structure structure;
 	
-	/** Base de données des structures pour le passage aux sous structures */
-	private final BaseDeDonneesDesStructures codes;
-	
 	/** Etat en cours pour la lecture d'octets */
 	private Etat etat;
 	
@@ -33,10 +30,9 @@ public class SequenceurLCFAEtat implements LecteurDeSequence<Void> {
 	 * @param data La donnée à remplir
 	 * @param codes La liste des codes
 	 */
-	public SequenceurLCFAEtat(DonneesLues data, BaseDeDonneesDesStructures codes) {
+	public SequenceurLCFAEtat(DonneesLues data) {
 		this.data = data;
-		this.structure = codes.structures.get(data.nomStruct);
-		this.codes = codes;
+		this.structure = BaseDeDonneesDesStructures.getInstance().structures.get(data.nomStruct);
 		this.etat = new EtatLireCode();
 	}
 
@@ -118,7 +114,7 @@ public class SequenceurLCFAEtat implements LecteurDeSequence<Void> {
 		 * @param tailleLue Le nombre d'octets
 		 */
 		public EtatLireDonnees(Champ<T> champ, int tailleLue) {
-			handler = champ.getHandler(tailleLue, codes);
+			handler = champ.getHandler(tailleLue);
 		}
 
 		@Override
