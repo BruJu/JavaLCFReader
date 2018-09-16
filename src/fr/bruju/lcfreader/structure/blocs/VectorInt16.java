@@ -28,30 +28,30 @@ public class VectorInt16 extends Bloc<int[]> {
 	public class H implements Handler<int[]> {
 		PrimitifCpp primitif = PrimitifCpp.map.get("Int16");
 		
-		private int[] nombres;
-		private int iNombres = 0;
+		private int[] nombresLus;
+		private int nombreEnCours = 0;
 		
-		private byte[] octetsNombreEnCours;
-		private int iOctetNombreEnCours;
+		private byte[] octetsEnCoursDeLecture;
+		private int indiceOctetCourant;
 
 		public H(int tailleLue) {
-			this.octetsNombreEnCours = new byte[primitif.getNombreDOctets()];
-			this.iOctetNombreEnCours = 0;
+			this.octetsEnCoursDeLecture = new byte[primitif.getNombreDOctets()];
+			this.indiceOctetCourant = 0;
 			
-			this.nombres = new int[tailleLue / primitif.getNombreDOctets()];
+			this.nombresLus = new int[tailleLue / primitif.getNombreDOctets()];
 		}
 
 		@Override
 		public Data<int[]> traiter(byte octetRecu) {
-			octetsNombreEnCours[iOctetNombreEnCours++] = octetRecu;
+			octetsEnCoursDeLecture[indiceOctetCourant++] = octetRecu;
 			
-			if (iOctetNombreEnCours == octetsNombreEnCours.length) {
-				iOctetNombreEnCours = 0;
+			if (indiceOctetCourant == octetsEnCoursDeLecture.length) {
+				indiceOctetCourant = 0;
 				
-				nombres[iNombres++] = primitif.convertir(octetsNombreEnCours);
+				nombresLus[nombreEnCours++] = primitif.convertir(octetsEnCoursDeLecture);
 				
-				if (iNombres == nombres.length) {
-					return new Data<int[]>(VectorInt16.this, nombres);
+				if (nombreEnCours == nombresLus.length) {
+					return new Data<int[]>(VectorInt16.this, nombresLus);
 				}
 			}
 			
