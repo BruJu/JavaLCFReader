@@ -1,7 +1,6 @@
 package fr.bruju.lcfreader.sequenceur.sequences;
 
 import fr.bruju.lcfreader.Utilitaire;
-import fr.bruju.lcfreader.debug.BytePrinter;
 import fr.bruju.lcfreader.modele.DonneesLues;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Champ;
@@ -62,10 +61,7 @@ public class SequenceurLCFAEtat implements LecteurDeSequence<Void> {
 	private class EtatLireCode implements Etat {
 		@Override
 		public Etat lireOctet(byte octet) {
-			BytePrinter.printByte(octet, 'C');
-			
 			if (octet == 0) {
-				System.out.println("0 détecté");
 				return null;
 			}
 			
@@ -101,7 +97,6 @@ public class SequenceurLCFAEtat implements LecteurDeSequence<Void> {
 
 		@Override
 		public Etat lireOctet(byte octet) {
-			BytePrinter.printByte(octet, 'T');
 			tailleLue = tailleLue * 0x80 + (octet & 0x7F);
 			return ((octet & 0x80) == 0) ? new EtatLireDonnees<>(champ, tailleLue) : this;
 		}
@@ -128,7 +123,6 @@ public class SequenceurLCFAEtat implements LecteurDeSequence<Void> {
 
 		@Override
 		public Etat lireOctet(byte octet) {
-			BytePrinter.printByte(octet, 'D');
 			Data<?> r = handler.traiter(octet);
 			
 			if (r == null) {

@@ -8,8 +8,8 @@ public class Main {
 	public static void main(String[] args) {
 		BaseDeDonneesDesStructures codesConnus = new BaseDeDonneesDesStructures("ressources\\liblcf\\fields.csv");
 		
-		//afficherMap("Map0452", codesConnus);
-		afficherMap("Map0001", codesConnus);
+		afficherMap("Map0452", codesConnus);
+		//afficherMap("Map0001", codesConnus);
 		//afficherMap("Map0003", codesConnus);
 		
 		

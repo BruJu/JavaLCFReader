@@ -53,6 +53,7 @@ public class BlocArray implements Bloc<TreeMap<Integer, DonneesLues>> {
 
 		private Champ<TreeMap<Integer, DonneesLues>> champ;
 		private BaseDeDonneesDesStructures codes;
+		private int nombreDElements;
 		
 		private Etat etat;
 		private TreeMap<Integer, DonneesLues> map;
@@ -71,26 +72,29 @@ public class BlocArray implements Bloc<TreeMap<Integer, DonneesLues>> {
 		public Data<TreeMap<Integer, DonneesLues>> traiter(byte octet) {
 			switch (etat) {
 			case LireTaille:
+				nombreDElements = octet;
 				map = new TreeMap<Integer, DonneesLues>();
 				etat = Etat.LireIndex;
-				System.out.println("Taille lue : " + octet);
 				break;
 			case LireIndex:
+				
+				/*
 				if (octet == 0) {
 					return new Data<>(champ, map);
-				} else {
+				} else {*/
 					DonneesLues donneeCourante = new DonneesLues(nomStructure);
-					System.out.println(nomStructure + " push " + octet);
 					map.put((int) octet, donneeCourante);
 					sequenceur = new SequenceurLCFAEtat(donneeCourante, codes);
 					etat = Etat.LireDonnees;
-					System.out.println("<" + nomStructure +">");
-				}
+				//}
 				break;
 			case LireDonnees:
 				if (!sequenceur.lireOctet(octet)) {
-					System.out.println("</" + nomStructure +">");
-					etat = Etat.LireIndex;
+					if (map.size() == nombreDElements) {
+						return new Data<>(champ, map);
+					} else {
+						etat = Etat.LireIndex;
+					}
 				}
 				break;
 			}
