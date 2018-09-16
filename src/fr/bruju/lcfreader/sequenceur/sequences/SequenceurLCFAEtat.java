@@ -32,7 +32,7 @@ public class SequenceurLCFAEtat implements LecteurDeSequence<Void> {
 	 */
 	public SequenceurLCFAEtat(DonneesLues data) {
 		this.data = data;
-		this.structure = BaseDeDonneesDesStructures.getInstance().structures.get(data.nomStruct);
+		this.structure = BaseDeDonneesDesStructures.getInstance().get(data.nomStruct);
 		this.etat = new EtatLireCode();
 	}
 

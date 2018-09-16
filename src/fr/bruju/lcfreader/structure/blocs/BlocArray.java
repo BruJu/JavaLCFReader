@@ -27,7 +27,7 @@ public class BlocArray implements Bloc<TreeMap<Integer, DonneesLues>> {
 	public static Bloc<?> essayer(String type) {
 		String vraiType = type.substring(6, type.length() - 1); // Array<X>
 		
-		Structure structure = BaseDeDonneesDesStructures.getInstance().structures.get(vraiType);
+		Structure structure = BaseDeDonneesDesStructures.getInstance().get(vraiType);
 		
 		return structure == null ? null : new BlocArray(vraiType);
 	}
