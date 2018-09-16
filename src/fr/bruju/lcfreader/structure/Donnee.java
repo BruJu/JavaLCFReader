@@ -2,17 +2,17 @@ package fr.bruju.lcfreader.structure;
 
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 
-public class Data<T> {
+public class Donnee<T> {
 	public Bloc<T> bloc;
 	public T value;
 	
-	public Data(Bloc<T> bloc) {
+	public Donnee(Bloc<T> bloc) {
 		this.bloc = bloc;
 		value = null;
 	}
 	
 
-	public Data(Bloc<T> bloc, T value) {
+	public Donnee(Bloc<T> bloc, T value) {
 		this.bloc = bloc;
 		this.value = value;
 	}

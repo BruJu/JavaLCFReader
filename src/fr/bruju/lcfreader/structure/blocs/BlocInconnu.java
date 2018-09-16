@@ -2,8 +2,8 @@ package fr.bruju.lcfreader.structure.blocs;
 
 import java.util.Arrays;
 
-import fr.bruju.lcfreader.sequenceur.sequences.Handler;
-import fr.bruju.lcfreader.structure.Data;
+import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
+import fr.bruju.lcfreader.structure.Donnee;
 
 public class BlocInconnu extends Bloc<byte[]> {
 	public final String type;
@@ -24,11 +24,11 @@ public class BlocInconnu extends Bloc<byte[]> {
 	
 
 	@Override
-	public Handler<byte[]> getHandler(int tailleLue) {
+	public ConvertisseurOctetsVersDonnees<byte[]> getHandler(int tailleLue) {
 		return new BlocHandler(tailleLue);
 	}
 
-	public class BlocHandler implements Handler<byte[]> {
+	public class BlocHandler implements ConvertisseurOctetsVersDonnees<byte[]> {
 		private byte[] octets;
 		private int i;
 
@@ -38,10 +38,10 @@ public class BlocInconnu extends Bloc<byte[]> {
 		}
 
 		@Override
-		public Data<byte[]> traiter(byte octet) {
+		public Donnee<byte[]> accumuler(byte octet) {
 			octets[i++] = octet;
 			
-			return (i == octets.length) ? new Data<byte[]>(BlocInconnu.this, octets) : null;
+			return (i == octets.length) ? new Donnee<byte[]>(BlocInconnu.this, octets) : null;
 		}
 	}
 }

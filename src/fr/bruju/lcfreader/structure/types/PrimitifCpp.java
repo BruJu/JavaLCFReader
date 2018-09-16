@@ -29,7 +29,6 @@ public interface PrimitifCpp {
 	
 	
 	public class Int16 implements PrimitifCpp {
-
 		@Override
 		public String getNom() {
 			return "Int16";
@@ -42,8 +41,27 @@ public interface PrimitifCpp {
 
 		@Override
 		public int convertir(byte[] octets) {
+			// TODO : corriger pour les nombres négatifs
 			return (Byte.toUnsignedInt(octets[0]) + Byte.toUnsignedInt(octets[1]) * 0x100);
 		}
+	}
+	
+	public class UInt32 implements PrimitifCpp {
+		@Override
+		public String getNom() {
+			return "UInt32";
+		}
+
+		@Override
+		public int getNombreDOctets() {
+			return 0;
+		}
+
+		@Override
+		public int convertir(byte[] octets) {
+			return 0;
+		}
+		
 		
 	}
 

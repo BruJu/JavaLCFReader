@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Il s'agit de la classe indiquant à quoi correspondent les différents codes rencontrés dans l'encodage BER.
@@ -58,7 +59,7 @@ public class BaseDeDonneesDesStructures {
 	 * =============== */
 	
 	/** Association nom de la structure - codes qu'elle contient */
-	private Map<String, Structure> structures;
+	public Map<String, Structure> structures;
 	
 	/**
 	 * Donne la structure contenant les codes pour la structure demandée
@@ -79,30 +80,42 @@ public class BaseDeDonneesDesStructures {
 		structures = new HashMap<>();
 		
 		try {
-			FileReader fileReader = new FileReader(file);
-			BufferedReader buffer = new BufferedReader(fileReader);
-			String line;
-	
-			while (true) {
-				line = buffer.readLine();
-	
-				if (line == null) {
-					break;
-				}
-				
-				if (line.startsWith("#") || line.equals(""))
-					continue;
-				
-				String[] donnees = line.split(",", -1);
-				
+			// Lire les noms de structure
+			lireToutesLesLignes(file, ligne -> {
+				String[] donnees = ligne.split(",", -1);
 				structures.putIfAbsent(donnees[0], new Structure());
-				
-				structures.get(donnees[0]).ajouterChamp(donnees);
-			}
-	
-			buffer.close();
-		} catch (IOException e) {
+			});
 			
+			
+			// Lire les arguments
+			lireToutesLesLignes(file, ligne -> {
+				String[] donnees = ligne.split(",", -1);
+				structures.get(donnees[0]).ajouterChamp(donnees);
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+	}
+	
+	private static void lireToutesLesLignes(File file, Consumer<String> action) throws IOException {
+		FileReader fileReader = new FileReader(file);
+		BufferedReader buffer = new BufferedReader(fileReader);
+		
+		String ligne;
+		
+		while (true) {
+			ligne = buffer.readLine();
+
+			if (ligne == null) {
+				break;
+			}
+			
+			if (ligne.startsWith("#") || ligne.equals(""))
+				continue;
+			
+			action.accept(ligne);
+		}
+
+		buffer.close();
 	}
 }

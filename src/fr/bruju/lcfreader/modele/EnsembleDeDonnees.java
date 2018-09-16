@@ -1,24 +1,29 @@
 package fr.bruju.lcfreader.modele;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.sequenceur.lecteurs.LecteurDeFichierOctetParOctet;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
 import fr.bruju.lcfreader.sequenceur.sequences.TailleChaine;
-import fr.bruju.lcfreader.structure.Data;
+import fr.bruju.lcfreader.structure.Donnee;
 
-public class DonneesLues {
-	private List<Data<?>> donnees;
+public class EnsembleDeDonnees {
+	private List<Donnee<?>> donnees;
+	private Map<String, Integer> tailles;
+	
 	public final String nomStruct;
 	
-	public DonneesLues(String nomStruct) {
+	public EnsembleDeDonnees(String nomStruct) {
 		donnees = new ArrayList<>();
 		this.nomStruct = nomStruct;
 	}
 	
-	public static DonneesLues lireFichier(String chemin) {
+	public static EnsembleDeDonnees lireFichier(String chemin) {
 		
 		// Connaître le type de fichier
 		LecteurDeFichierOctetParOctet lecteur = LecteurDeFichierOctetParOctet.instancier(chemin);
@@ -37,7 +42,7 @@ public class DonneesLues {
 		
 		}
 
-		DonneesLues data = new DonneesLues(nomStruct);
+		EnsembleDeDonnees data = new EnsembleDeDonnees(nomStruct);
 		
 		lecteur.sequencer(new SequenceurLCFAEtat(data));
 		
@@ -59,7 +64,13 @@ public class DonneesLues {
 		System.out.println(nomStruct);
 		donnees.forEach(data -> {
 			tab(niveau);
-			System.out.println(data.bloc.getTrueRepresetantion());
+			System.out.print(data.bloc.getTrueRepresetantion());
+			
+			if (data.value instanceof byte[]) {
+				System.out.print(" " + Arrays.toString((byte[]) data.value));
+			}
+			
+			System.out.println();
 			data.afficherSousArchi(niveau+1);
 		});
 	}
@@ -70,8 +81,15 @@ public class DonneesLues {
 	}
 	
 
-	public void push(Data<?> blocData) {
+	public void push(Donnee<?> blocData) {
 		donnees.add(blocData);
+		
+		if (blocData.bloc.getChamp().sized) {
+			if (tailles == null)
+				tailles = new HashMap<>();
+			
+			tailles.put(blocData.bloc.getChamp().nom, (Integer) blocData.value);
+		}
 	}
 
 	public String getRepresentation() {
@@ -79,5 +97,12 @@ public class DonneesLues {
 			donnees.stream()
 				   .map(d -> d.bloc.getChamp().nom + ":" + d.valueToString())
 				   .collect(Collectors.joining(" ; "));
+	}
+
+	public Integer getTaille(String nom) {
+		if (tailles == null)
+			return null;
+		
+		return tailles.get(nom);
 	}
 }

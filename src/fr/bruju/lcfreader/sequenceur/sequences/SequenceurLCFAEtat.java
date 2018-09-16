@@ -1,9 +1,9 @@
 package fr.bruju.lcfreader.sequenceur.sequences;
 
 import fr.bruju.lcfreader.Utilitaire;
-import fr.bruju.lcfreader.modele.DonneesLues;
+import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
-import fr.bruju.lcfreader.structure.Data;
+import fr.bruju.lcfreader.structure.Donnee;
 import fr.bruju.lcfreader.structure.Structure;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 
@@ -18,7 +18,7 @@ import fr.bruju.lcfreader.structure.blocs.Bloc;
 
 public class SequenceurLCFAEtat implements LecteurDeSequence<Void> {
 	/** Donnée en cours de construction */
-	public final DonneesLues data;
+	public final EnsembleDeDonnees data;
 	/** Structure contenant les codes de la donnée en cours de construction */
 	private final Structure structure;
 	
@@ -30,7 +30,7 @@ public class SequenceurLCFAEtat implements LecteurDeSequence<Void> {
 	 * @param data La donnée à remplir
 	 * @param codes La liste des codes
 	 */
-	public SequenceurLCFAEtat(DonneesLues data) {
+	public SequenceurLCFAEtat(EnsembleDeDonnees data) {
 		this.data = data;
 		this.structure = BaseDeDonneesDesStructures.getInstance().get(data.nomStruct);
 		this.etat = new EtatLireCode();
@@ -106,7 +106,7 @@ public class SequenceurLCFAEtat implements LecteurDeSequence<Void> {
 	 */
 	private class EtatLireDonnees<T> implements Etat {
 		/** Le traiteur pour le champ actuel */
-		private Handler<T> handler;
+		private ConvertisseurOctetsVersDonnees<T> handler;
 
 		/**
 		 * Crée un état de lecture des données pour le champ
@@ -115,11 +115,12 @@ public class SequenceurLCFAEtat implements LecteurDeSequence<Void> {
 		 */
 		public EtatLireDonnees(Bloc<T> bloc, int tailleLue) {
 			handler = bloc.getHandler(tailleLue);
+			handler.fournirTailles(data.getTaille(bloc.getChamp().nom));
 		}
 
 		@Override
 		public Etat lireOctet(byte octet) {
-			Data<?> r = handler.traiter(octet);
+			Donnee<?> r = handler.accumuler(octet);
 			
 			if (r == null) {
 				return this;
