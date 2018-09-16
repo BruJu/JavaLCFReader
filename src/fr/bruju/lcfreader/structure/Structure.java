@@ -39,6 +39,10 @@ public class Structure {
 	public boolean estSerie() {
 		return !serie.isEmpty();
 	}
+
+	public List<Bloc<?>> getSerie() {
+		return serie;
+	}
 	
 	
 }

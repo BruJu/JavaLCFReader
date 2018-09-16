@@ -59,4 +59,9 @@ public class BlocInt32 extends Bloc<Integer> {
 			return b ? null : new Donnee<>(BlocInt32.this, accumulateur.getResultat().intValue());
 		}
 	}
+
+	@Override
+	public ConvertisseurOctetsVersDonnees<Integer> getHandlerEnSerie() {
+		return new H();
+	}
 }

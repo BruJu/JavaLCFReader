@@ -1,7 +1,10 @@
 package fr.bruju.lcfreader.structure.blocs;
 
+import fr.bruju.lcfreader.sequenceur.sequences.Chaine;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
+import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
 import fr.bruju.lcfreader.sequenceur.sequences.NombreBER;
+import fr.bruju.lcfreader.sequenceur.sequences.TailleChaine;
 import fr.bruju.lcfreader.structure.Donnee;
 
 /**
@@ -9,54 +12,51 @@ import fr.bruju.lcfreader.structure.Donnee;
  * @author Bruju
  *
  */
-public class BlocString extends Bloc<Integer> {
+public class BlocString extends Bloc<String> {
 	/** Valeur par défaut */
-	private Integer defaut;
+	private String defaut;
 	
 	/**
 	 * Construit le bloc contenant un entier avec la valeur par défaut donnée
 	 * @param defaut La valeur par défaut. Si de la forme a|b, prend b.
 	 */
 	public BlocString(String defaut) {
-		if (!defaut.equals("")) {
-			// On prend la valeur par défaut pour RPG Maker 2003
-			if (defaut.contains("|")) {
-				defaut = defaut.split("|")[1];
-			}
-			
-			this.defaut = Integer.parseInt(defaut);
-		}
+		this.defaut = defaut.equals("") ? null : defaut;
 	}
 	
 	@Override
-	public Integer defaut() {
+	public String defaut() {
 		return defaut;
 	}
 
 	@Override
 	public String getRepresentation() {
-		return "Integer(" + defaut + ")";
+		return "String(" + defaut + ")";
 	}
-
 
 	@Override
-	public ConvertisseurOctetsVersDonnees<Integer> getHandler(int tailleLue) {
-		return new H();
+	public ConvertisseurOctetsVersDonnees<String> getHandler(int tailleLue) {
+		return new H(new Chaine(tailleLue));
 	}
+
+	@Override
+	public ConvertisseurOctetsVersDonnees<String> getHandlerEnSerie() {
+		return new H(new TailleChaine());
+	}
+
 	
-	public class H implements ConvertisseurOctetsVersDonnees<Integer> {
+	public class H implements ConvertisseurOctetsVersDonnees<String> {
 		
-		private NombreBER accumulateur;
-
-		public H() {
-			accumulateur = new NombreBER();
+		public LecteurDeSequence<String> sequenceur;
+		
+		public H(LecteurDeSequence<String> sequenceur) {
+			this.sequenceur = sequenceur;
 		}
-
+		
 		@Override
-		public Donnee<Integer> accumuler(byte octet) {
-			boolean b = accumulateur.lireOctet(octet);
-			
-			return b ? null : new Donnee<>(BlocString.this, accumulateur.getResultat().intValue());
+		public Donnee<String> accumuler(byte octet) {
+			return sequenceur.lireOctet(octet) ? null : new Donnee<>(BlocString.this, sequenceur.getResultat());
 		}
 	}
+
 }

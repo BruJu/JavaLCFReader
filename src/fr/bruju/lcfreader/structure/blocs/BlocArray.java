@@ -92,7 +92,7 @@ public class BlocArray extends Bloc<TreeMap<Integer, EnsembleDeDonnees>> {
 			case LireIndex:
 				EnsembleDeDonnees donneeCourante = new EnsembleDeDonnees(nomStructure);
 				map.put((int) octet, donneeCourante);
-				sequenceur = new SequenceurLCFAEtat(donneeCourante);
+				sequenceur = SequenceurLCFAEtat.instancier(donneeCourante);
 				etat = Etat.LireDonnees;
 				break;
 			case LireDonnees:
@@ -117,5 +117,10 @@ public class BlocArray extends Bloc<TreeMap<Integer, EnsembleDeDonnees>> {
 		LireTaille,
 		LireIndex,
 		LireDonnees
+	}
+
+	@Override
+	public ConvertisseurOctetsVersDonnees<TreeMap<Integer, EnsembleDeDonnees>> getHandlerEnSerie() {
+		return null;
 	};
 }

@@ -52,8 +52,12 @@ public abstract class Bloc<T> {
 		
 		
 		switch (type) {
+		case "String":
+			return new BlocString(defaut);
+		
 		
 		case "Int32":
+		case "Enum<EventCommand_Code>":
 			return new BlocInt32(defaut);
 			
 		default:
@@ -79,5 +83,7 @@ public abstract class Bloc<T> {
 
 	public void afficherSousArchi(int niveau, T value) {
 	}
+
+	public abstract ConvertisseurOctetsVersDonnees<T> getHandlerEnSerie();
 	
 }

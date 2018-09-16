@@ -3,6 +3,7 @@ package fr.bruju.lcfreader.structure.blocs;
 import java.util.Arrays;
 
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
+import fr.bruju.lcfreader.sequenceur.sequences.NombreBER;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Donnee;
 import fr.bruju.lcfreader.structure.types.PrimitifCpp;
@@ -54,6 +55,8 @@ public class BlocIntVector extends Bloc<int[]> {
 	public class H implements ConvertisseurOctetsVersDonnees<int[]> {
 		PrimitifCpp primitif = PrimitifCpp.map.get(nomPrimitive);
 		
+		private NombreBER decodageTaille;
+		
 		private int[] nombresLus;
 		private int indiceNombreEnCours = 0;
 		
@@ -61,14 +64,21 @@ public class BlocIntVector extends Bloc<int[]> {
 		private int indiceOctetCourant;
 
 		public H(int tailleLue) {
+			tailleConnue(tailleLue);
+		}
+		
+		public H() {
+			decodageTaille = new NombreBER();
+		}
+		
+		private void tailleConnue(int taille) {
 			this.octetsEnCoursDeLecture = new byte[primitif.getNombreDOctets()];
 			this.indiceOctetCourant = 0;
 			
-			this.nombresLus = new int[tailleLue / primitif.getNombreDOctets()];
+			this.nombresLus = new int[taille / primitif.getNombreDOctets()];
 		}
-
-		@Override
-		public Donnee<int[]> accumuler(byte octetRecu) {
+		
+		public Donnee<int[]> accumulerTableau(byte octetRecu) {
 			octetsEnCoursDeLecture[indiceOctetCourant++] = octetRecu;
 			
 			if (indiceOctetCourant == octetsEnCoursDeLecture.length) {
@@ -84,5 +94,30 @@ public class BlocIntVector extends Bloc<int[]> {
 			return null;
 		}
 
+		@Override
+		public Donnee<int[]> accumuler(byte octetRecu) {
+			if (decodageTaille != null) {
+				
+				if (!decodageTaille.lireOctet(octetRecu)) {
+					tailleConnue(decodageTaille.getResultat().intValue());
+					decodageTaille = null;
+					
+					if (nombresLus.length == 0) {
+						return new Donnee<int[]>(BlocIntVector.this, nombresLus);
+					}
+				}
+				
+				return null;
+			} else {
+				return accumulerTableau(octetRecu);
+			}
+			
+		}
+	}
+
+
+	@Override
+	public ConvertisseurOctetsVersDonnees<int[]> getHandlerEnSerie() {
+		return new H();
 	}
 }

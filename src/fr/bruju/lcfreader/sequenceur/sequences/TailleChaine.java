@@ -13,7 +13,16 @@ public class TailleChaine implements LecteurDeSequence<String> {
 			etape++;
 			
 			if (etape == 1) {
-				lecteurActuel = new Chaine(((Long) lecteurActuel.getResultat()).intValue());
+				int taille = ((Long) lecteurActuel.getResultat()).intValue();
+
+				lecteurActuel = new Chaine(taille);
+				
+				if (taille == 0) {
+					etape = 2;
+				}
+				
+				
+				
 			}
 		}
 		

@@ -44,4 +44,9 @@ public class BlocInconnu extends Bloc<byte[]> {
 			return (i == octets.length) ? new Donnee<byte[]>(BlocInconnu.this, octets) : null;
 		}
 	}
+
+	@Override
+	public ConvertisseurOctetsVersDonnees<byte[]> getHandlerEnSerie() {
+		return null;
+	}
 }

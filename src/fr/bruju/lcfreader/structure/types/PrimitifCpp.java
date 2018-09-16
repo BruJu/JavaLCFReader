@@ -11,8 +11,8 @@ public interface PrimitifCpp {
 	
 	public static Map<String, PrimitifCpp> map = remplirHashMap(
 			new PrimitifCpp[] {
-					new Int16()
-					
+					new Int16(),
+					new Int32()
 			});
 
 	
@@ -46,20 +46,20 @@ public interface PrimitifCpp {
 		}
 	}
 	
-	public class UInt32 implements PrimitifCpp {
+	public class Int32 implements PrimitifCpp {
 		@Override
 		public String getNom() {
-			return "UInt32";
+			return "Int32";
 		}
 
 		@Override
 		public int getNombreDOctets() {
-			return 0;
+			return 1;
 		}
 
 		@Override
 		public int convertir(byte[] octets) {
-			return 0;
+			return Byte.toUnsignedInt(octets[0]);
 		}
 		
 		

@@ -44,7 +44,7 @@ public class EnsembleDeDonnees {
 
 		EnsembleDeDonnees data = new EnsembleDeDonnees(nomStruct);
 		
-		lecteur.sequencer(new SequenceurLCFAEtat(data));
+		lecteur.sequencer(SequenceurLCFAEtat.instancier(data));
 		
 		return data;
 	}

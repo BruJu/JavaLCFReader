@@ -52,20 +52,17 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 		public void fournirTailles(Integer taille) {
 			this.taille = taille;
 			this.ensembles = new ArrayList<>(this.taille);
-			System.out.println("Recoit une taille de " + taille + " " + nomStructure);
 		}
 
 		@Override
 		public Donnee<List<EnsembleDeDonnees>> accumuler(byte octet) {
-			System.out.println(Utilitaire.toHex(octet));
-			
 			if (sequenceur == null) {
 				if ((octet & 0x80) == 0) {
-					sequenceur = new SequenceurLCFAEtat(new EnsembleDeDonnees(nomStructure));
+					sequenceur = SequenceurLCFAEtat.instancier(new EnsembleDeDonnees(nomStructure));
 				}
 			} else {
 				if (!sequenceur.lireOctet(octet)) {
-					ensembles.add(sequenceur.data);
+					ensembles.add(sequenceur.getResultat());
 					sequenceur = null;
 					
 					if (ensembles.size() == taille) {
@@ -80,6 +77,11 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 		
 		
 		
+	}
+
+	@Override
+	public ConvertisseurOctetsVersDonnees<List<EnsembleDeDonnees>> getHandlerEnSerie() {
+		return null;
 	}
 
 }
