@@ -9,8 +9,11 @@ import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
 		BaseDeDonneesDesStructures.initialiser("ressources\\liblcf\\fields.csv");
+
+		afficherMap("Projet\\Map0001", EnsembleDeDonnees::afficher);
+		afficherMap("Projet\\Map0001", EnsembleDeDonnees::afficherArchi);
 		
-		afficherMap("Map0452", EnsembleDeDonnees::afficher);
+		//afficherMap("Map0452", EnsembleDeDonnees::afficher);
 		//afficherMap("Map0001", EnsembleDeDonnees::afficher);
 		//afficherMap("Map0003", EnsembleDeDonnees::afficher);
 

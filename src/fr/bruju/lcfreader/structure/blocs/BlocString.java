@@ -1,9 +1,9 @@
 package fr.bruju.lcfreader.structure.blocs;
 
+import fr.bruju.lcfreader.debug.Logger;
 import fr.bruju.lcfreader.sequenceur.sequences.Chaine;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
-import fr.bruju.lcfreader.sequenceur.sequences.NombreBER;
 import fr.bruju.lcfreader.sequenceur.sequences.TailleChaine;
 import fr.bruju.lcfreader.structure.Donnee;
 
@@ -55,6 +55,7 @@ public class BlocString extends Bloc<String> {
 		
 		@Override
 		public Donnee<String> accumuler(byte octet) {
+			Logger.octet(octet);
 			return sequenceur.lireOctet(octet) ? null : new Donnee<>(BlocString.this, sequenceur.getResultat());
 		}
 	}

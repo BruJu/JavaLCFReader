@@ -46,32 +46,64 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 		private int taille;
 		private List<EnsembleDeDonnees> ensembles;
 
+		
+		private int nbOctetsRecu = 0;
+		
 		private SequenceurLCFAEtat sequenceur;
 
 		@Override
-		public void fournirTailles(Integer taille) {
+		public boolean fournirTailles(Integer taille) {
+			if (taille == null) {
+				this.taille = -1;
+				return false;
+			}
+			
 			this.taille = taille;
 			this.ensembles = new ArrayList<>(this.taille);
+			
+			return true;
 		}
-
+		
 		@Override
 		public Donnee<List<EnsembleDeDonnees>> accumuler(byte octet) {
 			if (sequenceur == null) {
+				sequenceur = SequenceurLCFAEtat.instancier(new EnsembleDeDonnees(nomStructure));
+			}
+			
+			boolean seq = sequenceur.lireOctet(octet);
+			
+			if (!seq) {
+				ensembles.add(sequenceur.getResultat());
+				sequenceur = null;
+			}
+			
+			
+			
+			return (taille == ++nbOctetsRecu) ? new Donnee<>(BlocEnsembleVector.this, ensembles) : null;
+			
+			/*
+			
+			
+			if (sequenceur == null) {
+
+				if (taille == -1) {
+					return new Donnee<>(BlocEnsembleVector.this, ensembles);
+				}
+				
 				if ((octet & 0x80) == 0) {
-					sequenceur = SequenceurLCFAEtat.instancier(new EnsembleDeDonnees(nomStructure));
+					
 				}
 			} else {
 				if (!sequenceur.lireOctet(octet)) {
 					ensembles.add(sequenceur.getResultat());
 					sequenceur = null;
 					
-					if (ensembles.size() == taille) {
-						return new Donnee<>(BlocEnsembleVector.this, ensembles);
+					if (nbOctetsRecu == taille) {
+						return ;
 					}
 				}
 			}
-			
-			return null;
+			*/
 		}
 		
 		

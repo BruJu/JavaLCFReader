@@ -51,13 +51,16 @@ public abstract class Bloc<T> {
 		
 		
 		
+		if (type.startsWith("Enum<")) {
+			type = "Int32";
+		}
+		
 		switch (type) {
 		case "String":
 			return new BlocString(defaut);
 		
 		
 		case "Int32":
-		case "Enum<EventCommand_Code>":
 			return new BlocInt32(defaut);
 			
 		default:

@@ -1,7 +1,10 @@
 package fr.bruju.lcfreader.structure.blocs;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
+import fr.bruju.lcfreader.debug.BytePrinter;
+import fr.bruju.lcfreader.debug.Logger;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.structure.Donnee;
 
@@ -19,7 +22,7 @@ public class BlocInconnu extends Bloc<byte[]> {
 
 	@Override
 	public String valueToString(byte[] value) {
-		return value.length + ">" + Arrays.toString(value);
+		return value.length + ">" + BytePrinter.getTable(value);
 	}
 	
 

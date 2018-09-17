@@ -52,4 +52,21 @@ public class BytePrinter {
 			
 		}
 	}
+
+	public static String getTable(byte[] value) {
+		String s = "[";
+		boolean a = false;
+		for (byte v : value) {
+			if (a) {
+				s += " ";
+			}
+			
+			a = true;
+			
+			s += Utilitaire.toHex(v);
+			
+		}
+		s +="]";
+		return s;
+	}
 }

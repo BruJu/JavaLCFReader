@@ -39,8 +39,7 @@ public class SequenceurLCFEnSerie implements SequenceurLCFAEtat {
 		this.data = data;
 		this.structure = BaseDeDonneesDesStructures.getInstance().get(data.nomStruct);
 		blocsAExplorer = structure.getSerie();
-
-		System.out.println("<< " + blocsAExplorer.stream().map(b -> b .getRepresentation()).collect(Collectors.joining("•")));
+		
 		nouveauSousChamp();
 	}
 	
@@ -48,17 +47,10 @@ public class SequenceurLCFEnSerie implements SequenceurLCFAEtat {
 		sousChampActuel ++;
 		
 		if (sousChampActuel == blocsAExplorer.size()) {
-			System.out.println(">>");
 			return false;
 		} else {
 			Bloc<?> bloc = blocsAExplorer.get(sousChampActuel);
 			handler = bloc.getHandlerEnSerie();
-			System.out.println(bloc.getRepresentation());
-			
-			if (handler == null) {
-				System.out.println("Pas de handler");
-			}
-			
 			String n = bloc.getChamp().nom;
 			Integer t = data.getTaille(n);
 			handler.fournirTailles(t);
@@ -77,8 +69,8 @@ public class SequenceurLCFEnSerie implements SequenceurLCFAEtat {
 
 	@Override
 	public boolean lireOctet(byte octet) {
-		System.out.print(" " + Utilitaire.toHex(octet));
-		
+
+		System.out.print(" " + data.nomStruct + Utilitaire.toHex(octet));
 		Donnee<?> r = handler.accumuler(octet);
 		
 		if (r == null) {
@@ -87,7 +79,7 @@ public class SequenceurLCFEnSerie implements SequenceurLCFAEtat {
 			data.push(r);
 			
 			boolean suite = nouveauSousChamp();
-			
+
 			if (suite) {
 				
 			}

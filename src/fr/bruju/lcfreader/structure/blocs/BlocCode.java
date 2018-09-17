@@ -1,7 +1,6 @@
 package fr.bruju.lcfreader.structure.blocs;
 
-import java.util.TreeMap;
-
+import fr.bruju.lcfreader.debug.Logger;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
@@ -46,11 +45,7 @@ public class BlocCode extends Bloc<EnsembleDeDonnees> {
 
 		@Override
 		public Donnee<EnsembleDeDonnees> accumuler(byte octet) {
-			if (sequenceur.lireOctet(octet)) {
-				return null;
-			} else {
-				return new Donnee<>(BlocCode.this, sequenceur.getResultat());
-			}
+			return sequenceur.lireOctet(octet) ? null : new Donnee<>(BlocCode.this, sequenceur.getResultat());
 		}
 	}
 

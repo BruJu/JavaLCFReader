@@ -23,6 +23,7 @@ public interface ConvertisseurOctetsVersDonnees<T> {
 	 * le même nom que le champ en cours 
 	 * @param taille La taille
 	 */
-	public default void fournirTailles(Integer taille) {
+	public default boolean fournirTailles(Integer taille) {
+		return true;
 	}
 }
