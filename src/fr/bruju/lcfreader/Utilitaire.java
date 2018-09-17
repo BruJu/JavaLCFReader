@@ -1,5 +1,7 @@
 package fr.bruju.lcfreader;
 
+import java.util.function.Function;
+
 public class Utilitaire {
 
 	/**
@@ -28,5 +30,9 @@ public class Utilitaire {
 		for (int i = 0 ; i != niveau ; i++) {
 			System.out.print("  ");
 		}
+	}
+	
+	public static <O, R> R appel(O objet, Function<O, R> fonction) {
+		return objet == null ? null : fonction.apply(objet);
 	}
 }
