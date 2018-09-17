@@ -14,12 +14,13 @@ public class Chaine implements LecteurDeSequence<String> {
 
 	/**
 	 * Construit un lecteur de séquences dont le but est de lire une chaîne
+	 * 
 	 * @param nombreDeCaracteres Taille de la chaîne à lire
 	 */
 	public Chaine(int nombreDeCaracteres) {
 		caracteres = new char[nombreDeCaracteres];
 	}
-	
+
 	@Override
 	public boolean lireOctet(byte octet) {
 		caracteres[i++] = (char) (octet & 0xFF);

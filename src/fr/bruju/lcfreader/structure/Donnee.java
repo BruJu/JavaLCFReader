@@ -14,18 +14,20 @@ public class Donnee<T> {
 	public Bloc<T> bloc;
 	/** La valeur */
 	public T value;
-	
+
 	/**
 	 * Crée une donnée liée au bloc donné et avec la valeur par défaut lié au bloc
+	 * 
 	 * @param bloc Le bloc décrivant le type de la donnée
 	 */
 	public Donnee(Bloc<T> bloc) {
 		this.bloc = bloc;
 		value = null;
 	}
-	
+
 	/**
 	 * Crée une donnée liée au bloc donné et avec la valeur donnée
+	 * 
 	 * @param bloc Le bloc décrivant le type
 	 * @param value La valeur
 	 */
@@ -36,6 +38,7 @@ public class Donnee<T> {
 
 	/**
 	 * Converti la valeur de la donnée en chaîne par rapport au bloc
+	 * 
 	 * @return Une représentation en chaîne de la valeur
 	 */
 	public String getString() {
@@ -45,6 +48,7 @@ public class Donnee<T> {
 	/**
 	 * Affiche l'architecture des données contenues par cette donnée en considérant qu'on est au niveau d'identation
 	 * donné.
+	 * 
 	 * @param niveau Le niveau d'indentation
 	 */
 	public void afficherSousArchi(int niveau) {

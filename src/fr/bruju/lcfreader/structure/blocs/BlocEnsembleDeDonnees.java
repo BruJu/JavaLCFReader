@@ -7,6 +7,7 @@ import fr.bruju.lcfreader.structure.Donnee;
 
 /**
  * Un bloc de données correspondant à un ensemble de données
+ * 
  * @author Bruju
  *
  */
@@ -14,12 +15,13 @@ public class BlocEnsembleDeDonnees extends Bloc<EnsembleDeDonnees> {
 	/* =========================
 	 * ATTRIBUTS ET CONSTRUCTEUR
 	 * ========================= */
-	
+
 	/** Nom de la structure */
 	private String nomStructure;
-	
+
 	/**
 	 * Bloc constitué d'un ensemble de données
+	 * 
 	 * @param champ Caractéristiques
 	 * @param nomStructure Nom de la structure
 	 */
@@ -28,17 +30,15 @@ public class BlocEnsembleDeDonnees extends Bloc<EnsembleDeDonnees> {
 		this.nomStructure = nomStructure;
 	}
 
-	
 	/* ====================
 	 * PROPRIETES D'UN BLOC
 	 * ==================== */
-	
+
 	@Override
 	public String getNomType() {
 		return "#" + nomStructure;
 	}
 
-	
 	/* =====================
 	 * CONSTRUIRE UNE VALEUR
 	 * ===================== */
@@ -49,11 +49,11 @@ public class BlocEnsembleDeDonnees extends Bloc<EnsembleDeDonnees> {
 				SequenceurLCFAEtat.instancier(new EnsembleDeDonnees(nomStructure)),
 				r -> new Donnee<>(BlocEnsembleDeDonnees.this, r));
 	}
-	
+
 	/* ============================
 	 * INTERACTION AVEC LES VALEURS
 	 * ============================ */
-	
+
 	@Override
 	public String convertirEnChaineUneValeur(EnsembleDeDonnees value) {
 		return value.getRepresentationEnLigne();

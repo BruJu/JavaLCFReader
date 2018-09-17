@@ -38,13 +38,12 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 	/* =====================
 	 * SEQUENCEUR LCF A ETAT
 	 * ===================== */
-	
+
 	@Override
 	public boolean lireOctet(byte octet) {
 		etat = etat.lireOctet(octet);
 		return etat != null;
 	}
-
 
 	@Override
 	public EnsembleDeDonnees getResultat() {
@@ -72,7 +71,7 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 			return new EtatLireTaille(bloc);
 		}
 	}
-	
+
 	/**
 	 * Un état dont le but est de lire le nombre d'octets
 	 *
@@ -96,15 +95,15 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 		@Override
 		public Etat lireOctet(byte octet) {
 			tailleLue = tailleLue * 0x80 + (octet & 0x7F);
-			
+
 			if ((octet & 0x80) != 0) {
 				return this;
 			}
-			
+
 			if (tailleLue == 0) {
 				return new EtatLireCode();
 			}
-			
+
 			return new EtatLireDonnees<>(bloc.getHandler(tailleLue));
 		}
 	}

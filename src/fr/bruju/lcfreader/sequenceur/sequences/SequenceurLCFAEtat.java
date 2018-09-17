@@ -13,6 +13,7 @@ import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 public interface SequenceurLCFAEtat extends LecteurDeSequence<EnsembleDeDonnees> {
 	/**
 	 * Donne le séquenceur pour déséquencer la donnée selon si elle est en série ou pas
+	 * 
 	 * @param data La donnée à déséquencer
 	 * @return Le déséquenceur
 	 */

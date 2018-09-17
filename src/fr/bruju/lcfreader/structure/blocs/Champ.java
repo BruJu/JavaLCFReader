@@ -1,9 +1,9 @@
 package fr.bruju.lcfreader.structure.blocs;
 
 /**
- * Une classe temporaire qui compacte index, nom et si le bloc est un champ de taille pour le passage entre
- * fonctions avant la création du bloc.
- *  
+ * Une classe temporaire qui compacte index, nom et si le bloc est un champ de taille pour le passage entre fonctions
+ * avant la création du bloc.
+ * 
  * @author Bruju
  *
  */

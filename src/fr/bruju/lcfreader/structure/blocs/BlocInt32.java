@@ -6,6 +6,7 @@ import fr.bruju.lcfreader.structure.Donnee;
 
 /**
  * Un bloc de données concernant un int32
+ * 
  * @author Bruju
  *
  */
@@ -13,12 +14,13 @@ public class BlocInt32 extends Bloc<Integer> {
 	/* =========================
 	 * ATTRIBUTS ET CONSTRUCTEUR
 	 * ========================= */
-	
+
 	/** Valeur par défaut */
 	private Integer defaut;
-	
+
 	/**
 	 * Construit le bloc contenant un entier avec la valeur par défaut donnée
+	 * 
 	 * @param defaut La valeur par défaut. Si de la forme a|b, prend b.
 	 */
 	public BlocInt32(Champ champ, String defaut) {
@@ -28,12 +30,11 @@ public class BlocInt32 extends Bloc<Integer> {
 			if (defaut.contains("|")) {
 				defaut = defaut.split("|")[1];
 			}
-			
+
 			this.defaut = Integer.parseInt(defaut);
 		}
 	}
 
-	
 	/* ====================
 	 * PROPRIETES D'UN BLOC
 	 * ==================== */
@@ -42,12 +43,11 @@ public class BlocInt32 extends Bloc<Integer> {
 	public String getNomType() {
 		return "Integer(" + defaut + ")";
 	}
-	
+
 	@Override
 	public Integer valeurParDefaut() {
 		return defaut;
 	}
-
 
 	/* =====================
 	 * CONSTRUIRE UNE VALEUR

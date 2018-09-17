@@ -11,13 +11,15 @@ package fr.bruju.lcfreader.sequenceur.sequences;
 public interface LecteurDeSequence<T> {
 	/**
 	 * Traite l'octet donné
+	 * 
 	 * @param octet L'octet à traiter
 	 * @return Vrai si ce lecteur veut recevoir d'autres octets
 	 */
 	public boolean lireOctet(byte octet);
-	
+
 	/**
 	 * Renvoie le résultat de la lecture
+	 * 
 	 * @return Le résultat
 	 */
 	public T getResultat();

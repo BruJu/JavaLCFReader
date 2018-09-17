@@ -16,7 +16,7 @@ import fr.bruju.lcfreader.structure.blocs.Blocs;
  */
 public class Structure {
 	// TODO : faire deux classes séparées pour la lecture en série et la lecture en indicé
-	
+
 	/** Liste des champs connus */
 	private Map<Integer, Bloc<?>> champs = new TreeMap<>();
 	/** Liste des blocs pour un décodage en série */
@@ -25,7 +25,7 @@ public class Structure {
 	/** Ajoute un champ */
 	public void ajouterChamp(String[] donnees) {
 		Bloc<?> bloc = Blocs.instancier(donnees);
-		
+
 		if (bloc.index != 0) {
 			champs.put(bloc.index, bloc);
 		} else {
@@ -37,11 +37,12 @@ public class Structure {
 	public Bloc<?> trouverChampIndex(byte octet) {
 		return champs.get((int) octet);
 	}
-	
+
 	/**
-	 * Indique si il faut lire la structure de manière indicée (chaque encodage des données d'un champ est précédé
-	 * du numéro du champ et de sa taille en octet) ou de manière séquentielle (chaque donnée est codée l'une après
-	 * l'autre dans un ordre précis)
+	 * Indique si il faut lire la structure de manière indicée (chaque encodage des données d'un champ est précédé du
+	 * numéro du champ et de sa taille en octet) ou de manière séquentielle (chaque donnée est codée l'une après l'autre
+	 * dans un ordre précis)
+	 * 
 	 * @return Vrai si les données présentes dans la structure sont en série
 	 */
 	public boolean estSerie() {
@@ -50,6 +51,7 @@ public class Structure {
 
 	/**
 	 * Donne la liste des blocs à lire pour cette structure
+	 * 
 	 * @return La liste des blocs indiquant comment décrypter cette structure
 	 */
 	public List<Bloc<?>> getSerie() {

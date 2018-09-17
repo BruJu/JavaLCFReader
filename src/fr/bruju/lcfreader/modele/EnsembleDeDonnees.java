@@ -24,17 +24,18 @@ public class EnsembleDeDonnees {
 	/* =========================
 	 * OBJET ENSEMBLE DE DONNEES
 	 * ========================= */
-	
+
 	/** Nom de la structure */
 	public final String nomStruct;
-	
+
 	/** Liste des données */
 	private List<Donnee<?>> donnees;
 	/** Tailles connues (données de type "size field") */
 	private Map<String, Integer> tailles;
-	
+
 	/**
 	 * Crée un conteneur de données pour la structure dont le nom est donné
+	 * 
 	 * @param nomStruct Le nom de la structure
 	 */
 	public EnsembleDeDonnees(String nomStruct) {
@@ -43,34 +44,35 @@ public class EnsembleDeDonnees {
 	}
 
 	// Services offerts pour la constitution
-	
+
 	/**
 	 * Enregistre le bloc de données dans l'ensemble
+	 * 
 	 * @param blocData L'ensemble de données à enregistrer
 	 */
 	public void push(Donnee<?> blocData) {
 		donnees.add(blocData);
-		
+
 		if (blocData.bloc.estUnChampIndiquantLaTaille()) {
 			if (tailles == null)
 				tailles = new HashMap<>();
-			
+
 			tailles.put(blocData.bloc.nom, (Integer) blocData.value);
 		}
 	}
-	
+
 	/**
 	 * Donne la taille du bloc de données si un champ taille a été lu pour ce bloc
+	 * 
 	 * @param bloc Le bloc dont on souhaite connaître la taille
 	 * @return -1 si aucune taille n'est connue, le nombre d'octets du bloc si il est connu
 	 */
 	public int getTaille(Bloc<?> bloc) {
 		if (tailles == null)
 			return -1;
-		
+
 		return tailles.getOrDefault(bloc.nom, -1);
 	}
-	
 
 	/* =======================================================
 	 * INSTANCIER UN ENSEMBLE DE DONNEES A PARTIR D'UN FICHIER
@@ -78,16 +80,17 @@ public class EnsembleDeDonnees {
 
 	/**
 	 * Lit le fichier et en donne une représentation dans la mémoire
+	 * 
 	 * @param chemin Le fichier
 	 * @return L'objet représentant le fichier, null si non lisible
 	 */
 	public static EnsembleDeDonnees lireFichier(String chemin) {
 		LecteurDeFichierOctetParOctet lecteur = LecteurDeFichierOctetParOctet.instancier(chemin);
-		
+
 		// Connaître le type de fichier
 		String type = lecteur.sequencer(new TailleChaine());
 		String nomStruct;
-		
+
 		switch (type) {
 		case "LcfMapUnit":
 			nomStruct = "Map";
@@ -100,30 +103,31 @@ public class EnsembleDeDonnees {
 		// Sequencer le reste du fichier
 		EnsembleDeDonnees data = new EnsembleDeDonnees(nomStruct);
 		lecteur.sequencer(SequenceurLCFAEtat.instancier(data));
-		
+
 		// Renvoyer les données
 		lecteur.fermer();
 		return data;
 	}
-	
+
 	/* ====================
 	 * SERVICES D'AFFICHAGE
 	 * ==================== */
-	
+
 	// Pour le debug / comprendre ce qu'il y a dans cette classe
-	
+
 	/** Affiche les données contenues par l'objet */
 	public void afficherDonnees() {
 		donnees.forEach(data -> System.out.println(data.bloc.getTypeEnString() + " -> " + data.getString()));
 	}
-	
+
 	/** Affiche l'architecture des données en considérant que le niveau est 0 */
 	public void afficherArchitecture() {
 		afficherArchitecture(0);
 	}
-	
+
 	/**
 	 * Affiche l'architecture des données avec une marge égale à niveau
+	 * 
 	 * @param niveau La marge
 	 */
 	public void afficherArchitecture(int niveau) {
@@ -132,24 +136,23 @@ public class EnsembleDeDonnees {
 		donnees.forEach(data -> {
 			Utilitaire.tab(niveau);
 			System.out.print(data.bloc.getTypeEnString());
-			
+
 			if (data.value instanceof byte[]) {
 				System.out.print(" " + BytePrinter.getTable((byte[]) data.value));
 			}
-			
+
 			System.out.println();
-			data.afficherSousArchi(niveau+1);
+			data.afficherSousArchi(niveau + 1);
 		});
 	}
-	
+
 	/**
-	 * Donne une représentation en ligne du type NomStructure -> nomChamp1:valeur1 ; nomChamp2:valeur2 
-	 * @return La représentation en ligne du type NomStructure -> nomChamp1:valeur1 ; nomChamp2:valeur2 
+	 * Donne une représentation en ligne du type NomStructure -> nomChamp1:valeur1 ; nomChamp2:valeur2
+	 * 
+	 * @return La représentation en ligne du type NomStructure -> nomChamp1:valeur1 ; nomChamp2:valeur2
 	 */
 	public String getRepresentationEnLigne() {
-		return nomStruct + " -> " +
-			donnees.stream()
-				   .map(d -> d.bloc.nom + ":" + d.getString())
-				   .collect(Collectors.joining(" ; "));
+		return nomStruct + " -> "
+				+ donnees.stream().map(d -> d.bloc.nom + ":" + d.getString()).collect(Collectors.joining(" ; "));
 	}
 }

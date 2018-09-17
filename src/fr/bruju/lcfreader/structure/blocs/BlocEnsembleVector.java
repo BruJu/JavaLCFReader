@@ -21,12 +21,13 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 	/* =========================
 	 * ATTRIBUTS ET CONSTRUCTEUR
 	 * ========================= */
-	
+
 	/** Nom de la structure contenue */
 	private String nomStructure;
 
 	/**
 	 * Bloc constitué d'un vecteur d'ensemble de données
+	 * 
 	 * @param champ Les caractéristiques
 	 * @param nomStructure Le nom de l'ensemble
 	 */
@@ -38,13 +39,12 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 	/* ====================
 	 * PROPRIETES D'UN BLOC
 	 * ==================== */
-	
+
 	@Override
 	public String getNomType() {
 		return "Vector<#" + nomStructure + ">";
 	}
 
-	
 	/* =====================
 	 * CONSTRUIRE UNE VALEUR
 	 * ===================== */
@@ -54,36 +54,33 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 		return new H(tailleLue);
 	}
 
-
 	/* ============================
 	 * INTERACTION AVEC LES VALEURS
 	 * ============================ */
-	
+
 	@Override
 	public String convertirEnChaineUneValeur(List<EnsembleDeDonnees> valeur) {
 		String contenu = valeur
 				.stream()
 				.map(d -> d.getRepresentationEnLigne())
 				.collect(Collectors.joining(";"));
-		
+
 		return new StringBuilder()
 				.append("[")
 				.append(contenu)
 				.append("]")
 				.toString();
 	}
-	
-	
+
 	@Override
 	public void afficherSousArchi(int niveau, List<EnsembleDeDonnees> value) {
 		value.forEach(data -> data.afficherArchitecture(niveau));
 	}
-	
-	
+
 	/* =============
 	 * CONVERTISSEUR
 	 * ============= */
-	
+
 	/**
 	 * Convertisseur d'un tableau d'octets représentants un vecteur d'ensemble de données en une liste d'ensemble de
 	 * données.
@@ -100,35 +97,36 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 
 		/** Nombre d'octets restant à lire */
 		private int nombreDOctetsRestants;
-		
+
 		/**
 		 * Construit le convertisseur
+		 * 
 		 * @param taille Le nombre d'octets du vecteur
 		 */
 		public H(int taille) {
 			if (taille == -1) {
 				throw new RuntimeException("Vecteur de taille inconnue");
 			}
-			
+
 			this.nombreDOctetsRestants = taille;
 			this.ensembles = new ArrayList<>();
 		}
-		
+
 		@Override
 		public Donnee<List<EnsembleDeDonnees>> accumuler(byte octet) {
 			if (sequenceur == null) {
 				sequenceur = SequenceurLCFAEtat.instancier(new EnsembleDeDonnees(nomStructure));
 			}
-			
+
 			boolean seq = sequenceur.lireOctet(octet);
-			
+
 			if (!seq) {
 				ensembles.add(sequenceur.getResultat());
 				sequenceur = null;
 			}
-			
+
 			nombreDOctetsRestants--;
-			
+
 			return (nombreDOctetsRestants == 0) ? new Donnee<>(BlocEnsembleVector.this, ensembles) : null;
 		}
 	}
