@@ -21,12 +21,12 @@ public class BlocCode extends Bloc<EnsembleDeDonnees> {
 	
 	@Override
 	public String valueToString(EnsembleDeDonnees value) {
-		return value.getRepresentation();
+		return value.getRepresentationEnLigne();
 	}
 
 	@Override
 	public void afficherSousArchi(int niveau, EnsembleDeDonnees value) {
-		value.afficherArchi(niveau);
+		value.afficherArchitecture(niveau);
 	}
 
 	

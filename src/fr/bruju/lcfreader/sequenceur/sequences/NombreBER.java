@@ -8,9 +8,9 @@ package fr.bruju.lcfreader.sequenceur.sequences;
  * @author Bruju
  *
  */
-public class NombreBER implements LecteurDeSequence<Long> {
+public class NombreBER implements LecteurDeSequence<Integer> {
 	/** Le nombre lu */
-	private long nombre = 0;
+	private int nombre = 0;
 
 	@Override
 	public boolean lireOctet(byte byteLu) {
@@ -21,7 +21,7 @@ public class NombreBER implements LecteurDeSequence<Long> {
 	}
 
 	@Override
-	public Long getResultat() {
+	public Integer getResultat() {
 		return nombre;
 	}
 }

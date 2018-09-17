@@ -17,13 +17,4 @@ public interface ConvertisseurOctetsVersDonnees<T> {
 	 * les octets ont été reçus.
 	 */
 	public Donnee<T> accumuler(byte octet);
-
-	/**
-	 * Fonction appelée après l'instantiation pour fournir la taille si un champ de taille a été lu précedemment avec
-	 * le même nom que le champ en cours 
-	 * @param taille La taille
-	 */
-	public default boolean fournirTailles(Integer taille) {
-		return true;
-	}
 }

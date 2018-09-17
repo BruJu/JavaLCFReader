@@ -53,7 +53,7 @@ public class BlocArray extends Bloc<TreeMap<Integer, EnsembleDeDonnees>> {
 	}
 	
 	private String dataToString(EnsembleDeDonnees data) {
-		return data.getRepresentation();
+		return data.getRepresentationEnLigne();
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class BlocArray extends Bloc<TreeMap<Integer, EnsembleDeDonnees>> {
 
 	@Override
 	public void afficherSousArchi(int niveau, TreeMap<Integer, EnsembleDeDonnees> value) {
-		value.values().forEach(data -> data.afficherArchi(niveau));
+		value.values().forEach(data -> data.afficherArchitecture(niveau));
 	}
 	
 	

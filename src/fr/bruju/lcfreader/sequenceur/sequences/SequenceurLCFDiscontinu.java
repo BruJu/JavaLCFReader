@@ -35,17 +35,25 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 		this.etat = new EtatLireCode();
 	}
 
+	/* =====================
+	 * SEQUENCEUR LCF A ETAT
+	 * ===================== */
+	
 	@Override
 	public boolean lireOctet(byte octet) {
 		etat = etat.lireOctet(octet);
 		return etat != null;
 	}
 
-	/** Un etat dans la machine */
-	private static interface Etat {
-		/** Accepte l'octet dans l'état */
-		public Etat lireOctet(byte octet);
+
+	@Override
+	public EnsembleDeDonnees getResultat() {
+		return data;
 	}
+
+	/* ==========================================
+	 * PATRON DE CONCEPTION ETAT / MACHINE A ETAT
+	 * ========================================== */
 
 	/** Un état lisant le code */
 	private class EtatLireCode implements Etat {
@@ -58,14 +66,13 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 			Bloc<?> bloc = structure.trouverChampIndex(octet);
 
 			if (bloc == null) {
-				System.out.println("[" + data.nomStruct + "] Pas de champ trouvé " + Utilitaire.toHex(octet));
-				return null;
+				throw new RuntimeException("[" + data.nomStruct + "] Pas de champ trouvé " + Utilitaire.toHex(octet));
 			}
 
 			return new EtatLireTaille(bloc);
 		}
 	}
-
+	
 	/**
 	 * Un état dont le but est de lire le nombre d'octets
 	 *
@@ -89,24 +96,17 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 		@Override
 		public Etat lireOctet(byte octet) {
 			tailleLue = tailleLue * 0x80 + (octet & 0x7F);
-			return ((octet & 0x80) == 0) ? getEtatApresTaille(bloc, tailleLue) : this;
+			
+			if ((octet & 0x80) != 0) {
+				return this;
+			}
+			
+			if (tailleLue == 0) {
+				return new EtatLireCode();
+			}
+			
+			return new EtatLireDonnees<>(bloc.getHandler(tailleLue));
 		}
-
-	}
-
-	private <T> Etat getEtatApresTaille(Bloc<T> bloc, int tailleLue) {
-		if (tailleLue == 0)
-			return new EtatLireCode();
-
-		ConvertisseurOctetsVersDonnees<T> handler = bloc.getHandler(tailleLue);
-		boolean estVide = !handler.fournirTailles(data.getTaille(bloc.getChamp().nom));
-		Etat nouvelEtat = new EtatLireDonnees<T>(handler);
-
-		if (estVide) {
-			nouvelEtat = nouvelEtat.lireOctet((byte) 0);
-		}
-
-		return nouvelEtat;
 	}
 
 	/**
@@ -141,8 +141,4 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 		}
 	}
 
-	@Override
-	public EnsembleDeDonnees getResultat() {
-		return data;
-	}
 }

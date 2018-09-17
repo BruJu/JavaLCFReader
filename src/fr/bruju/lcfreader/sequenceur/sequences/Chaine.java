@@ -1,7 +1,8 @@
 package fr.bruju.lcfreader.sequenceur.sequences;
 
 /**
- * Cherche une chaîne dont la taille est connue
+ * Lit des octets pour constituer une chaîne dont le nombre de caractères est connu.
+ * 
  * @author Bruju
  *
  */

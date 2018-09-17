@@ -1,9 +1,7 @@
 package fr.bruju.lcfreader.sequenceur.sequences;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Donnee;
@@ -11,24 +9,19 @@ import fr.bruju.lcfreader.structure.Structure;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 
 /**
- * Lit des blocs de la forme [code] [taille] [données] jusqu'à trouver le code 0.
- * <br>
- * Design Pattern : Etat
+ * Lit des blocs de la forme [données]* jusqu'à avoir tout lu conformément à la base de données des structures
  * 
  * @author Bruju
  *
  */
-
 public class SequenceurLCFEnSerie implements SequenceurLCFAEtat {
 	/** Donnée en cours de construction */
 	public final EnsembleDeDonnees data;
-	/** Structure contenant les codes de la donnée en cours de construction */
-	private final Structure structure;
 	
+	/** Liste des blocs à lire */
 	private final List<Bloc<?>> blocsAExplorer;
-	
-	
-	private int sousChampActuel = -1;
+	/** Numéro du bloc actuel */
+	private int indiceBlocActuel = -1;
 	
 	/**
 	 * Crée le sequenceur à état
@@ -37,29 +30,27 @@ public class SequenceurLCFEnSerie implements SequenceurLCFAEtat {
 	 */
 	SequenceurLCFEnSerie(EnsembleDeDonnees data) {
 		this.data = data;
-		this.structure = BaseDeDonneesDesStructures.getInstance().get(data.nomStruct);
+		
+		Structure structure = BaseDeDonneesDesStructures.getInstance().get(data.nomStruct);
 		blocsAExplorer = structure.getSerie();
 		
 		nouveauSousChamp();
 	}
 	
-	private boolean nouveauSousChamp() {
-		sousChampActuel ++;
-		
-		if (sousChampActuel == blocsAExplorer.size()) {
-			return false;
-		} else {
-			Bloc<?> bloc = blocsAExplorer.get(sousChampActuel);
-			String n = bloc.getChamp().nom;
-			Integer t = data.getTaille(n);
-			//handler.fournirTailles(t);
+	
+	/* =====================
+	 * SEQUENCEUR LCF A ETAT
+	 * ===================== */
 
-			if (t == null)
-				t = -1;
-			
-			handler = bloc.getHandler(t);
-			//handler.fournirTailles(t);
+	@Override
+	public boolean lireOctet(byte octet) {
+		Donnee<?> r = handler.accumuler(octet);
+		
+		if (r == null) {
 			return true;
+		} else {
+			data.push(r);
+			return nouveauSousChamp();
 		}
 	}
 
@@ -68,28 +59,25 @@ public class SequenceurLCFEnSerie implements SequenceurLCFAEtat {
 		return data;
 	}
 
+
+	/* ======================================================
+	 * Un seul état : celui consistant à lire le champ actuel
+	 * ====================================================== */
+
 	/** Le traiteur pour le champ actuel */
 	private ConvertisseurOctetsVersDonnees<?> handler;
-
-
-	@Override
-	public boolean lireOctet(byte octet) {
-
-		System.out.print(" " + data.nomStruct + Utilitaire.toHex(octet));
-		Donnee<?> r = handler.accumuler(octet);
-		
-		if (r == null) {
-			return true;
-		} else {
-			data.push(r);
-			
-			boolean suite = nouveauSousChamp();
-
-			if (suite) {
-				
-			}
-			
-			return suite;
+	
+	/**
+	 * Avance vers le bloc suivant
+	 * @return Vrai si il y a un bloc suivant à lire
+	 */
+	private boolean nouveauSousChamp() {
+		if (++indiceBlocActuel == blocsAExplorer.size()) {
+			return false;
 		}
+		
+		Bloc<?> blocAExplorer = blocsAExplorer.get(indiceBlocActuel);
+		handler = blocAExplorer.getHandler(data.getTaille(blocAExplorer));
+		return true;
 	}
 }

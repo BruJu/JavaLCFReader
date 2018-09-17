@@ -10,15 +10,19 @@ public class Main {
 	public static void main(String[] args) throws InterruptedException {
 		BaseDeDonneesDesStructures.initialiser("ressources\\liblcf\\fields.csv");
 
-		afficherMap("Projet\\Map0001", EnsembleDeDonnees::afficher);
-		afficherMap("Projet\\Map0001", EnsembleDeDonnees::afficherArchi);
+		String[] fichiers = new String[] {
+				"Projet\\Map0001",
+				"Map0452",
+				"Map0001",
+				"Map0003"
+		};
 		
-		//afficherMap("Map0452", EnsembleDeDonnees::afficher);
-		//afficherMap("Map0001", EnsembleDeDonnees::afficher);
-		//afficherMap("Map0003", EnsembleDeDonnees::afficher);
+		doubleAffichage(fichiers[1]);
+	}
 
-		
-		//afficherMap("Map0452", EnsembleDeDonnees::afficherArchi);
+	private static void doubleAffichage(String string) {
+		afficherMap(string, EnsembleDeDonnees::afficherDonnees);
+		afficherMap(string, EnsembleDeDonnees::afficherArchitecture);
 	}
 
 	private static void afficherMap(String nom, Consumer<EnsembleDeDonnees> consumer) {

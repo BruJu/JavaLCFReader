@@ -29,12 +29,12 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 	}
 	
 	private String dataToString(EnsembleDeDonnees data) {
-		return data.getRepresentation();
+		return data.getRepresentationEnLigne();
 	}
 	
 	@Override
 	public void afficherSousArchi(int niveau, List<EnsembleDeDonnees> value) {
-		value.forEach(data -> data.afficherArchi(niveau));
+		value.forEach(data -> data.afficherArchitecture(niveau));
 	}
 	
 	@Override
@@ -57,17 +57,15 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 			
 		}
 
-		@Override
-		public boolean fournirTailles(Integer taille) {
-			if (taille == null) {
+		public void fournirTailles(int taille) {
+			if (taille == -1) {
 				this.taille = -1;
-				return false;
+				return;
 			}
 			
 			this.taille = taille;
 			this.ensembles = new ArrayList<>(this.taille);
 			
-			return true;
 		}
 		
 		@Override

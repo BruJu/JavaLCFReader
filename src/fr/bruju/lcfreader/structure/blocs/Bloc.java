@@ -2,7 +2,6 @@ package fr.bruju.lcfreader.structure.blocs;
 
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
-//import fr.bruju.lcfreader.structure.Champ;
 import fr.bruju.lcfreader.structure.Champ;
 
 public abstract class Bloc<T> {
