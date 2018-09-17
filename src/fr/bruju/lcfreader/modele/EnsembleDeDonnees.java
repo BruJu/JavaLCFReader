@@ -114,7 +114,7 @@ public class EnsembleDeDonnees {
 	
 	/** Affiche les données contenues par l'objet */
 	public void afficherDonnees() {
-		donnees.forEach(data -> System.out.println(data.bloc.getTypeEnString() + " -> " + data.valueToString()));
+		donnees.forEach(data -> System.out.println(data.bloc.getTypeEnString() + " -> " + data.getString()));
 	}
 	
 	/** Affiche l'architecture des données en considérant que le niveau est 0 */
@@ -149,7 +149,7 @@ public class EnsembleDeDonnees {
 	public String getRepresentationEnLigne() {
 		return nomStruct + " -> " +
 			donnees.stream()
-				   .map(d -> d.bloc.nom + ":" + d.valueToString())
+				   .map(d -> d.bloc.nom + ":" + d.getString())
 				   .collect(Collectors.joining(" ; "));
 	}
 }

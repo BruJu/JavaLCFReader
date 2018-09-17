@@ -37,8 +37,7 @@ public interface ConvertisseurOctetsVersDonnees<T> {
 		 * @param lecteur Le lecteur de séquences
 		 * @param traiterResultat La fonction à appliquer pour transformer la valeur résultat en objet de type Donnée
 		 */
-		public ViaSequenceur(LecteurDeSequence<S> lecteur,
-				Function<S, Donnee<S>> traiterResultat) {
+		public ViaSequenceur(LecteurDeSequence<S> lecteur, Function<S, Donnee<S>> traiterResultat) {
 			this.lecteur = lecteur;
 			this.traiterResultat = traiterResultat;
 		}
