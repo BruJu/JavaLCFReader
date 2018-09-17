@@ -75,8 +75,9 @@ public class BaseDeDonneesDesStructures {
 	 * @param fichier Le chemin vers le fichier
 	 */
 	private void remplirStructures(String fichier) {
+		// Lit deux fois le fichiers parce que c'est plus simple et permet de référencer des types plus loin dans la
+		// liste
 		File file = new File(fichier);
-		
 		structures = new HashMap<>();
 		
 		try {
@@ -97,6 +98,12 @@ public class BaseDeDonneesDesStructures {
 		}
 	}
 	
+	/**
+	 * Lis toutes les lignes du fichier en appliquant action
+	 * @param file Le fichier à lire
+	 * @param action L'action à réaliser
+	 * @throws IOException
+	 */
 	private static void lireToutesLesLignes(File file, Consumer<String> action) throws IOException {
 		FileReader fileReader = new FileReader(file);
 		BufferedReader buffer = new BufferedReader(fileReader);

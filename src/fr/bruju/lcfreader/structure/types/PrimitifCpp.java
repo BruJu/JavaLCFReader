@@ -88,8 +88,6 @@ public interface PrimitifCpp {
 		public int convertir(byte[] octets) {
 			return octets[0] == 0 ? 1 : 0;
 		}
-		
-		
 	}
 
 }

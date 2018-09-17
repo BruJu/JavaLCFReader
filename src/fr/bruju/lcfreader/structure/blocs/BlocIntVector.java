@@ -4,53 +4,62 @@ import java.util.Arrays;
 
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.NombreBER;
-import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Donnee;
 import fr.bruju.lcfreader.structure.types.PrimitifCpp;
 
 public class BlocIntVector extends Bloc<int[]> {
-
-	public static Bloc<?> essayer(String type) {
-		if (!type.startsWith("Vector<") || !type.endsWith(">"))
-			return null;
-		
-		// Extraction de la chaîne entre Vector< et >
-		String sousType = type.substring(7, type.length() - 1);
-		
-		if (PrimitifCpp.map.get(sousType) != null) {
-			return new BlocIntVector(sousType);
-		}
-		
-		if (BaseDeDonneesDesStructures.getInstance().get(sousType) != null) {
-			return new BlocEnsembleVector(sousType);
-		}
-		
-		return null;
-	}
+	/* =========================
+	 * ATTRIBUTS ET CONSTRUCTEUR
+	 * ========================= */
 	
-	
+	/** Nom du type primitif C++ */
 	public final String nomPrimitive;
 	
-	public BlocIntVector(String nomPrimitive) {
+	/**
+	 * Bloc qui est un vecteur d'un type primitif c++ qui est converti ici en int
+	 * @param champ Les caractéristiques
+	 * @param nomPrimitive Le nom du type
+	 */
+	public BlocIntVector(Champ champ, String nomPrimitive) {
+		super(champ);
 		this.nomPrimitive = nomPrimitive;
 	}
 
+	
+	/* ====================
+	 * PROPRIETES D'UN BLOC
+	 * ==================== */
+	
 	@Override
-	public String getRepresentation() {
+	public String getNomType() {
 		return "Vector<"+nomPrimitive+">";
 	}
 
-
-	@Override
-	public String valueToString(int[] values) {
-		return Arrays.toString(values);
-	}
+	/* =====================
+	 * CONSTRUIRE UNE VALEUR
+	 * ===================== */
 
 	@Override
 	public ConvertisseurOctetsVersDonnees<int[]> getHandler(int tailleLue) {
 		return new H(tailleLue);
 	}
+
 	
+	/* ============================
+	 * INTERACTION AVEC LES VALEURS
+	 * ============================ */
+	
+	@Override
+	public String convertirEnChaineUneValeur(int[] values) {
+		return Arrays.toString(values);
+	}
+	
+	
+	/* =============
+	 * CONVERTISSEUR
+	 * ============= */
+	
+	// TODO : il est surement possible d'utiliser un lecteur de séquence intermédiaire
 	
 	public class H implements ConvertisseurOctetsVersDonnees<int[]> {
 		PrimitifCpp primitif = PrimitifCpp.map.get(nomPrimitive);

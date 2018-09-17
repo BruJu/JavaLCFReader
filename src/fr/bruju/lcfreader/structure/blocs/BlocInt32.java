@@ -10,6 +10,10 @@ import fr.bruju.lcfreader.structure.Donnee;
  *
  */
 public class BlocInt32 extends Bloc<Integer> {
+	/* =========================
+	 * ATTRIBUTS ET CONSTRUCTEUR
+	 * ========================= */
+	
 	/** Valeur par défaut */
 	private Integer defaut;
 	
@@ -17,7 +21,8 @@ public class BlocInt32 extends Bloc<Integer> {
 	 * Construit le bloc contenant un entier avec la valeur par défaut donnée
 	 * @param defaut La valeur par défaut. Si de la forme a|b, prend b.
 	 */
-	public BlocInt32(String defaut) {
+	public BlocInt32(Champ champ, String defaut) {
+		super(champ);
 		if (!defaut.equals("")) {
 			// On prend la valeur par défaut pour RPG Maker 2003
 			if (defaut.contains("|")) {
@@ -27,36 +32,30 @@ public class BlocInt32 extends Bloc<Integer> {
 			this.defaut = Integer.parseInt(defaut);
 		}
 	}
+
+	
+	/* ====================
+	 * PROPRIETES D'UN BLOC
+	 * ==================== */
+
+	@Override
+	public String getNomType() {
+		return "Integer(" + defaut + ")";
+	}
 	
 	@Override
-	public Integer defaut() {
+	public Integer valeurParDefaut() {
 		return defaut;
 	}
 
-	@Override
-	public String getRepresentation() {
-		return "Integer(" + defaut + ")";
-	}
 
+	/* =====================
+	 * CONSTRUIRE UNE VALEUR
+	 * ===================== */
 
 	@Override
 	public ConvertisseurOctetsVersDonnees<Integer> getHandler(int tailleLue) {
-		return new H();
-	}
-	
-	public class H implements ConvertisseurOctetsVersDonnees<Integer> {
-		
-		private NombreBER accumulateur;
-
-		public H() {
-			accumulateur = new NombreBER();
-		}
-
-		@Override
-		public Donnee<Integer> accumuler(byte octet) {
-			boolean b = accumulateur.lireOctet(octet);
-			
-			return b ? null : new Donnee<>(BlocInt32.this, accumulateur.getResultat().intValue());
-		}
+		return new ConvertisseurOctetsVersDonnees.ViaSequenceur<>(new NombreBER(),
+				r -> new Donnee<>(BlocInt32.this, r));
 	}
 }

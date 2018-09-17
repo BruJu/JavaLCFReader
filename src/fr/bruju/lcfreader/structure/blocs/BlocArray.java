@@ -6,87 +6,120 @@ import java.util.stream.Collectors;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
-import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Donnee;
-import fr.bruju.lcfreader.structure.Structure;
 
+/**
+ * Un bloc de données correspondant à un tableau d'ensemble de données
+ * 
+ * @author Bruju
+ *
+ */
 public class BlocArray extends Bloc<TreeMap<Integer, EnsembleDeDonnees>> {
-	/* ======
-	 * STATIC
-	 * ====== */
+	/* =========================
+	 * ATTRIBUTS ET CONSTRUCTEUR
+	 * ========================= */
 	
-	/**
-	 * Crée un bloc "tableau" si le type est Array<TypeDansLaBase>
-	 * @param type Le type
-	 * @return Un bloc tableau si c'est pertinent
-	 */
-	public static Bloc<?> essayer(String type) {
-		if (!type.startsWith("Array<") || !type.endsWith(">"))
-			return null;
-		
-		String vraiType = type.substring(6, type.length() - 1); // Array<X>
-		Structure structure = BaseDeDonneesDesStructures.getInstance().get(vraiType);
-		return structure == null ? null : new BlocArray(vraiType);
-	}
-	
-	
-	/*
-	 * 
-	 */
-	
+	/** Nom de la structure contenue dans chaque case du tableau */
 	private String nomStructure;
 
-	public BlocArray(String nomStructure) {
+	/**
+	 * Bloc constitué d'un tableau d'ensemble de données
+	 * @param champ Les caractéristiques
+	 * @param nomStructure Le nom de l'ensemble
+	 */
+	public BlocArray(Champ champ, String nomStructure) {
+		super(champ);
 		this.nomStructure = nomStructure;
 	}
 
-	@Override
-	public String getRepresentation() {
-		return "TableauDeDonnees[" + nomStructure + "]";
-	}
-
-
-
-	@Override
-	public String valueToString(TreeMap<Integer, EnsembleDeDonnees> value) {
-		return "[" + value.values().stream().map(data -> dataToString(data)).collect(Collectors.joining(" ; ")) + "]";
-	}
+	/* ====================
+	 * PROPRIETES D'UN BLOC
+	 * ==================== */
 	
-	private String dataToString(EnsembleDeDonnees data) {
-		return data.getRepresentationEnLigne();
+	@Override
+	public String getNomType() {
+		return "Tableau[" + nomStructure + "]";
 	}
+
+
+	/* =====================
+	 * CONSTRUIRE UNE VALEUR
+	 * ===================== */
 
 	@Override
 	public ConvertisseurOctetsVersDonnees<TreeMap<Integer, EnsembleDeDonnees>> getHandler(int tailleLue) {
 		return new H();
 	}
+	
+
+	/* ============================
+	 * INTERACTION AVEC LES VALEURS
+	 * ============================ */
+	
+	@Override
+	public String convertirEnChaineUneValeur(TreeMap<Integer, EnsembleDeDonnees> valeur) {
+		String contenu = valeur
+				.values()
+				.stream()
+				.map(d -> d.getRepresentationEnLigne())
+				.collect(Collectors.joining(";"));
+		
+		return new StringBuilder()
+				.append("[")
+				.append(contenu)
+				.append("]")
+				.toString();
+	}
+	
 
 	@Override
 	public void afficherSousArchi(int niveau, TreeMap<Integer, EnsembleDeDonnees> value) {
 		value.values().forEach(data -> data.afficherArchitecture(niveau));
 	}
 	
+
+	/* =============
+	 * CONVERTISSEUR
+	 * ============= */
+	
+	/** Etats de l'automate */
+	private static enum Etat {
+		LireNombreElements,
+		LireIndex,
+		LireDonnees
+	}
+	
+	// TODO : utiliser de vrais états
 	
 	public class H implements ConvertisseurOctetsVersDonnees<TreeMap<Integer, EnsembleDeDonnees>> {
-
-		private int nombreDElements;
-		
+		/** Etat actuel */
 		private Etat etat;
+		/** Données lues */
 		private TreeMap<Integer, EnsembleDeDonnees> map;
 		
+		/** Nombre d'éléments dans le tableau */
+		private int nombreDElements;
+		/** Séquenceur */
 		private SequenceurLCFAEtat sequenceur;
 		
-
-		public H() {
-			etat = Etat.LireTaille;
+		/**
+		 * Construit le convertisseur avec l'état "lire le nombre d'élément"
+		 */
+		private H() {
+			etat = Etat.LireNombreElements;
 		}
 
 		@Override
 		public Donnee<TreeMap<Integer, EnsembleDeDonnees>> accumuler(byte octet) {
 			switch (etat) {
-			case LireTaille:
+			case LireNombreElements:
 				nombreDElements = octet;
 				map = new TreeMap<Integer, EnsembleDeDonnees>();
+				
+				if (nombreDElements == 0) {
+					return new Donnee<>(BlocArray.this, map);
+				}
+				
 				etat = Etat.LireIndex;
 				break;
 			case LireIndex:
@@ -108,14 +141,5 @@ public class BlocArray extends Bloc<TreeMap<Integer, EnsembleDeDonnees>> {
 			
 			return null;
 		}
-		
-		
-		
-	}
-
-	private static enum Etat {
-		LireTaille,
-		LireIndex,
-		LireDonnees
 	}
 }

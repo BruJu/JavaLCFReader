@@ -19,7 +19,7 @@ public class Donnee<T> {
 
 
 	public String valueToString() {
-		return bloc.valueToString(value);
+		return bloc.convertirEnChaineUneValeur(value);
 	}
 
 

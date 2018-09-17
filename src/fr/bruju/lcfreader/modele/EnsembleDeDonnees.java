@@ -51,11 +51,11 @@ public class EnsembleDeDonnees {
 	public void push(Donnee<?> blocData) {
 		donnees.add(blocData);
 		
-		if (blocData.bloc.getChamp().sized) {
+		if (blocData.bloc.estUnChampIndiquantLaTaille()) {
 			if (tailles == null)
 				tailles = new HashMap<>();
 			
-			tailles.put(blocData.bloc.getChamp().nom, (Integer) blocData.value);
+			tailles.put(blocData.bloc.nom, (Integer) blocData.value);
 		}
 	}
 	
@@ -68,7 +68,7 @@ public class EnsembleDeDonnees {
 		if (tailles == null)
 			return -1;
 		
-		return tailles.getOrDefault(bloc.getChamp().nom, -1);
+		return tailles.getOrDefault(bloc.nom, -1);
 	}
 	
 
@@ -114,7 +114,7 @@ public class EnsembleDeDonnees {
 	
 	/** Affiche les données contenues par l'objet */
 	public void afficherDonnees() {
-		donnees.forEach(data -> System.out.println(data.bloc.getTrueRepresetantion() + " -> " + data.valueToString()));
+		donnees.forEach(data -> System.out.println(data.bloc.getTypeEnString() + " -> " + data.valueToString()));
 	}
 	
 	/** Affiche l'architecture des données en considérant que le niveau est 0 */
@@ -131,7 +131,7 @@ public class EnsembleDeDonnees {
 		System.out.println(nomStruct);
 		donnees.forEach(data -> {
 			Utilitaire.tab(niveau);
-			System.out.print(data.bloc.getTrueRepresetantion());
+			System.out.print(data.bloc.getTypeEnString());
 			
 			if (data.value instanceof byte[]) {
 				System.out.print(" " + BytePrinter.getTable((byte[]) data.value));
@@ -149,7 +149,7 @@ public class EnsembleDeDonnees {
 	public String getRepresentationEnLigne() {
 		return nomStruct + " -> " +
 			donnees.stream()
-				   .map(d -> d.bloc.getChamp().nom + ":" + d.valueToString())
+				   .map(d -> d.bloc.nom + ":" + d.valueToString())
 				   .collect(Collectors.joining(" ; "));
 	}
 }

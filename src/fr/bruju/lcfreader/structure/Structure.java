@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import fr.bruju.lcfreader.structure.blocs.Bloc;
+import fr.bruju.lcfreader.structure.blocs.Blocs;
 
 /**
  * L'ensemble des associations index - champs pour un type de données
@@ -21,10 +22,10 @@ public class Structure {
 
 	/** Ajoute un champ */
 	public void ajouterChamp(String[] donnees) {
-		Bloc<?> bloc = Bloc.instancier(donnees);
+		Bloc<?> bloc = Blocs.instancier(donnees);
 		
-		if (bloc.getChamp().index != 0) {
-			champs.put(bloc.getChamp().index, bloc);
+		if (bloc.index != 0) {
+			champs.put(bloc.index, bloc);
 		} else {
 			serie.add(bloc);
 		}
