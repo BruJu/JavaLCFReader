@@ -1,6 +1,5 @@
 package fr.bruju.lcfreader.structure.blocs;
 
-import fr.bruju.lcfreader.debug.Logger;
 import fr.bruju.lcfreader.sequenceur.sequences.Chaine;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
@@ -36,14 +35,11 @@ public class BlocString extends Bloc<String> {
 
 	@Override
 	public ConvertisseurOctetsVersDonnees<String> getHandler(int tailleLue) {
-		return new H(new Chaine(tailleLue));
+		if (tailleLue == -1)
+			return new H(new TailleChaine());
+		else
+			return new H(new Chaine(tailleLue));
 	}
-
-	@Override
-	public ConvertisseurOctetsVersDonnees<String> getHandlerEnSerie() {
-		return new H(new TailleChaine());
-	}
-
 	
 	public class H implements ConvertisseurOctetsVersDonnees<String> {
 		
@@ -55,7 +51,6 @@ public class BlocString extends Bloc<String> {
 		
 		@Override
 		public Donnee<String> accumuler(byte octet) {
-			Logger.octet(octet);
 			return sequenceur.lireOctet(octet) ? null : new Donnee<>(BlocString.this, sequenceur.getResultat());
 		}
 	}

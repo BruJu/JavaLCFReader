@@ -1,6 +1,5 @@
 package fr.bruju.lcfreader.structure.blocs;
 
-import fr.bruju.lcfreader.debug.Logger;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
@@ -47,11 +46,6 @@ public class BlocCode extends Bloc<EnsembleDeDonnees> {
 		public Donnee<EnsembleDeDonnees> accumuler(byte octet) {
 			return sequenceur.lireOctet(octet) ? null : new Donnee<>(BlocCode.this, sequenceur.getResultat());
 		}
-	}
-
-	@Override
-	public ConvertisseurOctetsVersDonnees<EnsembleDeDonnees> getHandlerEnSerie() {
-		return null;
 	}
 	
 

@@ -8,8 +8,7 @@ import fr.bruju.lcfreader.structure.Structure;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 
 /**
- * Lit des blocs de la forme [code] [taille] [données] jusqu'à trouver le code 0.
- * <br>
+ * Lit des blocs de la forme [code] [taille] [données] jusqu'à trouver le code 0. <br>
  * Design Pattern : Etat
  * 
  * @author Bruju
@@ -20,12 +19,13 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 	public final EnsembleDeDonnees data;
 	/** Structure contenant les codes de la donnée en cours de construction */
 	private final Structure structure;
-	
+
 	/** Etat en cours pour la lecture d'octets */
 	private Etat etat;
-	
+
 	/**
 	 * Crée le sequenceur à état
+	 * 
 	 * @param data La donnée à remplir
 	 * @param codes La liste des codes
 	 */
@@ -34,7 +34,7 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 		this.structure = BaseDeDonneesDesStructures.getInstance().get(data.nomStruct);
 		this.etat = new EtatLireCode();
 	}
-	
+
 	@Override
 	public boolean lireOctet(byte octet) {
 		etat = etat.lireOctet(octet);
@@ -46,7 +46,7 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 		/** Accepte l'octet dans l'état */
 		public Etat lireOctet(byte octet);
 	}
-	
+
 	/** Un état lisant le code */
 	private class EtatLireCode implements Etat {
 		@Override
@@ -54,18 +54,18 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 			if (octet == 0) {
 				return null;
 			}
-			
+
 			Bloc<?> bloc = structure.trouverChampIndex(octet);
-			
+
 			if (bloc == null) {
 				System.out.println("[" + data.nomStruct + "] Pas de champ trouvé " + Utilitaire.toHex(octet));
 				return null;
 			}
-			
+
 			return new EtatLireTaille(bloc);
 		}
 	}
-	
+
 	/**
 	 * Un état dont le but est de lire le nombre d'octets
 	 *
@@ -78,6 +78,7 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 
 		/**
 		 * Crée un état dont le but est de lire le nombre d'octets du champ
+		 * 
 		 * @param champ Le champ
 		 */
 		public EtatLireTaille(Bloc<?> bloc) {
@@ -96,19 +97,18 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 	private <T> Etat getEtatApresTaille(Bloc<T> bloc, int tailleLue) {
 		if (tailleLue == 0)
 			return new EtatLireCode();
-		
-		
+
 		ConvertisseurOctetsVersDonnees<T> handler = bloc.getHandler(tailleLue);
 		boolean estVide = !handler.fournirTailles(data.getTaille(bloc.getChamp().nom));
 		Etat nouvelEtat = new EtatLireDonnees<T>(handler);
-		
+
 		if (estVide) {
 			nouvelEtat = nouvelEtat.lireOctet((byte) 0);
 		}
-		
+
 		return nouvelEtat;
 	}
-	
+
 	/**
 	 * Un état dont le but est de lire les données du champ en cours de lecture
 	 * 
@@ -119,12 +119,10 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 		/** Le traiteur pour le champ actuel */
 		private ConvertisseurOctetsVersDonnees<T> handler;
 
-		
-		
 		/**
 		 * Crée un état de lecture des données pour le champ
+		 * 
 		 * @param champ Le champ en cours de lecture
-		 * @param tailleLue Le nombre d'octets
 		 */
 		public EtatLireDonnees(ConvertisseurOctetsVersDonnees<T> handler) {
 			this.handler = handler;
@@ -132,14 +130,14 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 
 		@Override
 		public Etat lireOctet(byte octet) {
-			Donnee<?> r = handler.accumuler(octet);
-			
-			if (r == null) {
+			Donnee<T> r = handler.accumuler(octet);
+
+			if (r == null)
 				return this;
-			} else {
-				data.push(r);
-				return new EtatLireCode();
-			}
+
+			data.push(r);
+
+			return new EtatLireCode();
 		}
 	}
 

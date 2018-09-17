@@ -64,11 +64,11 @@ public class BlocIntVector extends Bloc<int[]> {
 		private int indiceOctetCourant;
 
 		public H(int tailleLue) {
-			tailleConnue(tailleLue);
-		}
-		
-		public H() {
-			decodageTaille = new NombreBER();
+			if (tailleLue == -1) {
+				decodageTaille = new NombreBER();
+			} else {
+				tailleConnue(tailleLue);
+			}
 		}
 		
 		private void tailleConnue(int taille) {
@@ -113,11 +113,5 @@ public class BlocIntVector extends Bloc<int[]> {
 			}
 			
 		}
-	}
-
-
-	@Override
-	public ConvertisseurOctetsVersDonnees<int[]> getHandlerEnSerie() {
-		return new H();
 	}
 }

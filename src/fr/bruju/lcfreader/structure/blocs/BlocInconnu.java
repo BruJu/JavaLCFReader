@@ -1,10 +1,7 @@
 package fr.bruju.lcfreader.structure.blocs;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
 
 import fr.bruju.lcfreader.debug.BytePrinter;
-import fr.bruju.lcfreader.debug.Logger;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.structure.Donnee;
 
@@ -36,6 +33,10 @@ public class BlocInconnu extends Bloc<byte[]> {
 		private int i;
 
 		public BlocHandler(int tailleLue) {
+			if (tailleLue == -1) {
+				throw new RuntimeException("Bloc inconnu en lecture en série détecté : " + type);
+			}
+			
 			octets = new byte[tailleLue];
 			i = 0;
 		}
@@ -46,10 +47,5 @@ public class BlocInconnu extends Bloc<byte[]> {
 			
 			return (i == octets.length) ? new Donnee<byte[]>(BlocInconnu.this, octets) : null;
 		}
-	}
-
-	@Override
-	public ConvertisseurOctetsVersDonnees<byte[]> getHandlerEnSerie() {
-		return null;
 	}
 }

@@ -12,7 +12,9 @@ public interface PrimitifCpp {
 	public static Map<String, PrimitifCpp> map = remplirHashMap(
 			new PrimitifCpp[] {
 					new Int16(),
-					new Int32()
+					new Int32(),
+					new UInt32(),
+					new Boolean(),
 			});
 
 	
@@ -61,11 +63,33 @@ public interface PrimitifCpp {
 		public int convertir(byte[] octets) {
 			return Byte.toUnsignedInt(octets[0]);
 		}
-		
-		
 	}
 
 
+	public class UInt32 extends Int32 {
+		@Override
+		public String getNom() {
+			return "UInt32";
+		}
+	}
 
+	public class Boolean implements PrimitifCpp {
+		@Override
+		public String getNom() {
+			return "Boolean";
+		}
+
+		@Override
+		public int getNombreDOctets() {
+			return 1;
+		}
+
+		@Override
+		public int convertir(byte[] octets) {
+			return octets[0] == 0 ? 1 : 0;
+		}
+		
+		
+	}
 
 }

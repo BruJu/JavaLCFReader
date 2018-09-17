@@ -50,10 +50,15 @@ public class SequenceurLCFEnSerie implements SequenceurLCFAEtat {
 			return false;
 		} else {
 			Bloc<?> bloc = blocsAExplorer.get(sousChampActuel);
-			handler = bloc.getHandlerEnSerie();
 			String n = bloc.getChamp().nom;
 			Integer t = data.getTaille(n);
-			handler.fournirTailles(t);
+			//handler.fournirTailles(t);
+
+			if (t == null)
+				t = -1;
+			
+			handler = bloc.getHandler(t);
+			//handler.fournirTailles(t);
 			return true;
 		}
 	}

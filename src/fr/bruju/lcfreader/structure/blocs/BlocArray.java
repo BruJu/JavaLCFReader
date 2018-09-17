@@ -118,9 +118,4 @@ public class BlocArray extends Bloc<TreeMap<Integer, EnsembleDeDonnees>> {
 		LireIndex,
 		LireDonnees
 	}
-
-	@Override
-	public ConvertisseurOctetsVersDonnees<TreeMap<Integer, EnsembleDeDonnees>> getHandlerEnSerie() {
-		return null;
-	};
 }

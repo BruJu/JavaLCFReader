@@ -39,7 +39,7 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 	
 	@Override
 	public ConvertisseurOctetsVersDonnees<List<EnsembleDeDonnees>> getHandler(int tailleLue) {
-		return new H();
+		return new H(tailleLue);
 	}
 	
 	public class H implements ConvertisseurOctetsVersDonnees<List<EnsembleDeDonnees>> {
@@ -50,6 +50,12 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 		private int nbOctetsRecu = 0;
 		
 		private SequenceurLCFAEtat sequenceur;
+		
+		
+		public H(int taille) {
+			fournirTailles(taille);
+			
+		}
 
 		@Override
 		public boolean fournirTailles(Integer taille) {
@@ -77,43 +83,12 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 				sequenceur = null;
 			}
 			
-			
-			
 			return (taille == ++nbOctetsRecu) ? new Donnee<>(BlocEnsembleVector.this, ensembles) : null;
-			
-			/*
-			
-			
-			if (sequenceur == null) {
-
-				if (taille == -1) {
-					return new Donnee<>(BlocEnsembleVector.this, ensembles);
-				}
-				
-				if ((octet & 0x80) == 0) {
-					
-				}
-			} else {
-				if (!sequenceur.lireOctet(octet)) {
-					ensembles.add(sequenceur.getResultat());
-					sequenceur = null;
-					
-					if (nbOctetsRecu == taille) {
-						return ;
-					}
-				}
-			}
-			*/
 		}
 		
 		
 		
 		
-	}
-
-	@Override
-	public ConvertisseurOctetsVersDonnees<List<EnsembleDeDonnees>> getHandlerEnSerie() {
-		return null;
 	}
 
 }

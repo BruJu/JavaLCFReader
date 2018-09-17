@@ -82,11 +82,17 @@ public abstract class Bloc<T> {
 		return value.toString();
 	}
 
+	/**
+	 * 
+	 * <br>
+	 * Si tailleLue = -1, il faut lire soi même la taille.
+	 * 
+	 * @param tailleLue
+	 * @return
+	 */
 	public abstract ConvertisseurOctetsVersDonnees<T> getHandler(int tailleLue);
 
 	public void afficherSousArchi(int niveau, T value) {
 	}
-
-	public abstract ConvertisseurOctetsVersDonnees<T> getHandlerEnSerie();
 	
 }
