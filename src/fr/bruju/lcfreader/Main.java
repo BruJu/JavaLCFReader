@@ -9,45 +9,47 @@ import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
-		testerLecture();
+		String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
+		int numeroDeMap = 1;
 		
+
+		testerLecture(chemin, numeroDeMap);
 		
-		RMMap carte = new FabriqueLCF("A:\\Dev\\Projet\\").map(1);
+		RMMap carte = new FabriqueLCF(chemin).map(numeroDeMap);
 		
 		afficherRMMap(carte);
 
 	}
 	
 	private static void afficherRMMap(RMMap carte) {
-		System.out.println("• Carte " +carte.id() + " / " + carte.nom());
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("• Carte " +carte.id() + " / " + carte.nom()).append("\n");
 		
 		carte.evenements().stream().forEach(evenement -> {
-			System.out.println("•• Evenement " + evenement.id() + " [" + evenement.x() + ", " + evenement.y() + "]");
+			sb.append("•• Evenement " + evenement.id() + " [" + evenement.x() + ", " + evenement.y() + "]").append("\n");
 			evenement.pages().forEach(page -> {
-				System.out.println("••• Page " + page.id());
+				sb.append("••• Page " + page.id()).append("\n");
 				page.instructions().forEach(instruction -> {
-					System.out.print("••• Instruction " + instruction.code() + " '" + instruction.argument() + "' ");
+					sb.append("••• Instruction " + instruction.code() + " '" + instruction.argument() + "' ");
 					
 					for (int p : instruction.parametres()) {
-						System.out.print(p + " ");
+						sb.append(p + " ");
 					}
 					
-					System.out.println();
+					sb.append("\n");
 				});
-				
-				
-				
 			});
 		});
+		
+		System.out.println(sb.toString());
 	}
 
 	@SuppressWarnings("unused")
-	private static void testerLecture() {
+	private static void testerLecture(String chemin, int numeroDeMap) {
 		BaseDeDonneesDesStructures.initialiser("ressources\\liblcf\\fields.csv");
-
-		String[] fichiers = new String[] { "Projet\\Map0001", "Map0452", "Map0001", "Map0003" };
-
-		doubleAffichage(fichiers[0]);
+		String vraiChemin = chemin + "Map" + String.format("%04d", numeroDeMap) + ".lmu";
+		doubleAffichage(vraiChemin);
 	}
 
 	private static void doubleAffichage(String string) {
@@ -56,8 +58,8 @@ public class Main {
 	}
 
 	private static void afficherMap(String nom, Consumer<EnsembleDeDonnees> consumer) {
-		EnsembleDeDonnees map = EnsembleDeDonnees.lireFichier("A:\\Dev\\" + nom + ".lmu");
-
+		EnsembleDeDonnees map = EnsembleDeDonnees.lireFichier(nom);
+		
 		System.out.println();
 		System.out.println();
 		System.out.println("}}-- " + nom + " --{{");

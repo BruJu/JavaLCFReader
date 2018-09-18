@@ -22,7 +22,7 @@ public class FabriqueLCF implements RMFabrique {
 
 	@Override
 	public RMEvenement evenement(int idCarte, int idEvenement) {
-		return map(idCarte).evenements().stream().filter(map -> map.id() == idCarte).findAny().get();
+		return map(idCarte).evenements().stream().filter(ev -> ev.id() == idEvenement).findAny().get();
 	}
 
 	@Override
