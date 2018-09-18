@@ -3,17 +3,39 @@ package fr.bruju.lcfreader.structure.types;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
+import fr.bruju.lcfreader.sequenceur.sequences.NombreBER;
+
 public interface PrimitifCpp {
+	static abstract class LecteurAOctetsFixe implements LecteurDeSequence<Integer> {
+		protected byte[] accumulateur;
+		private int indice = 0;
+
+		public LecteurAOctetsFixe(int nombreDOctets) {
+			accumulateur = new byte[nombreDOctets];
+		}
+
+		@Override
+		public boolean lireOctet(byte octet) {
+			accumulateur[indice++] = octet;
+			return indice == accumulateur.length;
+		}
+
+		@Override
+		public abstract Integer getResultat();
+	}
+	
+	
 	public String getNom();
-
-	public int getNombreDOctets();
-
-	public int convertir(byte[] octets);
+	
+	public LecteurDeSequence<Integer> getLecteur();
+	
 
 	public static Map<String, PrimitifCpp> map = remplirHashMap(
 			new PrimitifCpp[] {
 					new Int16(),
 					new Int32(),
+					new Enum(),
 					new UInt32(),
 					new Boolean(),
 				});
@@ -35,14 +57,13 @@ public interface PrimitifCpp {
 		}
 
 		@Override
-		public int getNombreDOctets() {
-			return 2;
-		}
-
-		@Override
-		public int convertir(byte[] octets) {
-			// TODO : corriger pour les nombres négatifs
-			return (Byte.toUnsignedInt(octets[0]) + Byte.toUnsignedInt(octets[1]) * 0x100);
+		public LecteurDeSequence<Integer> getLecteur() {
+			return new LecteurAOctetsFixe(2) {
+				@Override
+				public Integer getResultat() {
+					return (Byte.toUnsignedInt(accumulateur[0]) + Byte.toUnsignedInt(accumulateur[1]) * 0x100);
+				}
+			};
 		}
 	}
 
@@ -53,20 +74,42 @@ public interface PrimitifCpp {
 		}
 
 		@Override
-		public int getNombreDOctets() {
-			return 1;
-		}
-
-		@Override
-		public int convertir(byte[] octets) {
-			return Byte.toUnsignedInt(octets[0]);
+		public LecteurDeSequence<Integer> getLecteur() {
+			return new NombreBER();
 		}
 	}
 
-	public class UInt32 extends Int32 {
+	public class Enum implements PrimitifCpp {
+		@Override
+		public String getNom() {
+			return "Enum";
+		}
+
+		@Override
+		public LecteurDeSequence<Integer> getLecteur() {
+			return new LecteurAOctetsFixe(2) {
+				@Override
+				public Integer getResultat() {
+					return Byte.toUnsignedInt(accumulateur[0]);
+				}
+			};
+		}
+	}
+
+	public class UInt32 implements PrimitifCpp {
 		@Override
 		public String getNom() {
 			return "UInt32";
+		}
+
+		@Override
+		public LecteurDeSequence<Integer> getLecteur() {
+			return new LecteurAOctetsFixe(2) {
+				@Override
+				public Integer getResultat() {
+					return Byte.toUnsignedInt(accumulateur[0]);
+				}
+			};
 		}
 	}
 
@@ -77,13 +120,13 @@ public interface PrimitifCpp {
 		}
 
 		@Override
-		public int getNombreDOctets() {
-			return 1;
-		}
-
-		@Override
-		public int convertir(byte[] octets) {
-			return octets[0] == 0 ? 1 : 0;
+		public LecteurDeSequence<Integer> getLecteur() {
+			return new LecteurAOctetsFixe(2) {
+				@Override
+				public Integer getResultat() {
+					return Byte.toUnsignedInt(accumulateur[0]);
+				}
+			};
 		}
 	}
 
