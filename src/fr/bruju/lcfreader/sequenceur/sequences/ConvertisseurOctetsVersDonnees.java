@@ -28,11 +28,11 @@ public interface ConvertisseurOctetsVersDonnees<T> {
 	 *
 	 * @param <S> Le type de données
 	 */
-	public static class ViaSequenceur<S> implements ConvertisseurOctetsVersDonnees<S> {
+	public static class ViaSequenceur<R, S> implements ConvertisseurOctetsVersDonnees<S> {
 		/** Lecteur utilisé */
-		private LecteurDeSequence<S> lecteur;
+		private LecteurDeSequence<R> lecteur;
 		/** Fonction de convertion du résultat en données */
-		private Function<S, Donnee<S>> traiterResultat;
+		private Function<R, Donnee<S>> traiterResultat;
 
 		/**
 		 * Crée un ConvertisseurOctetsVersDonnees utilisant un lecteur de séquences
@@ -40,7 +40,7 @@ public interface ConvertisseurOctetsVersDonnees<T> {
 		 * @param lecteur Le lecteur de séquences
 		 * @param traiterResultat La fonction à appliquer pour transformer la valeur résultat en objet de type Donnée
 		 */
-		public ViaSequenceur(LecteurDeSequence<S> lecteur, Function<S, Donnee<S>> traiterResultat) {
+		public ViaSequenceur(LecteurDeSequence<R> lecteur, Function<R, Donnee<S>> traiterResultat) {
 			this.lecteur = lecteur;
 			this.traiterResultat = traiterResultat;
 		}
