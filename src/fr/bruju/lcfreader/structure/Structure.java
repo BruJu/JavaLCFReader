@@ -57,4 +57,14 @@ public class Structure {
 	public List<Bloc<?>> getSerie() {
 		return serie;
 	}
+
+	public Bloc<?> getBloc(String nomBloc) {
+		for (Bloc<?> bloc : champs.values()) {
+			if (bloc.nom.equals(nomBloc) && !bloc.estUnChampIndiquantLaTaille()) {
+				return bloc;
+			}
+		}
+		
+		return null;
+	}
 }

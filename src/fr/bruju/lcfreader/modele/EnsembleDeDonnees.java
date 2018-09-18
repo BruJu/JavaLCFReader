@@ -11,6 +11,7 @@ import fr.bruju.lcfreader.debug.BytePrinter;
 import fr.bruju.lcfreader.sequenceur.lecteurs.LecteurDeFichierOctetParOctet;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
 import fr.bruju.lcfreader.sequenceur.sequences.TailleChaine;
+import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Donnee;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 
@@ -109,6 +110,23 @@ public class EnsembleDeDonnees {
 		return data;
 	}
 
+	/* =================
+	 * ACCES AUX DONNEES
+	 * ================= */
+	
+	public <T> T getDonnee(String nomBloc, Class<T> classe) {
+		Bloc<?> bloc = BaseDeDonneesDesStructures.getInstance().get(nomStruct).getBloc(nomBloc);
+		
+		for (Donnee<?> donnee : donnees) {
+			if (donnee.bloc == bloc) {
+				return classe.cast(donnee.value);
+			}
+		}
+		
+		return classe.cast(bloc.valeurParDefaut());
+	}
+	
+	
 	/* ====================
 	 * SERVICES D'AFFICHAGE
 	 * ==================== */
