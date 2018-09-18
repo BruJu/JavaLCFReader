@@ -3,8 +3,10 @@ package fr.bruju.lcfreader.structure.blocs;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
+import fr.bruju.lcfreader.sequenceur.sequences.Enchainement;
 import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
 import fr.bruju.lcfreader.sequenceur.sequences.NombreBER;
 import fr.bruju.lcfreader.structure.Donnee;
@@ -17,6 +19,9 @@ public class BlocIntVector extends Bloc<int[]> {
 
 	/** Nom du type primitif C++ */
 	public final String nomPrimitive;
+	
+	/** Type primitif c++ */
+	public final PrimitifCpp primitif;
 
 	/**
 	 * Bloc qui est un vecteur d'un type primitif c++ qui est converti ici en int
@@ -27,6 +32,7 @@ public class BlocIntVector extends Bloc<int[]> {
 	public BlocIntVector(Champ champ, String nomPrimitive) {
 		super(champ);
 		this.nomPrimitive = nomPrimitive;
+		primitif = PrimitifCpp.map.get(nomPrimitive);
 	}
 
 	/* ====================
@@ -44,7 +50,26 @@ public class BlocIntVector extends Bloc<int[]> {
 
 	@Override
 	public ConvertisseurOctetsVersDonnees<int[]> getHandler(int tailleLue) {
-		return new H(tailleLue);
+		Function<Integer, LecteurDeSequence<int[]>> secondLecteur;
+		
+		
+		if (nomPrimitive.equals("Int32")) {
+			secondLecteur = taille -> new Convertisseur(new CompteurValeurs(taille));
+		} else {
+			secondLecteur = taille -> new Convertisseur(new CompteurOctets(taille));
+		}
+		
+
+		LecteurDeSequence<int[]> sequenceurGlobal;
+		
+		if (tailleLue == -1) {
+			sequenceurGlobal = new Enchainement<>(new NombreBER(), secondLecteur, () -> new int[0]);
+		} else {
+			sequenceurGlobal = secondLecteur.apply(tailleLue);
+		}
+		
+		return new ConvertisseurOctetsVersDonnees.ViaSequenceur<int[]>(sequenceurGlobal,
+					tableau -> new Donnee<int[]>(this, tableau));
 	}
 
 	/* ============================
@@ -60,57 +85,73 @@ public class BlocIntVector extends Bloc<int[]> {
 	 * CONVERTISSEUR
 	 * ============= */
 
-	// TODO : il est surement possible d'utiliser un lecteur de séquence intermédiaire
-
-	public class H implements ConvertisseurOctetsVersDonnees<int[]> {
-		PrimitifCpp primitif = PrimitifCpp.map.get(nomPrimitive);
-
-		//private NombreBER decodageTaille;
-
-		private int nombreDOctetsRestants;
+	
+	private interface Compteur {
+		default boolean notifierOctetLu() {
+			return false;
+		}
 		
+		default boolean notifierValeurLue() {
+			return false;
+		}
+	}
+	
+	private class CompteurValeurs implements Compteur {
+		private int quantite;
+
+		CompteurValeurs(int quantite) {
+			this.quantite = quantite;
+		}
+		
+		public boolean notifierValeurLue() {
+			return --quantite == 0;
+		}
+	}
+
+	private class CompteurOctets implements Compteur {
+		private int quantite;
+
+		CompteurOctets(int quantite) {
+			this.quantite = quantite;
+		}
+		
+		public boolean notifierOctetLu() {
+			return --quantite == 0;
+		}
+	}
+	
+	
+	private class Convertisseur implements LecteurDeSequence<int[]> {
+		private Compteur compteur;
 		private LecteurDeSequence<Integer> lecteurDeValeur;
 		
 		private List<Integer> valeursLues;
 
-		public H(int tailleLue) {
-			if (tailleLue == -1) {
-				lecteurDeValeur = new NombreBER();
-				nombreDOctetsRestants = -1;
-			} else {
-				tailleConnue(tailleLue);
-			}
-		}
-
-		private void tailleConnue(int taille) {
-			valeursLues = new ArrayList<>();
-			nombreDOctetsRestants = taille;
+		public Convertisseur(Compteur compteur) {
+			this.compteur = compteur;
 			lecteurDeValeur = primitif.getLecteur();
+			valeursLues = new ArrayList<>();
 		}
-
 
 		@Override
-		public Donnee<int[]> accumuler(byte octetRecu) {
-			// Decompte des octets restants à lire
-			if (nombreDOctetsRestants != -1) {
-				nombreDOctetsRestants--;
-			}
+		public boolean lireOctet(byte octetRecu) {
+			boolean fin = false;
+			
+			fin |= compteur.notifierOctetLu();
 			
 			boolean finDeLaLectureDUnNombre = !lecteurDeValeur.lireOctet(octetRecu);
 			
 			if (finDeLaLectureDUnNombre) {
-				if (nombreDOctetsRestants == -1) {	// Taille en octets du vecteur
-					tailleConnue(lecteurDeValeur.getResultat());
-				} else { // Nombre contenu dans le vecteur
-					valeursLues.add(lecteurDeValeur.getResultat());
-					lecteurDeValeur = primitif.getLecteur();
-				}
+				valeursLues.add(lecteurDeValeur.getResultat());
+				fin |= compteur.notifierValeurLue();
+				lecteurDeValeur = primitif.getLecteur();
 			}
 			
-			return nombreDOctetsRestants != 0 ? null : new Donnee<int[]>(BlocIntVector.this, getTableau());
+			return !fin;
 		}
 
-		private int[] getTableau() {
+		@Override
+		public int[] getResultat() {
 			int[] valeurs = new int[valeursLues.size()];
 			
 			for (int i = 0 ; i != valeurs.length ; i++) {

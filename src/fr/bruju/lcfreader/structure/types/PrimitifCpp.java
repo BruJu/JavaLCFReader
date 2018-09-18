@@ -18,7 +18,7 @@ public interface PrimitifCpp {
 		@Override
 		public boolean lireOctet(byte octet) {
 			accumulateur[indice++] = octet;
-			return indice == accumulateur.length;
+			return indice != accumulateur.length;
 		}
 
 		@Override
