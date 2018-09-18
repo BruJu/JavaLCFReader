@@ -29,7 +29,7 @@ public class Main {
 					System.out.print("••• Instruction " + instruction.code() + " '" + instruction.argument() + "' ");
 					
 					for (int p : instruction.parametres()) {
-						System.out.println(p + " ");
+						System.out.print(p + " ");
 					}
 					
 					System.out.println();
@@ -47,7 +47,7 @@ public class Main {
 
 		String[] fichiers = new String[] { "Projet\\Map0001", "Map0452", "Map0001", "Map0003" };
 
-		doubleAffichage(fichiers[2]);
+		doubleAffichage(fichiers[0]);
 	}
 
 	private static void doubleAffichage(String string) {

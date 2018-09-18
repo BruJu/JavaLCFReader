@@ -110,7 +110,10 @@ public class Ensembles {
 		public List<RMInstruction> instructions() {
 			@SuppressWarnings("unchecked")
 			List<EnsembleDeDonnees> instructions = ensemble.getDonnee("event_commands", List.class);
-			return instructions.stream().map($Instruction::new).collect(Collectors.toList());
+			return instructions.stream()
+							   .map($Instruction::instancier)
+							   .filter(e -> e != null)
+							   .collect(Collectors.toList());
 		}
 	}
 	
@@ -120,6 +123,16 @@ public class Ensembles {
 
 		private $Instruction(EnsembleDeDonnees ensemble) {
 			this.ensemble = ensemble;
+		}
+		
+		private static $Instruction instancier(EnsembleDeDonnees ensemble) {
+			$Instruction instruction = new $Instruction(ensemble);
+			
+			if (instruction.code() == 0) {
+				instruction = null;
+			}
+			
+			return instruction;
 		}
 
 		@Override
@@ -134,15 +147,7 @@ public class Ensembles {
 
 		@Override
 		public int[] parametres() {
-			@SuppressWarnings("unchecked")
-			List<Integer> vecteur = ensemble.getDonnee("parameters", List.class);
-			
-			int[] parametres = new int[vecteur.size()];
-			for (int i = 0 ; i != vecteur.size() ; i++) {
-				parametres[i] = vecteur.get(i);
-			}
-			
-			return parametres;
+			return ensemble.getDonnee("parameters", int[].class);
 		}
 	}
 	

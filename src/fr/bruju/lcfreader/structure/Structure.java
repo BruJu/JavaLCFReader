@@ -64,6 +64,12 @@ public class Structure {
 				return bloc;
 			}
 		}
+
+		for (Bloc<?> bloc : serie) {
+			if (bloc.nom.equals(nomBloc) && !bloc.estUnChampIndiquantLaTaille()) {
+				return bloc;
+			}
+		}
 		
 		return null;
 	}
