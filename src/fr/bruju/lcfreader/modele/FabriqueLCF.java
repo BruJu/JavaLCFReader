@@ -8,10 +8,16 @@ import fr.bruju.lcfreader.rmobjets.RMFabrique;
 import fr.bruju.lcfreader.rmobjets.RMMap;
 
 public class FabriqueLCF implements RMFabrique {
+	
+	private String chemin;
+
+	public FabriqueLCF(String chemin) {
+		this.chemin = chemin;
+	}
 
 	@Override
 	public RMMap map(int idCarte) {
-		return Ensembles.map(idCarte);
+		return Ensembles.map(chemin, idCarte);
 	}
 
 	@Override
