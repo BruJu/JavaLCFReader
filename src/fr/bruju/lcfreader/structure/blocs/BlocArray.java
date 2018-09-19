@@ -1,7 +1,6 @@
 package fr.bruju.lcfreader.structure.blocs;
 
 import java.util.TreeMap;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
