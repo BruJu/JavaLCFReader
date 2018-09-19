@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
+import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.Enchainement;
 import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
@@ -69,7 +70,11 @@ public class BlocIntVector extends Bloc<int[]> {
 		LecteurDeSequence<List<Integer>> sequenceurGlobal;
 		
 		if (tailleLue == -1) {
-			sequenceurGlobal = new Enchainement<>(new NombreBER(), secondLecteur, () -> new ArrayList<>());
+			Function<Integer, LecteurDeSequence<List<Integer>>> alternatif = taille -> taille == 0 ? null :
+				secondLecteur.apply(taille);
+			
+			sequenceurGlobal = new Enchainement<>(new NombreBER(), alternatif
+					, () -> new ArrayList<>());
 		} else {
 			sequenceurGlobal = secondLecteur.apply(tailleLue);
 		}

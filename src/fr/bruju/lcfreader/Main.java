@@ -9,8 +9,8 @@ import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
-		String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
-		//String chemin = "A:\\Dev\\Projet\\";
+		//String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
+		String chemin = "A:\\Dev\\Projet\\";
 		int numeroDeMap = 1;
 		
 
@@ -32,7 +32,7 @@ public class Main {
 			evenement.pages().forEach(page -> {
 				sb.append("••• Page " + page.id()).append("\n");
 				page.instructions().forEach(instruction -> {
-					sb.append("••• Instruction " + instruction.code() + " '" + instruction.argument() + "' ");
+					sb.append("•••• Instruction " + instruction.code() + " '" + instruction.argument() + "' ");
 					
 					for (int p : instruction.parametres()) {
 						sb.append(p + " ");

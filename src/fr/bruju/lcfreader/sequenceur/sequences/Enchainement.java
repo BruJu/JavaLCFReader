@@ -28,6 +28,10 @@ public class Enchainement<T, R> implements LecteurDeSequence<R> {
 				
 				if (resultat != null) {
 					secondLecteur = fonction.apply(resultat);
+					
+					if (secondLecteur == null) {
+						return false;
+					}
 				} else {
 					return false;
 				}

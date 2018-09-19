@@ -98,13 +98,11 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 
 			if ((octet & 0x80) != 0) {
 				return this;
-			}
-
-			if (tailleLue == 0) {
+			} else if (tailleLue == 0) {
 				return new EtatLireCode();
+			} else {
+				return new EtatLireDonnees<>(bloc.getHandler(tailleLue));
 			}
-
-			return new EtatLireDonnees<>(bloc.getHandler(tailleLue));
 		}
 	}
 
@@ -131,12 +129,12 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 		public Etat lireOctet(byte octet) {
 			Donnee<T> r = handler.accumuler(octet);
 
-			if (r == null)
+			if (r == null) {
 				return this;
-
-			data.push(r);
-
-			return new EtatLireCode();
+			} else {
+				data.push(r);
+				return new EtatLireCode();
+			}
 		}
 	}
 
