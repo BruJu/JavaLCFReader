@@ -1,6 +1,6 @@
 package fr.bruju.lcfreader.structure.blocs;
 
-import fr.bruju.lcfreader.debug.BytePrinter;
+import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.structure.Donnee;
 
@@ -53,7 +53,24 @@ public class BlocInconnu extends Bloc<byte[]> {
 
 	@Override
 	public String convertirEnChaineUneValeur(byte[] value) {
-		return value.length + ">" + BytePrinter.getTable(value);
+		return value.length + ">" + getTableauDOctetsEnChaine(value);
+	}
+	
+	private String getTableauDOctetsEnChaine(byte[] valeurs) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+		
+		if (valeurs.length != 0) {
+			sb.append(Utilitaire.toHex(valeurs[0]));
+			
+			for (int i = 1 ; i != valeurs.length ; i++) {
+				sb.append(" ").append(Utilitaire.toHex(valeurs[i]));
+			}
+		}
+		
+		sb.append("]");
+		
+		return sb.toString();
 	}
 
 	/* =============

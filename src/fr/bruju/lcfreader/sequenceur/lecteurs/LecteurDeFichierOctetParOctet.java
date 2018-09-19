@@ -18,7 +18,28 @@ import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
 public class LecteurDeFichierOctetParOctet implements Desequenceur {
 	/** Flux de données */
 	private FileInputStream stream;
+	
+	private byte[] cache = new byte[4096];
+	
+	private int positionCache = 0;
+	private int tailleCache = 0;
 
+	
+
+	private int getProchainOctet() {
+		return tailleCache == -1 ? -1 : Byte.toUnsignedInt(cache[positionCache++]);
+	}
+
+	private void cacheNonVide() throws IOException {
+		if (positionCache == tailleCache) {
+			tailleCache = stream.read(cache, 0, 4096);
+			if (tailleCache == 0)
+				throw new IOException("Lecture de 0 octet");
+			
+			positionCache = 0;
+		}
+	}
+	
 	/**
 	 * Crée un lecteur de fichiers qui utilse un flux
 	 * 
@@ -38,7 +59,7 @@ public class LecteurDeFichierOctetParOctet implements Desequenceur {
 		try {
 			File file = new File(fichier);
 			FileInputStream stream = new FileInputStream(file);
-
+			
 			return new LecteurDeFichierOctetParOctet(stream);
 		} catch (FileNotFoundException e) {
 			return null;
@@ -58,8 +79,9 @@ public class LecteurDeFichierOctetParOctet implements Desequenceur {
 
 		while (stream != null) {
 			try {
-				byteLu = stream.read();
-
+				cacheNonVide();
+				byteLu = getProchainOctet();
+				
 				if (byteLu == -1) {
 					// Fin de fichier
 					stream.close();
@@ -83,6 +105,7 @@ public class LecteurDeFichierOctetParOctet implements Desequenceur {
 
 		return sequenceur.getResultat();
 	}
+
 
 	/**
 	 * Ferme le flux si il n'est pas déjà fermé.
