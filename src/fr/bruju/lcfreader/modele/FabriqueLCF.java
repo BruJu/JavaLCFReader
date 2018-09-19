@@ -1,6 +1,9 @@
 package fr.bruju.lcfreader.modele;
 
+import java.io.File;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import fr.bruju.lcfreader.rmobjets.RMEvenement;
 import fr.bruju.lcfreader.rmobjets.RMEvenementCommun;
@@ -32,7 +35,13 @@ public class FabriqueLCF implements RMFabrique {
 
 	@Override
 	public List<RMMap> maps() {
-		throw new UnsupportedOperationException("maps() n'est pas supporté");
+		File dossier = new File(chemin);
+		
+		return Stream.of(dossier.list())
+					 .filter(n -> n.length() == 11 && n.startsWith("Map") && n.endsWith(".lmu"))
+					 .map(n -> Integer.parseInt(n.substring(3, 7)))
+					 .map(numero -> map(numero))
+					 .collect(Collectors.toList());
 	}
 
 	@Override
