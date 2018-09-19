@@ -10,7 +10,7 @@ package fr.bruju.lcfreader.sequenceur.sequences;
  */
 public class NombreBER implements LecteurDeSequence<Integer> {
 	/** Le nombre lu */
-	private int nombre = 0;
+	protected int nombre = 0;
 
 	@Override
 	public boolean lireOctet(byte byteLu) {
@@ -23,5 +23,20 @@ public class NombreBER implements LecteurDeSequence<Integer> {
 	@Override
 	public Integer getResultat() {
 		return nombre;
+	}
+	
+
+	/**
+	 * Un cas particulier de NombreBER qui renvoie null au lieu de 0.
+	 * <br>Permet d'accéder au comportement plus facilement en cas d'absence de valeur retournée dans Enchaînement.
+	 * 
+	 * @author Bruju
+	 *
+	 */
+	public static class NonNull extends NombreBER {
+		@Override
+		public Integer getResultat() {
+			return nombre == 0 ? null : nombre;
+		}
 	}
 }

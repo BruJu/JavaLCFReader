@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.Enchainement;
 import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
