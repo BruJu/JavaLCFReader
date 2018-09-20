@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.Utilitaire;
-import fr.bruju.lcfreader.debug.BytePrinter;
 import fr.bruju.lcfreader.sequenceur.lecteurs.LecteurDeFichierOctetParOctet;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
 import fr.bruju.lcfreader.sequenceur.sequences.TailleChaine;
@@ -156,7 +155,7 @@ public class EnsembleDeDonnees {
 			System.out.print(data.bloc.getTypeEnString());
 
 			if (data.value instanceof byte[]) {
-				System.out.print(" " + BytePrinter.getTable((byte[]) data.value));
+				System.out.print(data.getString());
 			}
 
 			System.out.println();

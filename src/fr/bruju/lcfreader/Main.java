@@ -11,7 +11,7 @@ public class Main {
 	public static void main(String[] args) throws InterruptedException {
 		String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
 		//String chemin = "A:\\Dev\\Projet\\";
-		int numeroDeMap = 461;
+		int numeroDeMap = 1;
 		
 
 		testerLecture(chemin, numeroDeMap);
