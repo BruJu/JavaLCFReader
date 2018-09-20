@@ -67,6 +67,11 @@ public class LecteurDeFichierOctetParOctet implements Desequenceur {
 			return null;
 		}
 	}
+	
+	public int lireOctet() throws IOException {
+		cacheNonVide();
+		return getProchainOctet();
+	}
 
 	/**
 	 * Lance la lecteur d'octets en utilisant le sequenceur donné. La lecteur se fait jusqu'à que le sequenceur renvoie

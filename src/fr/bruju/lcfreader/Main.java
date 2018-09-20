@@ -1,21 +1,31 @@
 package fr.bruju.lcfreader;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Date;
 import java.util.function.Consumer;
 
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.modele.FabriqueLCF;
 import fr.bruju.lcfreader.rmobjets.RMMap;
+import fr.bruju.lcfreader.sequenceur.lecteurs.LecteurDeFichierOctetParOctet;
+import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 
 @SuppressWarnings("unused")
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
-		String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
+		
+		//String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
 		//String chemin = "A:\\Dev\\Projet\\";
-		int numeroDeMap = 2;
+		//int numeroDeMap = 2;
 		
 	
-		testerLecture(chemin, "RPG_RT.lmt");
+		//testerLecture(chemin, "Save01.lsd");
 
 		
 		//testerLecture(chemin, construireNomDeMap(2));

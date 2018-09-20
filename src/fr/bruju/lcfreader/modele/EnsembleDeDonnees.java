@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.sequenceur.lecteurs.LecteurDeFichierOctetParOctet;
-import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
 import fr.bruju.lcfreader.sequenceur.sequences.TailleChaine;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
@@ -99,6 +98,9 @@ public class EnsembleDeDonnees {
 		case "LcfMapTree":
 			nomStruct = "TreeMap";
 			break;
+		// case "LcfDataBase": nomStruct = "Database";	break; // Non fonctionnel
+		// case "LcfSaveData": nomStruct = "Save"; 	break; // Non fonctionnel
+			
 		default: // Type Inconnu
 			System.out.println("Inconnu " + type);
 			return null;
