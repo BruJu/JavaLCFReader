@@ -16,10 +16,12 @@ import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
  *
  */
 public class LecteurDeFichierOctetParOctet implements Desequenceur {
+	private static final int TAILLE_BUFFER = 4096;
+	
 	/** Flux de données */
 	private FileInputStream stream;
 	
-	private byte[] cache = new byte[4096];
+	private byte[] cache = new byte[TAILLE_BUFFER];
 	
 	private int positionCache = 0;
 	private int tailleCache = 0;
@@ -32,7 +34,7 @@ public class LecteurDeFichierOctetParOctet implements Desequenceur {
 
 	private void cacheNonVide() throws IOException {
 		if (positionCache == tailleCache) {
-			tailleCache = stream.read(cache, 0, 4096);
+			tailleCache = stream.read(cache, 0, TAILLE_BUFFER);
 			if (tailleCache == 0)
 				throw new IOException("Lecture de 0 octet");
 			

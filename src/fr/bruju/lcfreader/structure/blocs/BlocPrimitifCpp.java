@@ -1,7 +1,6 @@
 package fr.bruju.lcfreader.structure.blocs;
 
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
-import fr.bruju.lcfreader.sequenceur.sequences.NombreBER;
 import fr.bruju.lcfreader.structure.Donnee;
 import fr.bruju.lcfreader.structure.types.PrimitifCpp;
 

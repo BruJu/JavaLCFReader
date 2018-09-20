@@ -10,13 +10,15 @@ import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 @SuppressWarnings("unused")
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
-		//String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
-		String chemin = "A:\\Dev\\Projet\\";
-		int numeroDeMap = 1;
+		String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
+		//String chemin = "A:\\Dev\\Projet\\";
+		int numeroDeMap = 2;
 		
 	
 		testerLecture(chemin, "RPG_RT.lmt");
 
+		
+		//testerLecture(chemin, construireNomDeMap(2));
 
 		//testMap(chemin, numeroDeMap);
 	}

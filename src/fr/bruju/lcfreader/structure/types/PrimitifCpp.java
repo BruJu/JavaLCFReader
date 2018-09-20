@@ -37,7 +37,7 @@ public interface PrimitifCpp {
 					new Int32(),
 					new Enum(),
 					new UInt32(),
-					new Boolean(),
+					//new Boolean(),
 				});
 
 	public static Map<String, PrimitifCpp> remplirHashMap(PrimitifCpp[] primitifCpps) {
@@ -104,7 +104,7 @@ public interface PrimitifCpp {
 
 		@Override
 		public LecteurDeSequence<Integer> getLecteur() {
-			return new LecteurAOctetsFixe(2) {
+			return new LecteurAOctetsFixe(4) {
 				@Override
 				public Integer getResultat() {
 					return Byte.toUnsignedInt(accumulateur[0]);
