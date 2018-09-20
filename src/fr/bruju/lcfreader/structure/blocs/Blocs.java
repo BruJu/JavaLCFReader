@@ -35,6 +35,7 @@ public class Blocs {
 			new ProcedeArray(),
 			new ProcedeEnsembleDeDonnees(),
 			new ProcedeVector(),
+			new ProcedePrimitif(),
 			new ProcedeTypeDeBase()
 		};
 
@@ -80,6 +81,8 @@ public class Blocs {
 	 */
 	private Bloc<?> getBloc(Champ champ, String type, String defaut) {
 		Bloc<?> bloc;
+		
+		type = enleverRef(type);
 
 		for (Procede procede : procedes) {
 			bloc = procede.generer(champ, type, defaut);
@@ -89,6 +92,23 @@ public class Blocs {
 		}
 
 		return new BlocInconnu(champ, type);
+	}
+
+	private String enleverRef(String type) {
+		if (!(type.startsWith("Ref<") && type.endsWith(">"))) {
+			return type;
+		} else {
+			// Enlever Ref
+			type = type.substring(4, type.length() - 1);
+			
+			// Pour les Ref<A:B>, renvoyer B, pour les Ref<A> renvoyer Int32
+			String[] split = type.split("\\:");
+			if (split.length == 1) {
+				return "Int32";
+			} else {
+				return split[1];
+			}
+		}
 	}
 
 	/* ================================
@@ -151,7 +171,7 @@ public class Blocs {
 				return null;
 
 			// Extraction de la chaîne entre Vector< et >
-			String sousType = type.substring(7, type.length() - 1);
+			String sousType = enleverRef(type.substring(7, type.length() - 1));
 
 			if (PrimitifCpp.map.get(sousType) != null) {
 				return new BlocIntVector(champ, sousType);
@@ -171,6 +191,20 @@ public class Blocs {
 		public Bloc<?> generer(Champ champ, String type, String defaut) {
 			return BaseDeDonneesDesStructures.getInstance().get(type) == null ? null
 					: new BlocEnsembleDeDonnees(champ, type);
+		}
+	}
+	
+	/**
+	 * Crée un bloc qui décrypte les valeurs primitives
+	 */
+	private class ProcedePrimitif implements Procede {
+		@Override
+		public Bloc<?> generer(Champ champ, String type, String defaut) {
+			if (PrimitifCpp.map.get(type) != null) {
+				return new BlocPrimitifCpp(champ, type, defaut);
+			} else {
+				return null;
+			}
 		}
 	}
 

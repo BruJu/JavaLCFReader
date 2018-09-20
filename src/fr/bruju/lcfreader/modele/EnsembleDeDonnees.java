@@ -95,6 +95,9 @@ public class EnsembleDeDonnees {
 		case "LcfMapUnit":
 			nomStruct = "Map";
 			break;
+		case "LcfMapTree":
+			nomStruct = "TreeMap";
+			break;
 		default: // Type Inconnu
 			System.out.println("Inconnu " + type);
 			return null;

@@ -7,21 +7,25 @@ import fr.bruju.lcfreader.modele.FabriqueLCF;
 import fr.bruju.lcfreader.rmobjets.RMMap;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 
+@SuppressWarnings("unused")
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
-		String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
-		//String chemin = "A:\\Dev\\Projet\\";
+		//String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
+		String chemin = "A:\\Dev\\Projet\\";
 		int numeroDeMap = 1;
 		
+	
+		testerLecture(chemin, "RPG_RT.lmt");
 
-		testerLecture(chemin, numeroDeMap);
-		
-		RMMap carte = new FabriqueLCF(chemin).map(numeroDeMap);
-		
-		afficherRMMap(carte);
 
+		//testMap(chemin, numeroDeMap);
 	}
 	
+	private static void testMap(String chemin, int numeroDeMap) {
+		RMMap carte = new FabriqueLCF(chemin).map(numeroDeMap);
+		afficherRMMap(carte);
+	}
+
 	private static void afficherRMMap(RMMap carte) {
 		StringBuilder sb = new StringBuilder();
 		
@@ -46,11 +50,15 @@ public class Main {
 		System.out.println(sb.toString());
 	}
 
-	@SuppressWarnings("unused")
-	private static void testerLecture(String chemin, int numeroDeMap) {
+	private static void testerLecture(String chemin, String nomDeFichier) {
 		BaseDeDonneesDesStructures.initialiser("ressources\\liblcf\\fields.csv");
-		String vraiChemin = chemin + "Map" + String.format("%04d", numeroDeMap) + ".lmu";
+		String vraiChemin = chemin + nomDeFichier;
 		doubleAffichage(vraiChemin);
+	}
+	
+	
+	private static String construireNomDeMap(int numeroDeMap) {
+		return "Map" + String.format("%04d", numeroDeMap) + ".lmu";
 	}
 
 	private static void doubleAffichage(String string) {
