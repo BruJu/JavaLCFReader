@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Donnee;
@@ -45,10 +46,69 @@ public class Octets {
 	
 	static {
 		mapDePrimitives = new HashMap<>();
-		
+		mapDePrimitives.put("UInt32", new GestionnaireATailleFixeNormal(4));
+		mapDePrimitives.put("Int16", new GestionnaireInt16());
 		
 	}
+	
+	public static class GestionnaireInt16 extends GestionnaireATailleFixe {
+		public GestionnaireInt16() {
+			super(2);
+		}
 
+		@Override
+		protected Integer transformerAccumulateur(byte[] accumulateur) {
+			return (Byte.toUnsignedInt(accumulateur[0]) + Byte.toUnsignedInt(accumulateur[1]) * 0x100);
+		}
+	}
+	
+	public abstract static class GestionnaireATailleFixe implements GestionnaireDePrimitives {
+		private byte[] accumulateur;
+		private int i;
+		
+		public GestionnaireATailleFixe(int taille) {
+			accumulateur = new byte[taille];
+			i = 0;
+		}
+		
+		@Override
+		public Integer consommer(List<Integer> liste, byte octet) {
+			accumulateur[i++] = octet;
+			
+			if (i == accumulateur.length) {
+				liste.add(transformerAccumulateur(accumulateur));
+				i = 0;
+			}
+			
+			return null;
+		}
+		
+		protected abstract Integer transformerAccumulateur(byte[] accumulateur);
+		
+		@Override
+		public void vider() {
+			if (i != 0)
+				throw new RuntimeException("Lecture incomplète");
+		}
+	}
+	
+	public static class GestionnaireATailleFixeNormal extends GestionnaireATailleFixe {
+		public GestionnaireATailleFixeNormal(int taille) {
+			super(taille);
+		}
+
+		@Override
+		protected Integer transformerAccumulateur(byte[] accumulateur) {
+			int valeur = 0;
+			for (int i = 0 ; i != accumulateur.length ; i++) {
+				valeur = valeur * 0x100 + Byte.toUnsignedInt(accumulateur[i]);
+			}
+			
+			return valeur;
+		}
+	}
+	
+	
 	/* =============
 	 * CONSTRUCTEURS
 	 * ============= */
@@ -58,10 +118,12 @@ public class Octets {
 	 * 
 	 * @param tableau Le tableau d'octets
 	 */
-	public Octets(byte[] tableau) {
+	public Octets(byte[] tableau, String n) {
 		this.tableau = tableau;
 		this.indexActuel = 0;
 		this.fin = tableau.length;
+		
+		System.out.println("OCTETS " + Utilitaire.toHex(indexActuel) + " " + Utilitaire.toHex(fin) + " :" + n);
 	}
 
 	/**
@@ -71,10 +133,13 @@ public class Octets {
 	 * @param debut La première case du tableau
 	 * @param fin L'index de la case après la dernière case
 	 */
-	private Octets(byte[] tableau, int debut, int fin) {
+	private Octets(byte[] tableau, int debut, int fin, String n) {
 		this.tableau = tableau;
 		this.indexActuel = debut;
 		this.fin = fin;
+		
+
+		System.out.println("OCTETS " + Utilitaire.toHex(indexActuel) + " " + Utilitaire.toHex(fin) + " :" + n);
 	}
 
 	/* ==================================
@@ -108,8 +173,8 @@ public class Octets {
 	 * 
 	 * @return Une sous instance gérant les octets décrits precedemment.
 	 */
-	public Octets extraire() {
-		Octets nouvelleInstance = new Octets(tableau, indexActuel, indexActuel + dernierBERLu);
+	public Octets extraire(String n) {
+		Octets nouvelleInstance = new Octets(tableau, indexActuel, indexActuel + dernierBERLu, n);
 		ignorer();
 		return nouvelleInstance;
 	}
@@ -230,7 +295,7 @@ public class Octets {
 				throw new RuntimeException("Bloc inconnu");
 			}
 			
-			extraire().lireBloc(ensembleConstruit, bloc, true);
+			extraire(bloc.nom).lireBloc(ensembleConstruit, bloc, true);
 		}
 	}
 
@@ -336,6 +401,11 @@ public class Octets {
 					List<Integer> nombres = new ArrayList<>();
 					
 					GestionnaireDePrimitives fonctionDeTraitement = mapDePrimitives.get(decomposition.nom);
+					
+					if (fonctionDeTraitement == null) {
+						throw new RuntimeException("Pas de traitement pour " + decomposition.nom);
+					}
+					
 					while (indexActuel != fin) {
 						fonctionDeTraitement.consommer(nombres, avancer());
 					}

@@ -41,6 +41,8 @@ class DecompositionDeNom {
 		if (nomComplet.endsWith(">")) {
 			if (nomComplet.startsWith("Enum<")) {
 				return lireType(Disposition.SIMPLE, nomComplet);
+			} else if (nomComplet.startsWith("Ref<")) {
+				return lireType(Disposition.SIMPLE, nomComplet);
 			} else if (nomComplet.startsWith("Vector<")){
 				return lireType(Disposition.VECTEUR, nomComplet.substring(7, nomComplet.length() - 1));
 			} else if (nomComplet.startsWith("Array<")) {
@@ -55,6 +57,9 @@ class DecompositionDeNom {
 
 
 	private static DecompositionDeNom lireType(Disposition disposition, String nomComplet) {
+		if (nomComplet.startsWith("Ref<"))
+			nomComplet = "Int32";
+		
 		nomComplet = interpreterEnum(nomComplet);
 		
 		Type type;

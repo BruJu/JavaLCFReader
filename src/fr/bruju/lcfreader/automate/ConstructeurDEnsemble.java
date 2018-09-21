@@ -19,7 +19,7 @@ public class ConstructeurDEnsemble {
 			return null;
 		}
 		
-		Octets octets = new Octets(octetsDuFichier);
+		Octets octets = new Octets(octetsDuFichier, "BASE");
 		
 		@SuppressWarnings("unused")
 		String typeDObjet = octets.lireChaineDeTailleInconnue();

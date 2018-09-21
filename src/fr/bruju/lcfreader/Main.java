@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.function.Consumer;
 
+import fr.bruju.lcfreader.automate.ConstructeurDEnsemble;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.modele.FabriqueLCF;
 import fr.bruju.lcfreader.rmobjets.RMMap;
@@ -19,8 +20,17 @@ import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 @SuppressWarnings("unused")
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
+		/*
+		BaseDeDonneesDesStructures.initialiser("ressources\\liblcf\\fields.csv");
 		
-		//String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
+		ConstructeurDEnsemble constructeur = new ConstructeurDEnsemble();
+		EnsembleDeDonnees ensemble = constructeur.lire("A:\\Dev\\Projet\\Map0001.lmu");
+		
+		
+		ensemble.afficherArchitecture();
+		*/
+		
+		String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
 		//String chemin = "A:\\Dev\\Projet\\";
 		//int numeroDeMap = 2;
 		
@@ -28,7 +38,7 @@ public class Main {
 		//testerLecture(chemin, "Save01.lsd");
 
 		
-		//testerLecture(chemin, construireNomDeMap(2));
+		testerLecture(chemin, construireNomDeMap(2));
 
 		//testMap(chemin, numeroDeMap);
 	}
