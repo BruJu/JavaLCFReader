@@ -20,9 +20,9 @@ public class Ensembles {
 		
 		String cheminCarte = cheminProjet + "\\Map" + String.format("%04d", idCarte) + ".lmu";
 
-		EnsembleDeDonnees map =  EnsembleDeDonnees.lireFichier(cheminCarte); // -> 39 secondes
+		//EnsembleDeDonnees map =  EnsembleDeDonnees.lireFichier(cheminCarte); // -> 39 secondes
 		
-		//EnsembleDeDonnees map =  constructeur.lire(cheminCarte); // 60 secondes
+		EnsembleDeDonnees map =  constructeur.lire(cheminCarte); // 45 secondes
 		
 		if (!map.nomStruct.equals("Map"))
 			return null;

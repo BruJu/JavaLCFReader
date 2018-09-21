@@ -1,5 +1,6 @@
 package fr.bruju.lcfreader.structure.blocs;
 
+import fr.bruju.lcfreader.automate.DecompositionDeNom;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 
 /**
@@ -123,5 +124,15 @@ public abstract class Bloc<T> {
 
 	public Bloc<byte[]> inconnu() {
 		return new BlocInconnu(new Champ(index, nom, sized, vraiType), vraiType);
+	}
+
+	
+	private DecompositionDeNom decompo = null;
+
+	public DecompositionDeNom getDecomposition() {
+		if (decompo == null)
+			decompo = DecompositionDeNom.maj(this.vraiType);
+		
+		return decompo;
 	}
 }

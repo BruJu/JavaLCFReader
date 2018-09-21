@@ -12,7 +12,7 @@ import fr.bruju.lcfreader.structure.types.PrimitifCpp;
  * @author Bruju
  *
  */
-class DecompositionDeNom {
+public class DecompositionDeNom {
 	public final Disposition disposition;
 	public final Type type;
 	public final String nom;
@@ -37,7 +37,7 @@ class DecompositionDeNom {
 	}
 	
 	
-	static DecompositionDeNom maj(String nomComplet) {
+	public static DecompositionDeNom maj(String nomComplet) {
 		if (nomComplet.equals("Vector<MoveCommand>")) {
 			// TODO : Certains champs dans move command ne sont pas lus selon le premier champ. A implémenter
 			return new DecompositionDeNom(Disposition.SIMPLE, Type.INCONNU, nomComplet);
@@ -90,8 +90,9 @@ class DecompositionDeNom {
 		} else {
 			// Par construction, on a affaire à un Enum<Chaine>
 			String typeEnum = nomComplet.substring(5, nomComplet.length() - 1);
-			String[] decomposition = typeEnum.split("\\:");
-			return decomposition.length == 2 ? decomposition[1] : "Int32";
+			
+			int indexDeDeuxPoints = typeEnum.indexOf(":");
+			return indexDeDeuxPoints == -1 ? "Int32" : typeEnum.substring(indexDeDeuxPoints + 1);
 		}
 	}
 	

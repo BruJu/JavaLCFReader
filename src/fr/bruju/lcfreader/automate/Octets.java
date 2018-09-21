@@ -248,134 +248,149 @@ public class Octets {
 				throw new RuntimeException("Bloc inconnu");
 			}
 			
-			extraire("["+numeroDeBloc + "," + Utilitaire.toHex(this.dernierBERLu) + "," + bloc.nom+";" + bloc.getTypeEnString() + "-" + bloc.estUnChampIndiquantLaTaille() +"]").lireBloc(ensembleConstruit, bloc, true);
+			extraire("["+numeroDeBloc + "," + Utilitaire.toHex(this.dernierBERLu) + "," + bloc.nom+";" + bloc.getTypeEnString() + "-" + bloc.estUnChampIndiquantLaTaille() +"]").lireBloc1(ensembleConstruit, bloc, true);
 		}
 	}
 
 
 	private EnsembleDeDonnees lireEnsembleSerie(String nomEnsemble, Structure structure) {
 		EnsembleDeDonnees ensembleConstruit = new EnsembleDeDonnees(nomEnsemble);
-		structure.getSerie().forEach(bloc -> lireBloc(ensembleConstruit, bloc, false));
+		structure.getSerie().forEach(bloc -> lireBloc1(ensembleConstruit, bloc, false));
 		return ensembleConstruit;
 	}
 
 	
 
-	private void lireBloc(EnsembleDeDonnees ensembleConstruit, Bloc<?> bloc, boolean blocUnique) {
+	private void lireBloc1(EnsembleDeDonnees ensembleConstruit, Bloc<?> bloc, boolean blocUnique) {
 		
-		DecompositionDeNom decomposition = DecompositionDeNom.maj(bloc.vraiType);
+		DecompositionDeNom decomposition = bloc.getDecomposition();
+		
 		if (bloc.estUnChampIndiquantLaTaille()) {
 			decomposition = new DecompositionDeNom(Disposition.SIMPLE, Type.NOMBRE, "Int32");
 		}
-		lireBloc(ensembleConstruit, decomposition, bloc, blocUnique);
+		lireBloc2(ensembleConstruit, decomposition, bloc, blocUnique);
 	}
 
-	private void lireBloc(EnsembleDeDonnees ensembleConstruit, DecompositionDeNom decomposition, Bloc<?> bloc,
+	private void lireBloc2(EnsembleDeDonnees ensembleConstruit, DecompositionDeNom decomposition, Bloc<?> bloc,
 			boolean blocUnique) {
 		switch (decomposition.disposition) {
 		case SIMPLE:
-			switch (decomposition.type) {
-			case CHAINE:
-				String chaineLue = blocUnique ?
-						lireChaineTailleConnue(nombreDOctetsRestants()) : lireChaineDeTailleInconnue();
-				
-				ensembleConstruit.push(new Donnee<String>(bloc, chaineLue));
-				break;
-			case ENSEMBLEDEDONNEES:
-				ensembleConstruit.push(new Donnee<EnsembleDeDonnees>(bloc, lireEnsemble(decomposition.nom)));
-				break;
-			case NOMBRE:
-				Integer nombre;
-				if (decomposition.nom.equals("Int32")) {
-					nombre = lireUnNombreEncodeEnBER();
-				} else {
-					List<Integer> nombres = new ArrayList<>();
-					
-					GestionnaireDePrimitives fonctionDeTraitement = mapDePrimitives.get(decomposition.nom);
-					while (nombres.size() != 1) {
-						fonctionDeTraitement.consommer(nombres, avancer());
-					}
-					nombre = nombres.get(0);
-				}
-				ensembleConstruit.push(new Donnee<Integer>(bloc, nombre));
-				break;
-			case INCONNU:
-				ensembleConstruit.push(new Donnee<byte[]>(bloc.inconnu(), enTableau()));
-				break;
-			}
+			lireBlocSimple(ensembleConstruit, decomposition, bloc, blocUnique);
 			break;
 		case TABLEAU:
-			int nombreDelements = this.lireUnNombreEncodeEnBER();
-			
-			Map<Integer, EnsembleDeDonnees> donnees = new LinkedHashMap<>(nombreDelements);
-			
-			for (int idElem = 0 ; idElem != nombreDelements ; idElem++) {
-				int indice = lireUnNombreEncodeEnBER();
-				
-				if (decomposition.type != DecompositionDeNom.Type.ENSEMBLEDEDONNEES) {
-					throw new RuntimeException("Cas non géré");
-				}
-				
-				EnsembleDeDonnees ensemble = lireEnsemble(decomposition.nom);
-				
-				donnees.put(indice, ensemble);
-			}
-			
-			ensembleConstruit.push(new Donnee<>(bloc, donnees));
+			lireBlocTableau(ensembleConstruit, decomposition, bloc);
 			break;
 		case VECTEUR:
-			switch (decomposition.type) {
-			case CHAINE:
-			case INCONNU:
-				throw new RuntimeException("Vecteur de " + decomposition.type);
-			case ENSEMBLEDEDONNEES:
+			lireBlocVecteur(ensembleConstruit, decomposition, bloc, blocUnique);
+			break;
+		}
+	}
+
+	private void lireBlocVecteur(EnsembleDeDonnees ensembleConstruit, DecompositionDeNom decomposition, Bloc<?> bloc,
+			boolean blocUnique) {
+		switch (decomposition.type) {
+		case CHAINE:
+		case INCONNU:
+			throw new RuntimeException("Vecteur de " + decomposition.type);
+		case ENSEMBLEDEDONNEES:
+			if (!blocUnique) {
+				throw new RuntimeException("Vecteur de " + decomposition.type + " sans bloc unique");
+			}
+			List<EnsembleDeDonnees> ensembles = new ArrayList<>(10);
+			
+			while (indexActuel != fin) {
+				ensembles.add(lireEnsemble(decomposition.nom));
+			}
+			ensembleConstruit.push(new Donnee<>(bloc, ensembles));
+			break;
+		case NOMBRE:
+			List<Integer> nombres;
+			if (decomposition.nom.equals("Int32")) {
+				int nombreDeNombres = lireUnNombreEncodeEnBER();
+				
+				nombres = new ArrayList<>(nombreDeNombres);
+				
+				for (int i = 0 ; i != nombreDeNombres ; i++) {
+					nombres.add(lireUnNombreEncodeEnBER());
+				}
+				
+				
+			} else {
 				if (!blocUnique) {
 					throw new RuntimeException("Vecteur de " + decomposition.type + " sans bloc unique");
 				}
-				List<EnsembleDeDonnees> ensembles = new ArrayList<>(10);
+				nombres = new ArrayList<>();
+				
+				GestionnaireDePrimitives fonctionDeTraitement = mapDePrimitives.get(decomposition.nom);
+				
+				if (fonctionDeTraitement == null) {
+					throw new RuntimeException("Pas de traitement pour " + decomposition.nom);
+				}
 				
 				while (indexActuel != fin) {
-					ensembles.add(lireEnsemble(decomposition.nom));
+					fonctionDeTraitement.consommer(nombres, avancer());
 				}
-				ensembleConstruit.push(new Donnee<>(bloc, ensembles));
-				break;
-			case NOMBRE:
-				List<Integer> nombres;
-				if (decomposition.nom.equals("Int32")) {
-					int nombreDeNombres = lireUnNombreEncodeEnBER();
-					
-					nombres = new ArrayList<>(nombreDeNombres);
-					
-					for (int i = 0 ; i != nombreDeNombres ; i++) {
-						nombres.add(lireUnNombreEncodeEnBER());
-					}
-					
-					
-				} else {
-					if (!blocUnique) {
-						throw new RuntimeException("Vecteur de " + decomposition.type + " sans bloc unique");
-					}
-					nombres = new ArrayList<>();
-					
-					GestionnaireDePrimitives fonctionDeTraitement = mapDePrimitives.get(decomposition.nom);
-					
-					if (fonctionDeTraitement == null) {
-						throw new RuntimeException("Pas de traitement pour " + decomposition.nom);
-					}
-					
-					while (indexActuel != fin) {
-						fonctionDeTraitement.consommer(nombres, avancer());
-					}
-					
-				}
-				int[] tableauReel = new int[nombres.size()];
-				for (int i = 0 ; i != tableauReel.length ; i++)
-					tableauReel[i] = nombres.get(i);
 				
-				
-				ensembleConstruit.push(new Donnee<>(bloc, tableauReel));
-				break;
 			}
+			int[] tableauReel = new int[nombres.size()];
+			for (int i = 0 ; i != tableauReel.length ; i++)
+				tableauReel[i] = nombres.get(i);
+			
+			
+			ensembleConstruit.push(new Donnee<>(bloc, tableauReel));
+			break;
+		}
+	}
+
+	private void lireBlocTableau(EnsembleDeDonnees ensembleConstruit, DecompositionDeNom decomposition, Bloc<?> bloc) {
+		int nombreDelements = this.lireUnNombreEncodeEnBER();
+		
+		Map<Integer, EnsembleDeDonnees> donnees = new LinkedHashMap<>(nombreDelements);
+		
+		for (int idElem = 0 ; idElem != nombreDelements ; idElem++) {
+			int indice = lireUnNombreEncodeEnBER();
+			
+			if (decomposition.type != DecompositionDeNom.Type.ENSEMBLEDEDONNEES) {
+				throw new RuntimeException("Cas non géré");
+			}
+			
+			EnsembleDeDonnees ensemble = lireEnsemble(decomposition.nom);
+			
+			donnees.put(indice, ensemble);
+		}
+		
+		ensembleConstruit.push(new Donnee<>(bloc, donnees));
+	}
+
+	private void lireBlocSimple(EnsembleDeDonnees ensembleConstruit, DecompositionDeNom decomposition, Bloc<?> bloc,
+			boolean blocUnique) {
+		switch (decomposition.type) {
+		case CHAINE:
+			String chaineLue = blocUnique ?
+					lireChaineTailleConnue(nombreDOctetsRestants()) : lireChaineDeTailleInconnue();
+			
+			ensembleConstruit.push(new Donnee<String>(bloc, chaineLue));
+			break;
+		case ENSEMBLEDEDONNEES:
+			ensembleConstruit.push(new Donnee<EnsembleDeDonnees>(bloc, lireEnsemble(decomposition.nom)));
+			break;
+		case NOMBRE:
+			Integer nombre;
+			if (decomposition.nom.equals("Int32")) {
+				nombre = lireUnNombreEncodeEnBER();
+			} else {
+				List<Integer> nombres = new ArrayList<>();
+				
+				GestionnaireDePrimitives fonctionDeTraitement = mapDePrimitives.get(decomposition.nom);
+				while (nombres.size() != 1) {
+					fonctionDeTraitement.consommer(nombres, avancer());
+				}
+				nombre = nombres.get(0);
+			}
+			ensembleConstruit.push(new Donnee<Integer>(bloc, nombre));
+			break;
+		case INCONNU:
+			ensembleConstruit.push(new Donnee<byte[]>(bloc.inconnu(), enTableau()));
 			break;
 		}
 	}
