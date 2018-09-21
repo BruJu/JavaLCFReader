@@ -20,18 +20,21 @@ import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 @SuppressWarnings("unused")
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
-		/*
+		
 		BaseDeDonneesDesStructures.initialiser("ressources\\liblcf\\fields.csv");
 		
 		ConstructeurDEnsemble constructeur = new ConstructeurDEnsemble();
-		EnsembleDeDonnees ensemble = constructeur.lire("A:\\Dev\\Projet\\Map0001.lmu");
+		EnsembleDeDonnees ensemble = constructeur.lire("A:\\Dev\\Projet\\Map0002.lmu");
 		
 		
 		ensemble.afficherArchitecture();
-		*/
 		
-		String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
-		//String chemin = "A:\\Dev\\Projet\\";
+		ensemble.afficherDonnees();
+		
+		/*
+		
+		//String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
+		String chemin = "A:\\Dev\\Projet\\";
 		//int numeroDeMap = 2;
 		
 	
@@ -41,6 +44,8 @@ public class Main {
 		testerLecture(chemin, construireNomDeMap(2));
 
 		//testMap(chemin, numeroDeMap);
+		 * 
+		 */
 	}
 	
 	private static void testMap(String chemin, int numeroDeMap) {

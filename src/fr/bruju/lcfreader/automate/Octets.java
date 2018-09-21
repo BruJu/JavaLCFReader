@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import fr.bruju.lcfreader.Utilitaire;
+import fr.bruju.lcfreader.automate.DecompositionDeNom.Disposition;
+import fr.bruju.lcfreader.automate.DecompositionDeNom.Type;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Donnee;
@@ -42,7 +44,7 @@ public class Octets {
 	/** Résultat du dernier appel à lireUnNombreEncodeEnBER(). Typiquement une taille */
 	private int dernierBERLu;
 	
-	private static Map<String, GestionnaireDePrimitives> mapDePrimitives;
+	static Map<String, GestionnaireDePrimitives> mapDePrimitives;
 	
 	static {
 		mapDePrimitives = new HashMap<>();
@@ -51,62 +53,7 @@ public class Octets {
 		
 	}
 	
-	public static class GestionnaireInt16 extends GestionnaireATailleFixe {
-		public GestionnaireInt16() {
-			super(2);
-		}
 
-		@Override
-		protected Integer transformerAccumulateur(byte[] accumulateur) {
-			return (Byte.toUnsignedInt(accumulateur[0]) + Byte.toUnsignedInt(accumulateur[1]) * 0x100);
-		}
-	}
-	
-	public abstract static class GestionnaireATailleFixe implements GestionnaireDePrimitives {
-		private byte[] accumulateur;
-		private int i;
-		
-		public GestionnaireATailleFixe(int taille) {
-			accumulateur = new byte[taille];
-			i = 0;
-		}
-		
-		@Override
-		public Integer consommer(List<Integer> liste, byte octet) {
-			accumulateur[i++] = octet;
-			
-			if (i == accumulateur.length) {
-				liste.add(transformerAccumulateur(accumulateur));
-				i = 0;
-			}
-			
-			return null;
-		}
-		
-		protected abstract Integer transformerAccumulateur(byte[] accumulateur);
-		
-		@Override
-		public void vider() {
-			if (i != 0)
-				throw new RuntimeException("Lecture incomplète");
-		}
-	}
-	
-	public static class GestionnaireATailleFixeNormal extends GestionnaireATailleFixe {
-		public GestionnaireATailleFixeNormal(int taille) {
-			super(taille);
-		}
-
-		@Override
-		protected Integer transformerAccumulateur(byte[] accumulateur) {
-			int valeur = 0;
-			for (int i = 0 ; i != accumulateur.length ; i++) {
-				valeur = valeur * 0x100 + Byte.toUnsignedInt(accumulateur[i]);
-			}
-			
-			return valeur;
-		}
-	}
 	
 	
 	/* =============
@@ -122,8 +69,6 @@ public class Octets {
 		this.tableau = tableau;
 		this.indexActuel = 0;
 		this.fin = tableau.length;
-		
-		System.out.println("OCTETS " + Utilitaire.toHex(indexActuel) + " " + Utilitaire.toHex(fin) + " :" + n);
 	}
 
 	/**
@@ -137,9 +82,6 @@ public class Octets {
 		this.tableau = tableau;
 		this.indexActuel = debut;
 		this.fin = fin;
-		
-
-		System.out.println("OCTETS " + Utilitaire.toHex(indexActuel) + " " + Utilitaire.toHex(fin) + " :" + n);
 	}
 
 	/* ==================================
@@ -154,7 +96,7 @@ public class Octets {
 	 */
 	public byte avancer() {
 		if (indexActuel >= fin) {
-			throw new RuntimeException("Dépassement de tableau");
+			throw new RuntimeException("Dépassement de tableau " + Utilitaire.toHex(fin));
 		}
 		
 		return tableau[indexActuel++];
@@ -309,7 +251,11 @@ public class Octets {
 	
 
 	private void lireBloc(EnsembleDeDonnees ensembleConstruit, Bloc<?> bloc, boolean blocUnique) {
+		
 		DecompositionDeNom decomposition = DecompositionDeNom.maj(bloc.vraiType);
+		if (bloc.estUnChampIndiquantLaTaille()) {
+			decomposition = new DecompositionDeNom(Disposition.SIMPLE, Type.NOMBRE, "Int32");
+		}
 		lireBloc(ensembleConstruit, decomposition, bloc, blocUnique);
 	}
 
@@ -383,22 +329,22 @@ public class Octets {
 				ensembleConstruit.push(new Donnee<>(bloc, ensembles));
 				break;
 			case NOMBRE:
+				List<Integer> nombres;
 				if (decomposition.nom.equals("Int32")) {
 					int nombreDeNombres = lireUnNombreEncodeEnBER();
 					
-					List<Integer> nombres = new ArrayList<>(nombreDeNombres);
+					nombres = new ArrayList<>(nombreDeNombres);
 					
 					for (int i = 0 ; i != nombreDeNombres ; i++) {
 						nombres.add(lireUnNombreEncodeEnBER());
 					}
 					
-					ensembleConstruit.push(new Donnee<>(bloc, nombres));
 					
 				} else {
 					if (!blocUnique) {
 						throw new RuntimeException("Vecteur de " + decomposition.type + " sans bloc unique");
 					}
-					List<Integer> nombres = new ArrayList<>();
+					nombres = new ArrayList<>();
 					
 					GestionnaireDePrimitives fonctionDeTraitement = mapDePrimitives.get(decomposition.nom);
 					
@@ -410,18 +356,20 @@ public class Octets {
 						fonctionDeTraitement.consommer(nombres, avancer());
 					}
 					
-					ensembleConstruit.push(new Donnee<>(bloc, nombres));
 				}
+				int[] tableauReel = new int[nombres.size()];
+				for (int i = 0 ; i != tableauReel.length ; i++)
+					tableauReel[i] = nombres.get(i);
+				
+				
+				ensembleConstruit.push(new Donnee<>(bloc, tableauReel));
 				break;
 			}
 			break;
 		}
 	}
 	
-	private interface GestionnaireDePrimitives {
-		public Integer consommer(List<Integer> liste, byte octet);
-		public void vider();
-	}
+
 
 	private byte[] enTableau() {
 		byte[] tableau = Arrays.copyOfRange(this.tableau, indexActuel, fin);
