@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import fr.bruju.lcfreader.automate.Octets;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 import fr.bruju.lcfreader.structure.blocs.Blocs;
 
@@ -71,6 +72,10 @@ public class Structure {
 			}
 		}
 		
+		return null;
+	}
+
+	public Donnee<?> bloquer(Octets extraire, Integer numeroDeBloc) {
 		return null;
 	}
 }

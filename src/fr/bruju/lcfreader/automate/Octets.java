@@ -1,5 +1,9 @@
 package fr.bruju.lcfreader.automate;
 
+import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
+import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
+import fr.bruju.lcfreader.structure.Structure;
+
 /**
  * Classe lisant un tableau octets par octets et offrant des services vis à vis de la lecture de fichiers encodés selon
  * l'encodage BER. <br>
@@ -67,6 +71,10 @@ public class Octets {
 	 * @return L'octet qui était pointé
 	 */
 	public byte avancer() {
+		if (indexActuel >= fin) {
+			throw new RuntimeException("Dépassement de tableau");
+		}
+		
 		return tableau[indexActuel++];
 	}
 
@@ -172,6 +180,41 @@ public class Octets {
 		dernierBERLu = valeur;
 
 		return valeur;
+	}
+
+	public EnsembleDeDonnees lireEnsemble(String nomEnsemble) {
+		BaseDeDonneesDesStructures instance = BaseDeDonneesDesStructures.getInstance();
+		
+		Structure structure = instance.get(nomEnsemble);
+		
+		if (structure == null) {
+			throw new RuntimeException("Structure " + nomEnsemble + " inconnue");
+		} else if (structure.estSerie()) {
+			return lireEnsembleSerie(nomEnsemble, structure);
+		} else {
+			return lireEnsembleDiscontinu(nomEnsemble, structure);
+		}
+	}
+
+	private EnsembleDeDonnees lireEnsembleDiscontinu(String nomEnsemble, Structure structure) {
+		EnsembleDeDonnees ensembleConstruit = new EnsembleDeDonnees(nomEnsemble);
+		
+		Integer numeroDeBloc;
+		
+		while (true) {
+			numeroDeBloc = this.lireTypeEtTailleBloc();
+			if (numeroDeBloc == null) {
+				return ensembleConstruit;
+			}
+			
+			ensembleConstruit.push(structure.bloquer(extraire(), numeroDeBloc));
+		}
+	}
+
+	private EnsembleDeDonnees lireEnsembleSerie(String nomEnsemble, Structure structure) {
+		EnsembleDeDonnees ensembleConstruit = new EnsembleDeDonnees(nomEnsemble);
+		structure.getSerie().forEach(bloc -> ensembleConstruit.push(bloc.bloquerSansTaille(this)));
+		return ensembleConstruit;
 	}
 
 }

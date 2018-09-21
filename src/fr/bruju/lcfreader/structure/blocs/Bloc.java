@@ -1,6 +1,8 @@
 package fr.bruju.lcfreader.structure.blocs;
 
+import fr.bruju.lcfreader.automate.Octets;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
+import fr.bruju.lcfreader.structure.Donnee;
 
 /**
  * Un bloc est une manière de représenter un type de données à savoir comment l'afficher, comment le décrypter,
@@ -115,6 +117,11 @@ public abstract class Bloc<T> {
 		  .append(" ")
 		  .append(estUnChampIndiquantLaTaille())
 		  .toString();
+	}
+
+
+	public Donnee<?> bloquerSansTaille(Octets octets) {
+		return null;
 	}
 	
 }

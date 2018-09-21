@@ -21,14 +21,13 @@ public class ConstructeurDEnsemble {
 		
 		Octets octets = new Octets(octetsDuFichier);
 		
+		@SuppressWarnings("unused")
 		String typeDObjet = octets.lireChaineDeTailleInconnue();
 		
+		String nomEnsemble = "Map";
 		
+		EnsembleDeDonnees ensemble = octets.lireEnsemble(nomEnsemble);
 		
-		return null;
+		return ensemble;
 	}
-
-	
-	
-	
 }
