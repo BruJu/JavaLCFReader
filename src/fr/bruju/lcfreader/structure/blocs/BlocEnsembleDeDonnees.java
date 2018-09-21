@@ -1,5 +1,7 @@
 package fr.bruju.lcfreader.structure.blocs;
 
+import java.util.Map;
+
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
@@ -12,6 +14,9 @@ import fr.bruju.lcfreader.structure.Donnee;
  *
  */
 public class BlocEnsembleDeDonnees extends Bloc<EnsembleDeDonnees> {
+
+	
+	
 	/* =========================
 	 * ATTRIBUTS ET CONSTRUCTEUR
 	 * ========================= */

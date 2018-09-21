@@ -20,6 +20,8 @@ import fr.bruju.lcfreader.structure.Donnee;
  *
  */
 public class BlocArray extends Bloc<Map<Integer, EnsembleDeDonnees>> {
+	
+	
 	/* =========================
 	 * ATTRIBUTS ET CONSTRUCTEUR
 	 * ========================= */

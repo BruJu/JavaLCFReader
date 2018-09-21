@@ -1,5 +1,7 @@
 package fr.bruju.lcfreader.structure.blocs;
 
+import java.util.List;
+
 import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.structure.Donnee;
@@ -11,6 +13,7 @@ import fr.bruju.lcfreader.structure.Donnee;
  *
  */
 public class BlocInconnu extends Bloc<byte[]> {
+	
 	/* =========================
 	 * ATTRIBUTS ET CONSTRUCTEUR
 	 * ========================= */

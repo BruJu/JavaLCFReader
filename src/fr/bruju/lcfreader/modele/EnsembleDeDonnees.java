@@ -85,7 +85,7 @@ public class EnsembleDeDonnees {
 	 */
 	public static EnsembleDeDonnees lireFichier(String chemin) {
 		LecteurDeFichierOctetParOctet lecteur = LecteurDeFichierOctetParOctet.instancier(chemin);
-
+		
 		// Connaître le type de fichier
 		String type = lecteur.sequencer(new TailleChaine());
 		String nomStruct;

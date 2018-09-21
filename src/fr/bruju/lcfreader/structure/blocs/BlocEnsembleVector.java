@@ -18,6 +18,8 @@ import fr.bruju.lcfreader.structure.Donnee;
  *
  */
 public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
+	
+
 	/* =========================
 	 * ATTRIBUTS ET CONSTRUCTEUR
 	 * ========================= */

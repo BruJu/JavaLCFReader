@@ -38,6 +38,12 @@ class DecompositionDeNom {
 	
 	
 	static DecompositionDeNom maj(String nomComplet) {
+		if (nomComplet.equals("Vector<MoveCommand>")) {
+			// TODO : Certains champs dans move command ne sont pas lus selon le premier champ. A implémenter
+			return new DecompositionDeNom(Disposition.SIMPLE, Type.INCONNU, nomComplet);
+		}
+		
+		
 		if (nomComplet.endsWith(">")) {
 			if (nomComplet.startsWith("Enum<")) {
 				return lireType(Disposition.SIMPLE, nomComplet);

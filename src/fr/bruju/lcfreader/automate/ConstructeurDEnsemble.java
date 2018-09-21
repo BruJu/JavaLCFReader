@@ -21,10 +21,25 @@ public class ConstructeurDEnsemble {
 		
 		Octets octets = new Octets(octetsDuFichier, "BASE");
 		
-		@SuppressWarnings("unused")
 		String typeDObjet = octets.lireChaineDeTailleInconnue();
 		
-		String nomEnsemble = "Map";
+		String nomEnsemble;
+		
+		switch (typeDObjet) {
+		case "LcfMapUnit":
+			nomEnsemble = "Map";
+			break;
+		case "LcfMapTree":
+			nomEnsemble = "TreeMap";
+			break;
+		// case "LcfDataBase": nomEnsemble = "Database";	break; // Non fonctionnel
+		// case "LcfSaveData": nomEnsemble = "Save"; 	break; // Non fonctionnel
+			
+		default: // Type Inconnu
+			System.out.println("Inconnu " + typeDObjet);
+			return null;
+		}
+		
 		
 		EnsembleDeDonnees ensemble = octets.lireEnsemble(nomEnsemble);
 		

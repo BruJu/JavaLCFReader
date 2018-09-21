@@ -69,6 +69,8 @@ public class Octets {
 		this.tableau = tableau;
 		this.indexActuel = 0;
 		this.fin = tableau.length;
+		init = 0;
+		afficherInfo(n);
 	}
 
 	/**
@@ -82,6 +84,15 @@ public class Octets {
 		this.tableau = tableau;
 		this.indexActuel = debut;
 		this.fin = fin;
+		init = debut;
+		
+		afficherInfo(n);
+	}
+	
+	int init;
+	
+	private void afficherInfo(String n) {
+		//System.out.println("Sequence " + n + " " + Utilitaire.toHex(init) + " -> " + Utilitaire.toHex(fin));
 	}
 
 	/* ==================================
@@ -96,7 +107,7 @@ public class Octets {
 	 */
 	public byte avancer() {
 		if (indexActuel >= fin) {
-			throw new RuntimeException("Dépassement de tableau " + Utilitaire.toHex(fin));
+			throw new RuntimeException("Dépassement de tableau " + Utilitaire.toHex(fin) + " (a commencé à " + Utilitaire.toHex(init));
 		}
 		
 		return tableau[indexActuel++];
@@ -237,7 +248,7 @@ public class Octets {
 				throw new RuntimeException("Bloc inconnu");
 			}
 			
-			extraire(bloc.nom).lireBloc(ensembleConstruit, bloc, true);
+			extraire("["+numeroDeBloc + "," + Utilitaire.toHex(this.dernierBERLu) + "," + bloc.nom+";" + bloc.getTypeEnString() + "-" + bloc.estUnChampIndiquantLaTaille() +"]").lireBloc(ensembleConstruit, bloc, true);
 		}
 	}
 
@@ -289,7 +300,7 @@ public class Octets {
 				ensembleConstruit.push(new Donnee<Integer>(bloc, nombre));
 				break;
 			case INCONNU:
-				ensembleConstruit.push(new Donnee<byte[]>(bloc, enTableau()));
+				ensembleConstruit.push(new Donnee<byte[]>(bloc.inconnu(), enTableau()));
 				break;
 			}
 			break;

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import fr.bruju.lcfreader.automate.ConstructeurDEnsemble;
 import fr.bruju.lcfreader.rmobjets.RMEvenement;
 import fr.bruju.lcfreader.rmobjets.RMInstruction;
 import fr.bruju.lcfreader.rmobjets.RMMap;
@@ -12,12 +13,16 @@ import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 
 public class Ensembles {
 
+	private static ConstructeurDEnsemble constructeur = new ConstructeurDEnsemble();
+	
 	public static RMMap map(String cheminProjet, int idCarte) {
 		BaseDeDonneesDesStructures.initialiser("ressources\\liblcf\\fields.csv");
 		
 		String cheminCarte = cheminProjet + "\\Map" + String.format("%04d", idCarte) + ".lmu";
+
+		EnsembleDeDonnees map =  EnsembleDeDonnees.lireFichier(cheminCarte); // -> 39 secondes
 		
-		EnsembleDeDonnees map = EnsembleDeDonnees.lireFichier(cheminCarte);
+		//EnsembleDeDonnees map =  constructeur.lire(cheminCarte); // 60 secondes
 		
 		if (!map.nomStruct.equals("Map"))
 			return null;

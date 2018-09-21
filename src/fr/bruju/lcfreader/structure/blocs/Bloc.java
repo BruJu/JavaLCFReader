@@ -119,4 +119,9 @@ public abstract class Bloc<T> {
 		  .append(estUnChampIndiquantLaTaille())
 		  .toString();
 	}
+
+
+	public Bloc<byte[]> inconnu() {
+		return new BlocInconnu(new Champ(index, nom, sized, vraiType), vraiType);
+	}
 }

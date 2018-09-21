@@ -16,6 +16,8 @@ public class FabriqueLCF implements RMFabrique {
 
 	public FabriqueLCF(String chemin) {
 		this.chemin = chemin;
+
+
 	}
 
 	@Override
