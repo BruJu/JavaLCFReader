@@ -59,7 +59,7 @@ public class Blocs {
 		if (!donnees[4].equals(""))
 			index = Integer.decode(donnees[4]);
 
-		Champ champ = new Champ(index, nom, sized);
+		Champ champ = new Champ(index, nom, sized, donnees[3]);
 
 		Bloc<?> bloc;
 		if (sized) {

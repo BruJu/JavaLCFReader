@@ -31,10 +31,12 @@ public class Donnee<T> {
 	 * @param bloc Le bloc décrivant le type
 	 * @param value La valeur
 	 */
-	public Donnee(Bloc<T> bloc, T value) {
-		this.bloc = bloc;
+	@SuppressWarnings("unchecked")
+	public Donnee(Bloc<?> bloc, T value) {
+		this.bloc = (Bloc<T>) bloc;
 		this.value = value;
 	}
+
 
 	/**
 	 * Converti la valeur de la donnée en chaîne par rapport au bloc

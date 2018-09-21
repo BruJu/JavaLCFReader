@@ -1,5 +1,6 @@
 package fr.bruju.lcfreader.structure.blocs;
 
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,7 @@ import fr.bruju.lcfreader.structure.Donnee;
  * @author Bruju
  *
  */
-public class BlocArray extends Bloc<TreeMap<Integer, EnsembleDeDonnees>> {
+public class BlocArray extends Bloc<Map<Integer, EnsembleDeDonnees>> {
 	/* =========================
 	 * ATTRIBUTS ET CONSTRUCTEUR
 	 * ========================= */
@@ -51,7 +52,7 @@ public class BlocArray extends Bloc<TreeMap<Integer, EnsembleDeDonnees>> {
 	 * ============================ */
 
 	@Override
-	public String convertirEnChaineUneValeur(TreeMap<Integer, EnsembleDeDonnees> valeur) {
+	public String convertirEnChaineUneValeur(Map<Integer, EnsembleDeDonnees> valeur) {
 		String contenu = valeur
 				.values()
 				.stream()
@@ -66,7 +67,7 @@ public class BlocArray extends Bloc<TreeMap<Integer, EnsembleDeDonnees>> {
 	}
 
 	@Override
-	public void afficherSousArchi(int niveau, TreeMap<Integer, EnsembleDeDonnees> value) {
+	public void afficherSousArchi(int niveau, Map<Integer, EnsembleDeDonnees> value) {
 		value.values().forEach(data -> data.afficherArchitecture(niveau));
 	}
 
@@ -75,7 +76,7 @@ public class BlocArray extends Bloc<TreeMap<Integer, EnsembleDeDonnees>> {
 	 * ===================== */
 
 	@Override
-	public ConvertisseurOctetsVersDonnees<TreeMap<Integer, EnsembleDeDonnees>> getHandler(int tailleLue) {
+	public ConvertisseurOctetsVersDonnees<Map<Integer, EnsembleDeDonnees>> getHandler(int tailleLue) {
 		Enchainement<Integer, TreeMap<Integer, EnsembleDeDonnees>> enchainement =
 				new Enchainement<>(new NombreBER.NonNull(), ConstructeurArbre::new, TreeMap::new);
 		return new ConvertisseurOctetsVersDonnees.ViaSequenceur<>(enchainement, r -> new Donnee<>(this, r));
@@ -150,59 +151,5 @@ public class BlocArray extends Bloc<TreeMap<Integer, EnsembleDeDonnees>> {
 				}
 			}
 		}
-		
-		
 	}
-
-	/*
-	public class H implements ConvertisseurOctetsVersDonnees<TreeMap<Integer, EnsembleDeDonnees>> {
-
-		private Etat etat;
-
-		private TreeMap<Integer, EnsembleDeDonnees> map;
-
-		private int nombreDElements;
-
-		private SequenceurLCFAEtat sequenceur;
-
-		private H() {
-			etat = Etat.LireNombreElements;
-		}
-
-		@Override
-		public Donnee<TreeMap<Integer, EnsembleDeDonnees>> accumuler(byte octet) {
-			switch (etat) {
-			case LireNombreElements:
-				nombreDElements = octet;
-				map = new TreeMap<Integer, EnsembleDeDonnees>();
-
-				if (nombreDElements == 0) {
-					return new Donnee<>(BlocArray.this, map);
-				}
-
-				etat = Etat.LireIndex;
-				break;
-			case LireIndex:
-				EnsembleDeDonnees donneeCourante = new EnsembleDeDonnees(nomStructure);
-				map.put((int) octet, donneeCourante);
-				sequenceur = SequenceurLCFAEtat.instancier(donneeCourante);
-				etat = Etat.LireDonnees;
-				break;
-			case LireDonnees:
-				if (!sequenceur.lireOctet(octet)) {
-					if (map.size() == nombreDElements) {
-						return new Donnee<>(BlocArray.this, map);
-					} else {
-						etat = Etat.LireIndex;
-					}
-				}
-				break;
-			}
-
-			return null;
-		}
-	}
-	*/
-	
-	
 }

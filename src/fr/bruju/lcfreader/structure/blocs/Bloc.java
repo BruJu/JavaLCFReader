@@ -1,8 +1,6 @@
 package fr.bruju.lcfreader.structure.blocs;
 
-import fr.bruju.lcfreader.automate.Octets;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
-import fr.bruju.lcfreader.structure.Donnee;
 
 /**
  * Un bloc est une manière de représenter un type de données à savoir comment l'afficher, comment le décrypter,
@@ -24,6 +22,8 @@ public abstract class Bloc<T> {
 	/** Vrai si le champ est un champ de taille */
 	protected final boolean sized;
 	
+	public final String vraiType;
+	
 	/**
 	 * Construit le bloc
 	 * @param champ Les données du bloc
@@ -32,6 +32,7 @@ public abstract class Bloc<T> {
 		this.index = champ.index;
 		this.nom = champ.nom;
 		this.sized = champ.sized;
+		this.vraiType = champ.vraiType;
 	}
 	
 	
@@ -118,10 +119,4 @@ public abstract class Bloc<T> {
 		  .append(estUnChampIndiquantLaTaille())
 		  .toString();
 	}
-
-
-	public Donnee<?> bloquerSansTaille(Octets octets) {
-		return null;
-	}
-	
 }

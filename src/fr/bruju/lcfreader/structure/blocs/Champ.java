@@ -14,13 +14,16 @@ class Champ {
 	final String nom;
 	/** Vrai si le champ est un champ indiquant la taille d'un autre */
 	final boolean sized;
+	
+	public final String vraiType;
 
 	/**
 	 * Construit le champ
 	 */
-	Champ(int index, String nom, boolean sized) {
+	Champ(int index, String nom, boolean sized, String vraiType) {
 		this.index = index;
 		this.nom = nom;
 		this.sized = sized;
+		this.vraiType = vraiType;
 	}
 }

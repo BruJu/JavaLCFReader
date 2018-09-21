@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import fr.bruju.lcfreader.automate.Octets;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 import fr.bruju.lcfreader.structure.blocs.Blocs;
 
@@ -38,6 +37,11 @@ public class Structure {
 	public Bloc<?> trouverChampIndex(byte octet) {
 		return champs.get((int) octet);
 	}
+
+	public Bloc<?> getBloc(Integer numero) {
+		return champs.get(numero);
+	}
+	
 
 	/**
 	 * Indique si il faut lire la structure de manière indicée (chaque encodage des données d'un champ est précédé du
@@ -74,8 +78,5 @@ public class Structure {
 		
 		return null;
 	}
-
-	public Donnee<?> bloquer(Octets extraire, Integer numeroDeBloc) {
-		return null;
-	}
+	
 }
