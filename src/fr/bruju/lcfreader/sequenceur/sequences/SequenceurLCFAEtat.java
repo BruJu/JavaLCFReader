@@ -1,7 +1,7 @@
 package fr.bruju.lcfreader.sequenceur.sequences;
 
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
-import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
+import fr.bruju.lcfreader.structure.Structure;
 
 /**
  * Un séquenceur LCF à état est un objet pouvant lire les octets d'une structure de données des fichiers LCF et leur
@@ -17,11 +17,11 @@ public interface SequenceurLCFAEtat extends Sequenceur<EnsembleDeDonnees> {
 	 * @param data La donnée à déséquencer
 	 * @return Le déséquenceur
 	 */
-	public static SequenceurLCFAEtat instancier(EnsembleDeDonnees data) {
-		if (BaseDeDonneesDesStructures.getInstance().get(data.nomStruct).estSerie()) {
-			return new SequenceurLCFEnSerie(data);
+	public static SequenceurLCFAEtat instancier(Structure structure) {
+		if (structure.estSerie()) {
+			return new SequenceurLCFEnSerie(structure);
 		} else {
-			return new SequenceurLCFDiscontinu(data);
+			return new SequenceurLCFDiscontinu(structure);
 		}
 	}
 }

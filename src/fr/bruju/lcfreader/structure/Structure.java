@@ -21,6 +21,13 @@ public class Structure {
 	private Map<Integer, Bloc<?>> champs = new TreeMap<>();
 	/** Liste des blocs pour un décodage en série */
 	private List<Bloc<?>> serie = new ArrayList<>();
+	
+	public final String nom;
+	
+	
+	public Structure(String nom) {
+		this.nom = nom;
+	}
 
 	/** Ajoute un champ */
 	public void ajouterChamp(String[] donnees) {

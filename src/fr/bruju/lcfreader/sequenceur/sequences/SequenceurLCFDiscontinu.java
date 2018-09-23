@@ -1,10 +1,7 @@
 package fr.bruju.lcfreader.sequenceur.sequences;
 
-import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
-import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
-import fr.bruju.lcfreader.structure.Donnee;
 import fr.bruju.lcfreader.structure.Structure;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 
@@ -16,8 +13,6 @@ import fr.bruju.lcfreader.structure.blocs.Bloc;
  *
  */
 public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
-	/** Donnée en cours de construction */
-	public final EnsembleDeDonnees data;
 	/** Structure contenant les codes de la donnée en cours de construction */
 	private final Structure structure;
 
@@ -28,9 +23,8 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 	 * @param data La donnée à remplir
 	 * @param codes La liste des codes
 	 */
-	SequenceurLCFDiscontinu(EnsembleDeDonnees data) {
-		this.data = data;
-		this.structure = BaseDeDonneesDesStructures.getInstance().get(data.nomStruct);
+	SequenceurLCFDiscontinu(Structure structure) {
+		this.structure = structure;
 	}
 
 	/* =====================
@@ -40,7 +34,7 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 
 	@Override
 	public EnsembleDeDonnees lireOctet(Desequenceur desequenceur, int parametre) {
-		EnsembleDeDonnees ensembleConstruit = data;
+		EnsembleDeDonnees ensembleConstruit = new EnsembleDeDonnees(structure);
 		
 		Integer numeroDeBloc;
 		int taille;

@@ -11,6 +11,7 @@ import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Donnee;
+import fr.bruju.lcfreader.structure.Structure;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 
 /**
@@ -35,11 +36,11 @@ public class EnsembleDeDonnees {
 	/**
 	 * Crée un conteneur de données pour la structure dont le nom est donné
 	 * 
-	 * @param nomStruct Le nom de la structure
+	 * @param structure Le nom de la structure
 	 */
-	public EnsembleDeDonnees(String nomStruct) {
+	public EnsembleDeDonnees(Structure structure) {
 		donnees = new ArrayList<>();
-		this.nomStruct = nomStruct;
+		this.nomStruct = structure.nom;
 	}
 
 	// Services offerts pour la cons
@@ -106,13 +107,9 @@ public class EnsembleDeDonnees {
 		}
 
 		// Sequencer le reste du fichier
-		EnsembleDeDonnees data = new EnsembleDeDonnees(nomStruct);
 		
-		SequenceurLCFAEtat.instancier(data).lireOctet(lecteur, lecteur.octetsRestants());
-		
-		
-		// Renvoyer les données
-		return data;
+		Structure structure = BaseDeDonneesDesStructures.getInstance().get(nomStruct);
+		return SequenceurLCFAEtat.instancier(structure).lireOctet(lecteur, lecteur.octetsRestants());
 	}
 
 	/* =================

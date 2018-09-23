@@ -3,10 +3,8 @@ package fr.bruju.lcfreader.structure.blocs;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
-import fr.bruju.lcfreader.structure.Donnee;
 import fr.bruju.lcfreader.structure.types.PrimitifCpp;
 
 /**

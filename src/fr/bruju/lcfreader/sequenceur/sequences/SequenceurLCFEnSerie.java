@@ -1,11 +1,7 @@
 package fr.bruju.lcfreader.sequenceur.sequences;
 
-import java.util.List;
-
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
-import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
-import fr.bruju.lcfreader.structure.Donnee;
 import fr.bruju.lcfreader.structure.Structure;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 
@@ -16,13 +12,8 @@ import fr.bruju.lcfreader.structure.blocs.Bloc;
  *
  */
 public class SequenceurLCFEnSerie implements SequenceurLCFAEtat {
-	/** Donnée en cours de construction */
-	public final EnsembleDeDonnees data;
-
-	/** Liste des blocs à lire */
-	private final List<Bloc<?>> blocsAExplorer;
-	/** Numéro du bloc actuel */
-	private int indiceBlocActuel = -1;
+	private Structure structure;
+	
 
 	/**
 	 * Crée le sequenceur à état
@@ -30,56 +21,21 @@ public class SequenceurLCFEnSerie implements SequenceurLCFAEtat {
 	 * @param data La donnée à remplir
 	 * @param codes La liste des codes
 	 */
-	SequenceurLCFEnSerie(EnsembleDeDonnees data) {
-		this.data = data;
-
-		Structure structure = BaseDeDonneesDesStructures.getInstance().get(data.nomStruct);
-		blocsAExplorer = structure.getSerie();
+	SequenceurLCFEnSerie(Structure structure) {
+		this.structure = structure;
 	}
 
 	/* =====================
 	 * SEQUENCEUR LCF A ETAT
 	 * ===================== */
 
-	/*
-	public boolean lireOctet(byte octet) {
-		Donnee<?> r = handler.accumuler(octet);
 
-		if (r == null) {
-			return true;
-		} else {
-			data.push(r);
-			return nouveauSousChamp();
-		}
-	}
-	*/
-
-	/* ======================================================
-	 * Un seul état : celui consistant à lire le champ actuel
-	 * ====================================================== */
-
-	/**
-	 * Avance vers le bloc suivant
-	 * 
-	 * @return Vrai si il y a un bloc suivant à lire
-	 */
-	/*
-	private boolean nouveauSousChamp() {
-		if (++indiceBlocActuel == blocsAExplorer.size()) {
-			return false;
-		}
-
-		Bloc<?> blocAExplorer = blocsAExplorer.get(indiceBlocActuel);
-		handler = blocAExplorer.getHandler(data.getTaille(blocAExplorer));
-		return true;
-	}
-	*/
 
 	@Override
 	public EnsembleDeDonnees lireOctet(Desequenceur desequenceur, int parametre) {
-		EnsembleDeDonnees ensemble = data;
+		EnsembleDeDonnees ensemble = new EnsembleDeDonnees(structure);
 		
-		for (Bloc<?> bloc : blocsAExplorer) {
+		for (Bloc<?> bloc : structure.getSerie()) {
 			ensemble.push(bloc.lireOctet(desequenceur, -1));
 		}
 		

@@ -2,7 +2,6 @@ package fr.bruju.lcfreader.structure.blocs;
 
 import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
-import fr.bruju.lcfreader.structure.Donnee;
 
 /**
  * Un bloc dont les données ne peuvent être décryptées.

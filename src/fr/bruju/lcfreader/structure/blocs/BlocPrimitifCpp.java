@@ -1,7 +1,6 @@
 package fr.bruju.lcfreader.structure.blocs;
 
 import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
-import fr.bruju.lcfreader.structure.Donnee;
 import fr.bruju.lcfreader.structure.types.PrimitifCpp;
 
 /**
@@ -63,8 +62,7 @@ public class BlocPrimitifCpp extends Bloc<Integer> {
 	/* =====================
 	 * CONSTRUIRE UNE VALEUR
 	 * ===================== */
-
-
+	
 	@Override
 	public Integer extraireDonnee(Desequenceur desequenceur, int tailleLue) {
 		return primitif.lireOctet(desequenceur, 0);

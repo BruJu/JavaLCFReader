@@ -157,7 +157,7 @@ public class Blocs {
 
 			String vraiType = type.substring(6, type.length() - 1); // Array<X>
 			Structure structure = BaseDeDonneesDesStructures.getInstance().get(vraiType);
-			return structure == null ? null : new BlocArray(champ, vraiType);
+			return structure == null ? null : new BlocArray(champ, structure);
 		}
 	}
 
@@ -177,8 +177,10 @@ public class Blocs {
 				return new BlocIntVector(champ, sousType);
 			}
 
-			if (BaseDeDonneesDesStructures.getInstance().get(sousType) != null) {
-				return new BlocEnsembleVector(champ, sousType);
+			Structure structure = BaseDeDonneesDesStructures.getInstance().get(sousType);
+			
+			if (structure != null) {
+				return new BlocEnsembleVector(champ, structure);
 			}
 
 			return null;
@@ -189,8 +191,8 @@ public class Blocs {
 	private class ProcedeEnsembleDeDonnees implements Procede {
 		@Override
 		public Bloc<?> generer(Champ champ, String type, String defaut) {
-			return BaseDeDonneesDesStructures.getInstance().get(type) == null ? null
-					: new BlocEnsembleDeDonnees(champ, type);
+			Structure structure = BaseDeDonneesDesStructures.getInstance().get(type);
+			return structure == null ? null : new BlocEnsembleDeDonnees(champ, structure);
 		}
 	}
 	

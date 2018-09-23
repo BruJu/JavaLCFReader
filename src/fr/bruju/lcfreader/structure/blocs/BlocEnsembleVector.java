@@ -8,7 +8,7 @@ import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
 import fr.bruju.lcfreader.sequenceur.sequences.Sequenceur;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
-import fr.bruju.lcfreader.structure.Donnee;
+import fr.bruju.lcfreader.structure.Structure;
 
 /**
  * Un bloc de données correspondant à un vecteur d'ensemble de données. Dans un vecteur, les données n'ont pas
@@ -25,7 +25,7 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 	 * ========================= */
 
 	/** Nom de la structure contenue */
-	private String nomStructure;
+	private Structure structure;
 
 	/**
 	 * Bloc constitué d'un vecteur d'ensemble de données
@@ -33,9 +33,9 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 	 * @param champ Les caractéristiques
 	 * @param nomStructure Le nom de l'ensemble
 	 */
-	public BlocEnsembleVector(Champ champ, String nomStructure) {
+	public BlocEnsembleVector(Champ champ, Structure structure) {
 		super(champ);
-		this.nomStructure = nomStructure;
+		this.structure = structure;
 	}
 
 	/* ====================
@@ -44,7 +44,7 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 
 	@Override
 	public String getNomType() {
-		return "Vector<#" + nomStructure + ">";
+		return "Vector<#" + structure.nom + ">";
 	}
 
 	/* =====================
@@ -94,7 +94,7 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 		
 		while (desequenceur.nonVide()) {
 			// TODO : garder le même séquenceur quand les objets seront devenus stateless
-			sequenceur = SequenceurLCFAEtat.instancier(new EnsembleDeDonnees(nomStructure));
+			sequenceur = SequenceurLCFAEtat.instancier(structure);
 			
 			ensembles.add(sequenceur.lireOctet(desequenceur, -1));
 		}

@@ -3,8 +3,7 @@ package fr.bruju.lcfreader.structure.blocs;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
-import fr.bruju.lcfreader.structure.Donnee;
-
+import fr.bruju.lcfreader.structure.Structure;
 /**
  * Un bloc de données correspondant à un ensemble de données
  * 
@@ -20,7 +19,7 @@ public class BlocEnsembleDeDonnees extends Bloc<EnsembleDeDonnees> {
 	 * ========================= */
 
 	/** Nom de la structure */
-	private String nomStructure;
+	private Structure structure;
 
 	/**
 	 * Bloc constitué d'un ensemble de données
@@ -28,9 +27,9 @@ public class BlocEnsembleDeDonnees extends Bloc<EnsembleDeDonnees> {
 	 * @param champ Caractéristiques
 	 * @param nomStructure Nom de la structure
 	 */
-	public BlocEnsembleDeDonnees(Champ champ, String nomStructure) {
+	public BlocEnsembleDeDonnees(Champ champ, Structure structure) {
 		super(champ);
-		this.nomStructure = nomStructure;
+		this.structure = structure;
 	}
 
 	/* ====================
@@ -39,7 +38,7 @@ public class BlocEnsembleDeDonnees extends Bloc<EnsembleDeDonnees> {
 
 	@Override
 	public String getNomType() {
-		return "#" + nomStructure;
+		return "#" + structure.nom;
 	}
 
 	/* =====================
@@ -63,7 +62,6 @@ public class BlocEnsembleDeDonnees extends Bloc<EnsembleDeDonnees> {
 
 	@Override
 	public EnsembleDeDonnees extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		return SequenceurLCFAEtat.instancier(new EnsembleDeDonnees(nomStructure))
-				.lireOctet(desequenceur, tailleLue);
+		return SequenceurLCFAEtat.instancier(structure).lireOctet(desequenceur, tailleLue);
 	}
 }
