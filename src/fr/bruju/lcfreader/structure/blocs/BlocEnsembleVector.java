@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
+import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
+import fr.bruju.lcfreader.sequenceur.sequences.Sequenceur;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
 import fr.bruju.lcfreader.structure.Donnee;
 
@@ -131,5 +133,27 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 
 			return (nombreDOctetsRestants == 0) ? new Donnee<>(BlocEnsembleVector.this, ensembles) : null;
 		}
+	}
+
+	@Override
+	protected List<EnsembleDeDonnees> extraireDonnee(Desequenceur desequenceur, int taille) {
+		if (taille == -1) {
+			throw new RuntimeException("Vecteur de taille inconnue");
+		}
+		
+		if (taille != desequenceur.octetsRestants())
+			throw new RuntimeException("!!");
+		
+		List<EnsembleDeDonnees> ensembles = new ArrayList<>();
+		Sequenceur<EnsembleDeDonnees> sequenceur = null;
+		
+		while (desequenceur.nonVide()) {
+			// TODO : garder le même séquenceur quand les objets seront devenus stateless
+			sequenceur = SequenceurLCFAEtat.instancier(new EnsembleDeDonnees(nomStructure));
+			
+			ensembles.add(sequenceur.lireOctet(desequenceur, -1));
+		}
+		
+		return ensembles;
 	}
 }

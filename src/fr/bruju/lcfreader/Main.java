@@ -26,10 +26,10 @@ public class Main {
 		int numeroDeMap = 2;
 		
 	
-		testerLecture(chemin, "RPG_RT.lmt");
+		//testerLecture(chemin, "RPG_RT.lmt");
 
 		
-		//testerLecture(chemin, construireNomDeMap(numeroDeMap));
+		testerLecture(chemin, construireNomDeMap(numeroDeMap));
 
 		//testMap(chemin, numeroDeMap);
 	}

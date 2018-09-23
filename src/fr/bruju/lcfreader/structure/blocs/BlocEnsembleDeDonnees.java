@@ -1,8 +1,7 @@
 package fr.bruju.lcfreader.structure.blocs;
 
-import java.util.Map;
-
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
+import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
 import fr.bruju.lcfreader.structure.Donnee;
@@ -67,5 +66,11 @@ public class BlocEnsembleDeDonnees extends Bloc<EnsembleDeDonnees> {
 	@Override
 	public void afficherSousArchi(int niveau, EnsembleDeDonnees value) {
 		value.afficherArchitecture(niveau);
+	}
+
+	@Override
+	protected EnsembleDeDonnees extraireDonnee(Desequenceur desequenceur, int tailleLue) {
+		return SequenceurLCFAEtat.instancier(new EnsembleDeDonnees(nomStructure))
+				.lireOctet(desequenceur, tailleLue);
 	}
 }

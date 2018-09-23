@@ -83,7 +83,7 @@ public class SequenceurLCFEnSerie implements SequenceurLCFAEtat {
 	}
 
 	@Override
-	public EnsembleDeDonnees lireOctet(Desequenceur desequenceur) {
+	public EnsembleDeDonnees lireOctet(Desequenceur desequenceur, int parametre) {
 		while (lireOctet(desequenceur.suivant()));
 		return data;
 	}

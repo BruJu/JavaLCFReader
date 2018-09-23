@@ -1,5 +1,6 @@
 package fr.bruju.lcfreader.structure.blocs;
 
+import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.NombreBER;
 import fr.bruju.lcfreader.structure.Donnee;
@@ -57,5 +58,10 @@ public class BlocInt32 extends Bloc<Integer> {
 	public ConvertisseurOctetsVersDonnees<Integer> getHandler(int tailleLue) {
 		return new ConvertisseurOctetsVersDonnees.ViaSequenceur<>(new NombreBER(),
 				r -> new Donnee<>(BlocInt32.this, r));
+	}
+
+	@Override
+	protected Integer extraireDonnee(Desequenceur desequenceur, int tailleLue) {
+		return desequenceur.$lireUnNombreBER();
 	}
 }

@@ -107,7 +107,9 @@ public class EnsembleDeDonnees {
 
 		// Sequencer le reste du fichier
 		EnsembleDeDonnees data = new EnsembleDeDonnees(nomStruct);
-		lecteur.sequencer(SequenceurLCFAEtat.instancier(data));
+		
+		SequenceurLCFAEtat.instancier(data).lireOctet(lecteur, lecteur.octetsRestants());
+		
 		
 		// Renvoyer les données
 		return data;

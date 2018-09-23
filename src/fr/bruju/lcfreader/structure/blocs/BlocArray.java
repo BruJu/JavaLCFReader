@@ -1,10 +1,12 @@
 package fr.bruju.lcfreader.structure.blocs;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
+import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.Enchainement;
 import fr.bruju.lcfreader.sequenceur.sequences.Etat;
@@ -153,5 +155,25 @@ public class BlocArray extends Bloc<Map<Integer, EnsembleDeDonnees>> {
 				}
 			}
 		}
+	}
+
+	@Override
+	protected Map<Integer, EnsembleDeDonnees> extraireDonnee(Desequenceur desequenceur, int tailleLue) {
+		int nombreElements = desequenceur.$lireUnNombreBER();
+		
+		int id;
+		EnsembleDeDonnees ensemble;
+		
+		Map<Integer, EnsembleDeDonnees> carte = new LinkedHashMap<>();
+		
+		
+		while (nombreElements != 0) {
+			id = desequenceur.$lireUnNombreBER();
+			ensemble = SequenceurLCFAEtat.instancier(new EnsembleDeDonnees(nomStructure)).lireOctet(desequenceur, -1);
+			
+			carte.put(id, ensemble);
+		}
+		
+		return carte;
 	}
 }

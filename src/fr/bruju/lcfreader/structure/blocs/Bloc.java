@@ -1,7 +1,10 @@
 package fr.bruju.lcfreader.structure.blocs;
 
 import fr.bruju.lcfreader.automate.DecompositionDeNom;
+import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
+import fr.bruju.lcfreader.sequenceur.sequences.Sequenceur;
+import fr.bruju.lcfreader.structure.Donnee;
 
 /**
  * Un bloc est une manière de représenter un type de données à savoir comment l'afficher, comment le décrypter,
@@ -11,7 +14,7 @@ import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
  *
  * @param <T> Le type de données utilisé pour représenter les données en Java
  */
-public abstract class Bloc<T> {
+public abstract class Bloc<T> implements Sequenceur<Donnee<T>> {
 	/* =========================
 	 * ATTRIBUTS ET CONSTRUCTEUR
 	 * ========================= */
@@ -79,9 +82,24 @@ public abstract class Bloc<T> {
 	public abstract ConvertisseurOctetsVersDonnees<T> getHandler(int tailleLue);
 	
 
+	@Override
+	public final Donnee<T> lireOctet(Desequenceur desequenceur, int tailleLue) {
+		return new Donnee<>(this, extraireDonnee(desequenceur, tailleLue));
+	}
+	
+	protected
+	abstract
+	T extraireDonnee(Desequenceur desequenceur, int tailleLue)
+	;
+	//{ throw new UnsupportedOperationException("Sequencage non implémenté"); }
+
+	
+	
+
 	/* ============================
 	 * INTERACTION AVEC LES VALEURS
 	 * ============================ */
+
 
 	/**
 	 * Converti la valeur en une chaîne comme si elle était issue du bloc
@@ -104,6 +122,8 @@ public abstract class Bloc<T> {
 	/* =========
 	 * AFFICHAGE
 	 * ========= */
+
+
 
 	/**
 	 * Donne une représentation du bloc de la forme "index nom type estUnChampTaille"

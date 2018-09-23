@@ -1,8 +1,7 @@
 package fr.bruju.lcfreader.structure.blocs;
 
-import java.util.List;
-
 import fr.bruju.lcfreader.Utilitaire;
+import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.structure.Donnee;
 
@@ -112,5 +111,20 @@ public class BlocInconnu extends Bloc<byte[]> {
 
 			return (i == octets.length) ? new Donnee<byte[]>(BlocInconnu.this, octets) : null;
 		}
+	}
+
+	@Override
+	protected byte[] extraireDonnee(Desequenceur desequenceur, int tailleLue) {
+		if (tailleLue == -1) {
+			throw new RuntimeException("Bloc inconnu en lecture en série détecté : " + type);
+		}
+		
+		byte[] octets = new byte[tailleLue];
+		
+		for (int i = 0 ; i != tailleLue ; i++) {
+			octets[i] = desequenceur.suivant();
+		}
+		
+		return octets;
 	}
 }

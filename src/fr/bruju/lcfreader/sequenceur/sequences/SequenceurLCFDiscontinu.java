@@ -42,7 +42,7 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 
 
 	@Override
-	public EnsembleDeDonnees lireOctet(Desequenceur desequenceur) {
+	public EnsembleDeDonnees lireOctet(Desequenceur desequenceur, int parametre) {
 		EnsembleDeDonnees ensembleConstruit = data;
 		
 		Integer numeroDeBloc;
@@ -64,15 +64,22 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 			taille = desequenceur.$lireUnNombreBER();
 			
 			if (taille != 0) {
-				// === Réutilisation à LecteurDeSequence ===
+				Desequenceur sousDesequenceur = desequenceur.sousSequencer(taille);
+				
+				// === Réutilisation de LecteurDeSequence ===
 				Etat etat;
 				Etat nouvelEtat = new EtatLireDonnees<>(bloc.getHandler(taille));
 				
 				do {
 					etat = nouvelEtat;
-					nouvelEtat = etat.lireOctet(desequenceur.suivant());
-				} while (etat != nouvelEtat);
-				// === Réutilisation à LecteurDeSequence ===
+					nouvelEtat = etat.lireOctet(sousDesequenceur.suivant());
+				} while (etat == nouvelEtat);
+				// === Réutilisation de LecteurDeSequence ===
+				
+
+				if (parametre != -1 && sousDesequenceur.nonVide()) {
+					throw new RuntimeException("Lecture d'un bloc non terminé " + sousDesequenceur.octetsRestants());
+				}
 			}
 		}
 		

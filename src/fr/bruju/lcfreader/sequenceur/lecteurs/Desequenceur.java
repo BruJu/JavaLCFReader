@@ -88,6 +88,10 @@ public class Desequenceur {
 	}
 	
 	public byte suivant() {
+		if (position >= fin) {
+			throw new RuntimeException("Lecture illégale");
+		}
+		
 		return octetsDuFichier[position++];
 	}
 	
@@ -132,6 +136,10 @@ public class Desequenceur {
 
 	public boolean nonVide() {
 		return position != fin;
+	}
+
+	public int octetsRestants() {
+		return fin - position;
 	}
 	
 	

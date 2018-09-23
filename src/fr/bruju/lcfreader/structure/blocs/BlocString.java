@@ -1,5 +1,6 @@
 package fr.bruju.lcfreader.structure.blocs;
 
+import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
 import fr.bruju.lcfreader.sequenceur.sequences.Chaine;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
@@ -49,9 +50,22 @@ public class BlocString extends Bloc<String> {
 	 * CONSTRUIRE UNE VALEUR
 	 * ===================== */
 
+	
+	
+	
 	@Override
 	public ConvertisseurOctetsVersDonnees<String> getHandler(int tailleLue) {
 		LecteurDeSequence<String> base = (tailleLue == -1) ? new TailleChaine() : new Chaine(tailleLue);
 		return new ConvertisseurOctetsVersDonnees.ViaSequenceur<>(base, chaine -> new Donnee<>(this, chaine));
+	}
+
+
+	@Override
+	public String extraireDonnee(Desequenceur desequenceur, int tailleLue) {
+		if (tailleLue == -1) {
+			tailleLue = desequenceur.$lireUnNombreBER();
+		}
+		
+		return desequenceur.$lireUneChaine(tailleLue);
 	}
 }

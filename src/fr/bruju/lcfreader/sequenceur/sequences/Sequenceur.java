@@ -6,5 +6,5 @@ public interface Sequenceur<T> {
 	
 	
 	
-	public T lireOctet(Desequenceur desequenceur);
+	public T lireOctet(Desequenceur desequenceur, int parametre);
 }
