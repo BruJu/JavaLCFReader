@@ -9,11 +9,10 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.function.Consumer;
 
-import fr.bruju.lcfreader.automate.ConstructeurDEnsemble;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.modele.FabriqueLCF;
 import fr.bruju.lcfreader.rmobjets.RMMap;
-import fr.bruju.lcfreader.sequenceur.lecteurs.LecteurDeFichierOctetParOctet;
+import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
 import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 
@@ -81,9 +80,7 @@ public class Main {
 	}
 
 	private static void afficherMap(String nom, Consumer<EnsembleDeDonnees> consumer) {
-
-		ConstructeurDEnsemble constructeur = new ConstructeurDEnsemble();
-		EnsembleDeDonnees map = constructeur.lire(nom);
+		EnsembleDeDonnees map = EnsembleDeDonnees.lireFichier(nom);
 		
 		System.out.println();
 		System.out.println();

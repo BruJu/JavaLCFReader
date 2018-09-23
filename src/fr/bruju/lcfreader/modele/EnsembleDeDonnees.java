@@ -7,9 +7,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.Utilitaire;
-import fr.bruju.lcfreader.sequenceur.lecteurs.LecteurDeFichierOctetParOctet;
+import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
-import fr.bruju.lcfreader.sequenceur.sequences.TailleChaine;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Donnee;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
@@ -84,10 +83,11 @@ public class EnsembleDeDonnees {
 	 * @return L'objet représentant le fichier, null si non lisible
 	 */
 	public static EnsembleDeDonnees lireFichier(String chemin) {
-		LecteurDeFichierOctetParOctet lecteur = LecteurDeFichierOctetParOctet.instancier(chemin);
+		Desequenceur lecteur = Desequenceur.instancier(chemin);
 		
 		// Connaître le type de fichier
-		String type = lecteur.sequencer(new TailleChaine());
+		String type = lecteur.$lireUneChaine(lecteur.$lireUnNombreBER());
+		
 		String nomStruct;
 
 		switch (type) {
@@ -110,7 +110,6 @@ public class EnsembleDeDonnees {
 		lecteur.sequencer(SequenceurLCFAEtat.instancier(data));
 		
 		// Renvoyer les données
-		lecteur.fermer();
 		return data;
 	}
 
