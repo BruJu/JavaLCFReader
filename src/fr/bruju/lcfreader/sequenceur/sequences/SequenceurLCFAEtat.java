@@ -10,7 +10,7 @@ import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
  * @author Bruju
  *
  */
-public interface SequenceurLCFAEtat extends LecteurDeSequence<EnsembleDeDonnees>, Sequenceur<EnsembleDeDonnees> {
+public interface SequenceurLCFAEtat extends Sequenceur<EnsembleDeDonnees> {
 	/**
 	 * Donne le séquenceur pour déséquencer la donnée selon si elle est en série ou pas
 	 * 

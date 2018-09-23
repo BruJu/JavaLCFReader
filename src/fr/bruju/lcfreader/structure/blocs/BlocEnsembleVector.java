@@ -6,8 +6,6 @@ import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
-import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
-import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
 import fr.bruju.lcfreader.sequenceur.sequences.Sequenceur;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
 import fr.bruju.lcfreader.structure.Donnee;
@@ -53,10 +51,6 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 	 * CONSTRUIRE UNE VALEUR
 	 * ===================== */
 
-	@Override
-	public ConvertisseurOctetsVersDonnees<List<EnsembleDeDonnees>> getHandler(int tailleLue) {
-		return new H(tailleLue);
-	}
 
 	/* ============================
 	 * INTERACTION AVEC LES VALEURS
@@ -85,58 +79,9 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 	 * CONVERTISSEUR
 	 * ============= */
 
-	/**
-	 * Convertisseur d'un tableau d'octets représentants un vecteur d'ensemble de données en une liste d'ensemble de
-	 * données.
-	 * 
-	 * @author Bruju
-	 *
-	 */
-	public class H implements ConvertisseurOctetsVersDonnees<List<EnsembleDeDonnees>> {
-		/** Données lues */
-		private List<EnsembleDeDonnees> ensembles;
-
-		/** Le lecteur de séquence de l'ensemble de données en cours de lecture */
-		private LecteurDeSequence<EnsembleDeDonnees> sequenceur = null;
-
-		/** Nombre d'octets restant à lire */
-		private int nombreDOctetsRestants;
-
-		/**
-		 * Construit le convertisseur
-		 * 
-		 * @param taille Le nombre d'octets du vecteur
-		 */
-		public H(int taille) {
-			if (taille == -1) {
-				throw new RuntimeException("Vecteur de taille inconnue");
-			}
-
-			this.nombreDOctetsRestants = taille;
-			this.ensembles = new ArrayList<>();
-		}
-
-		@Override
-		public Donnee<List<EnsembleDeDonnees>> accumuler(byte octet) {
-			if (sequenceur == null) {
-				sequenceur = SequenceurLCFAEtat.instancier(new EnsembleDeDonnees(nomStructure));
-			}
-
-			boolean seq = sequenceur.lireOctet(octet);
-
-			if (!seq) {
-				ensembles.add(sequenceur.getResultat());
-				sequenceur = null;
-			}
-
-			nombreDOctetsRestants--;
-
-			return (nombreDOctetsRestants == 0) ? new Donnee<>(BlocEnsembleVector.this, ensembles) : null;
-		}
-	}
 
 	@Override
-	protected List<EnsembleDeDonnees> extraireDonnee(Desequenceur desequenceur, int taille) {
+	public List<EnsembleDeDonnees> extraireDonnee(Desequenceur desequenceur, int taille) {
 		if (taille == -1) {
 			throw new RuntimeException("Vecteur de taille inconnue");
 		}

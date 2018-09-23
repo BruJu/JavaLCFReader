@@ -1,7 +1,6 @@
 package fr.bruju.lcfreader.structure.types;
 
 import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
-import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
 import fr.bruju.lcfreader.sequenceur.sequences.Sequenceur;
 
 abstract class SequenceurIntATailleFixe implements Sequenceur<Integer>, PrimitifCpp {
@@ -49,23 +48,6 @@ abstract class SequenceurIntATailleFixe implements Sequenceur<Integer>, Primitif
 		}
 	}
 	
-	
-
-	@Override
-	public LecteurDeSequence<Integer> getLecteur() {
-		return new LecteurAOctetsFixe(nombreDOctetsUtilises) {
-			@Override
-			public Integer getResultat() {
-				int valeur = 0;
-				
-				for (int i = 0 ; i != nombreDOctetsUtilises ; i++) {
-					valeur = (valeur * 0x100) + Byte.toUnsignedInt(accumulateur[i]);
-				}
-				
-				return valeur;
-			}
-		};
-	}
 	
 	
 	private final int nombreDOctetsUtilises;

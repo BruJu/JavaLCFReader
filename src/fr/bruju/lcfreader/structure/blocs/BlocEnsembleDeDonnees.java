@@ -2,7 +2,6 @@ package fr.bruju.lcfreader.structure.blocs;
 
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
-import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
 import fr.bruju.lcfreader.structure.Donnee;
 
@@ -47,12 +46,6 @@ public class BlocEnsembleDeDonnees extends Bloc<EnsembleDeDonnees> {
 	 * CONSTRUIRE UNE VALEUR
 	 * ===================== */
 
-	@Override
-	public ConvertisseurOctetsVersDonnees<EnsembleDeDonnees> getHandler(int tailleLue) {
-		return new ConvertisseurOctetsVersDonnees.ViaSequenceur<>(
-				SequenceurLCFAEtat.instancier(new EnsembleDeDonnees(nomStructure)),
-				r -> new Donnee<>(BlocEnsembleDeDonnees.this, r));
-	}
 
 	/* ============================
 	 * INTERACTION AVEC LES VALEURS
@@ -69,7 +62,7 @@ public class BlocEnsembleDeDonnees extends Bloc<EnsembleDeDonnees> {
 	}
 
 	@Override
-	protected EnsembleDeDonnees extraireDonnee(Desequenceur desequenceur, int tailleLue) {
+	public EnsembleDeDonnees extraireDonnee(Desequenceur desequenceur, int tailleLue) {
 		return SequenceurLCFAEtat.instancier(new EnsembleDeDonnees(nomStructure))
 				.lireOctet(desequenceur, tailleLue);
 	}

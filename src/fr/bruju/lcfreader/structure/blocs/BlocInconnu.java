@@ -2,7 +2,6 @@ package fr.bruju.lcfreader.structure.blocs;
 
 import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
-import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.structure.Donnee;
 
 /**
@@ -44,11 +43,6 @@ public class BlocInconnu extends Bloc<byte[]> {
 	 * CONSTRUIRE UNE VALEUR
 	 * ===================== */
 
-	@Override
-	public ConvertisseurOctetsVersDonnees<byte[]> getHandler(int tailleLue) {
-		return new BlocHandler(tailleLue);
-	}
-
 	/* ============================
 	 * INTERACTION AVEC LES VALEURS
 	 * ============================ */
@@ -79,42 +73,9 @@ public class BlocInconnu extends Bloc<byte[]> {
 	 * CONVERTISSEUR
 	 * ============= */
 
-	/**
-	 * Le convertisseur de bloc inconnu ! Se contente d'enregistrer tous les octets reçus.
-	 * 
-	 * @author Bruju
-	 *
-	 */
-	public class BlocHandler implements ConvertisseurOctetsVersDonnees<byte[]> {
-		/** Liste des octets de ce bloc mystérieux */
-		private byte[] octets;
-		/** Indice du prochain octet à remplir */
-		private int i;
-
-		/**
-		 * Construit le convertisseur de bloc pour stocker la liste des octets
-		 * 
-		 * @param tailleLue Le nombre d'octets
-		 */
-		public BlocHandler(int tailleLue) {
-			if (tailleLue == -1) {
-				throw new RuntimeException("Bloc inconnu en lecture en série détecté : " + type);
-			}
-
-			octets = new byte[tailleLue];
-			i = 0;
-		}
-
-		@Override
-		public Donnee<byte[]> accumuler(byte octet) {
-			octets[i++] = octet;
-
-			return (i == octets.length) ? new Donnee<byte[]>(BlocInconnu.this, octets) : null;
-		}
-	}
 
 	@Override
-	protected byte[] extraireDonnee(Desequenceur desequenceur, int tailleLue) {
+	public byte[] extraireDonnee(Desequenceur desequenceur, int tailleLue) {
 		if (tailleLue == -1) {
 			throw new RuntimeException("Bloc inconnu en lecture en série détecté : " + type);
 		}

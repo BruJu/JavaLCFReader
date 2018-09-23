@@ -2,7 +2,6 @@ package fr.bruju.lcfreader.structure.blocs;
 
 import fr.bruju.lcfreader.automate.DecompositionDeNom;
 import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
-import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.Sequenceur;
 import fr.bruju.lcfreader.structure.Donnee;
 
@@ -71,30 +70,12 @@ public abstract class Bloc<T> implements Sequenceur<Donnee<T>> {
 	 * CONSTRUIRE UNE VALEUR
 	 * ===================== */
 
-	/**
-	 * Donne un lecteur octet par octet 
-	 * <br>
-	 * Si tailleLue = -1, il faut lire soi même la taille.
-	 * 
-	 * @param tailleLue Le nombre d'octets à lire, -1 si inconnu
-	 * @return Un sequenceur octet par octet pour obtenir un objet valeur du bloc
-	 */
-	public abstract ConvertisseurOctetsVersDonnees<T> getHandler(int tailleLue);
-	
-
 	@Override
 	public final Donnee<T> lireOctet(Desequenceur desequenceur, int tailleLue) {
 		return new Donnee<>(this, extraireDonnee(desequenceur, tailleLue));
 	}
 	
-	protected
-	abstract
-	T extraireDonnee(Desequenceur desequenceur, int tailleLue)
-	;
-	//{ throw new UnsupportedOperationException("Sequencage non implémenté"); }
-
-	
-	
+	public abstract T extraireDonnee(Desequenceur desequenceur, int tailleLue);
 
 	/* ============================
 	 * INTERACTION AVEC LES VALEURS

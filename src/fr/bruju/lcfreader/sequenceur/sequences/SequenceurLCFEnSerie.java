@@ -35,15 +35,13 @@ public class SequenceurLCFEnSerie implements SequenceurLCFAEtat {
 
 		Structure structure = BaseDeDonneesDesStructures.getInstance().get(data.nomStruct);
 		blocsAExplorer = structure.getSerie();
-
-		nouveauSousChamp();
 	}
 
 	/* =====================
 	 * SEQUENCEUR LCF A ETAT
 	 * ===================== */
 
-	@Override
+	/*
 	public boolean lireOctet(byte octet) {
 		Donnee<?> r = handler.accumuler(octet);
 
@@ -54,24 +52,18 @@ public class SequenceurLCFEnSerie implements SequenceurLCFAEtat {
 			return nouveauSousChamp();
 		}
 	}
-
-	@Override
-	public EnsembleDeDonnees getResultat() {
-		return data;
-	}
+	*/
 
 	/* ======================================================
 	 * Un seul état : celui consistant à lire le champ actuel
 	 * ====================================================== */
-
-	/** Le traiteur pour le champ actuel */
-	private ConvertisseurOctetsVersDonnees<?> handler;
 
 	/**
 	 * Avance vers le bloc suivant
 	 * 
 	 * @return Vrai si il y a un bloc suivant à lire
 	 */
+	/*
 	private boolean nouveauSousChamp() {
 		if (++indiceBlocActuel == blocsAExplorer.size()) {
 			return false;
@@ -81,10 +73,16 @@ public class SequenceurLCFEnSerie implements SequenceurLCFAEtat {
 		handler = blocAExplorer.getHandler(data.getTaille(blocAExplorer));
 		return true;
 	}
+	*/
 
 	@Override
 	public EnsembleDeDonnees lireOctet(Desequenceur desequenceur, int parametre) {
-		while (lireOctet(desequenceur.suivant()));
-		return data;
+		EnsembleDeDonnees ensemble = data;
+		
+		for (Bloc<?> bloc : blocsAExplorer) {
+			ensemble.push(bloc.lireOctet(desequenceur, -1));
+		}
+		
+		return ensemble;
 	}
 }
