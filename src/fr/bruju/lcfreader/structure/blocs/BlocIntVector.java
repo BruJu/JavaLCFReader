@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
+import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
 import fr.bruju.lcfreader.sequenceur.sequences.ConvertisseurOctetsVersDonnees;
 import fr.bruju.lcfreader.sequenceur.sequences.Enchainement;
 import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
@@ -53,6 +54,45 @@ public class BlocIntVector extends Bloc<int[]> {
 	/* =====================
 	 * CONSTRUIRE UNE VALEUR
 	 * ===================== */
+
+
+	@Override
+	protected int[] extraireDonnee(Desequenceur desequenceur, int tailleLue) {
+		if (tailleLue == -1) {
+			tailleLue = desequenceur.$lireUnNombreBER();
+		}
+		
+		List<Integer> nombres = new ArrayList<>();
+		
+		if (nomPrimitive.equals("Int32")) {
+			remplirBER(desequenceur, nombres, tailleLue);
+		} else {
+			remplirPrimitives(desequenceur, nombres, tailleLue);
+		}
+		
+		
+		int[] tableau = new int[nombres.size()];
+		for (int i = 0 ; i != tableau.length ; i++) {
+			tableau[i] = nombres.get(i);
+		}
+		
+		return tableau;
+	}
+
+	
+	private void remplirPrimitives(Desequenceur desequenceur, List<Integer> nombres, int tailleLue) {
+		desequenceur = desequenceur.sousSequencer(tailleLue);
+		
+		while (desequenceur.nonVide()) {
+			nombres.add(primitif.lireOctet(desequenceur, 0));
+		}
+	}
+
+	private void remplirBER(Desequenceur desequenceur, List<Integer> nombres, int tailleLue) {
+		for (int i = 0 ; i != tailleLue ; i++) {
+			nombres.add(desequenceur.$lireUnNombreBER());
+		}
+	}
 
 	@Override
 	public ConvertisseurOctetsVersDonnees<int[]> getHandler(int tailleLue) {
@@ -105,6 +145,7 @@ public class BlocIntVector extends Bloc<int[]> {
 	public String convertirEnChaineUneValeur(int[] values) {
 		return Arrays.toString(values);
 	}
+	
 
 	/* =============
 	 * CONVERTISSEUR
@@ -220,4 +261,5 @@ public class BlocIntVector extends Bloc<int[]> {
 			return valeursLues;
 		}
 	}
+
 }

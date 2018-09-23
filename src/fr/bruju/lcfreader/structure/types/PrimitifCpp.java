@@ -3,10 +3,12 @@ package fr.bruju.lcfreader.structure.types;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
 import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
 import fr.bruju.lcfreader.sequenceur.sequences.NombreBER;
+import fr.bruju.lcfreader.sequenceur.sequences.Sequenceur;
 
-public interface PrimitifCpp {
+public interface PrimitifCpp extends Sequenceur<Integer> {
 	static abstract class LecteurAOctetsFixe implements LecteurDeSequence<Integer> {
 		protected byte[] accumulateur;
 		private int indice = 0;
@@ -26,6 +28,9 @@ public interface PrimitifCpp {
 	}
 	
 	
+
+	
+	
 	public String getNom();
 	
 	public LecteurDeSequence<Integer> getLecteur();
@@ -35,9 +40,10 @@ public interface PrimitifCpp {
 			new PrimitifCpp[] {
 					new Int16(),
 					new Int32(),
-					new Enum(),
-					new UInt32(),
-					//new Boolean(),
+					new SequenceurIntATailleFixe.UInt8(),
+					new SequenceurIntATailleFixe.UInt16(),
+					new SequenceurIntATailleFixe.UInt32(),
+					new SequenceurIntATailleFixe.Boolean(),
 				});
 
 	public static Map<String, PrimitifCpp> remplirHashMap(PrimitifCpp[] primitifCpps) {
@@ -65,6 +71,11 @@ public interface PrimitifCpp {
 				}
 			};
 		}
+
+		@Override
+		public Integer lireOctet(Desequenceur desequenceur, int parametre) {
+			return (Byte.toUnsignedInt(desequenceur.suivant()) + Byte.toUnsignedInt(desequenceur.suivant()) * 0x100);
+		}
 	}
 
 	public class Int32 implements PrimitifCpp {
@@ -77,57 +88,15 @@ public interface PrimitifCpp {
 		public LecteurDeSequence<Integer> getLecteur() {
 			return new NombreBER();
 		}
-	}
-
-	public class Enum implements PrimitifCpp {
-		@Override
-		public String getNom() {
-			return "Enum";
-		}
 
 		@Override
-		public LecteurDeSequence<Integer> getLecteur() {
-			return new LecteurAOctetsFixe(2) {
-				@Override
-				public Integer getResultat() {
-					return Byte.toUnsignedInt(accumulateur[0]);
-				}
-			};
+		public Integer lireOctet(Desequenceur desequenceur, int parametre) {
+			return desequenceur.$lireUnNombreBER();
 		}
 	}
 
-	public class UInt32 implements PrimitifCpp {
-		@Override
-		public String getNom() {
-			return "UInt32";
-		}
 
-		@Override
-		public LecteurDeSequence<Integer> getLecteur() {
-			return new LecteurAOctetsFixe(4) {
-				@Override
-				public Integer getResultat() {
-					return Byte.toUnsignedInt(accumulateur[0]);
-				}
-			};
-		}
-	}
 
-	public class Boolean implements PrimitifCpp {
-		@Override
-		public String getNom() {
-			return "Boolean";
-		}
 
-		@Override
-		public LecteurDeSequence<Integer> getLecteur() {
-			return new LecteurAOctetsFixe(2) {
-				@Override
-				public Integer getResultat() {
-					return Byte.toUnsignedInt(accumulateur[0]);
-				}
-			};
-		}
-	}
 
 }
