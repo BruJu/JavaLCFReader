@@ -9,10 +9,10 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.function.Consumer;
 
+import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.modele.FabriqueLCF;
 import fr.bruju.lcfreader.rmobjets.RMMap;
-import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 
 @SuppressWarnings("unused")

@@ -11,13 +11,12 @@ import fr.bruju.lcfreader.rmobjets.RMPage;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 
 public class Ensembles {
-	
 	public static RMMap map(String cheminProjet, int idCarte) {
 		BaseDeDonneesDesStructures.initialiser("ressources\\liblcf\\fields.csv");
 		
 		String cheminCarte = cheminProjet + "\\Map" + String.format("%04d", idCarte) + ".lmu";
 
-		EnsembleDeDonnees map =  EnsembleDeDonnees.lireFichier(cheminCarte); // -> 39 secondes
+		EnsembleDeDonnees map =  EnsembleDeDonnees.lireFichier(cheminCarte); // -> 35 secondes
 		
 		
 		if (!map.nomStruct.equals("Map"))

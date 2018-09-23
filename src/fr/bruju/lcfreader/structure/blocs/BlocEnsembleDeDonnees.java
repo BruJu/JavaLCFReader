@@ -1,8 +1,7 @@
 package fr.bruju.lcfreader.structure.blocs;
 
+import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
-import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
-import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
 import fr.bruju.lcfreader.structure.Structure;
 /**
  * Un bloc de données correspondant à un ensemble de données
@@ -11,9 +10,6 @@ import fr.bruju.lcfreader.structure.Structure;
  *
  */
 public class BlocEnsembleDeDonnees extends Bloc<EnsembleDeDonnees> {
-
-	
-	
 	/* =========================
 	 * ATTRIBUTS ET CONSTRUCTEUR
 	 * ========================= */
@@ -41,11 +37,6 @@ public class BlocEnsembleDeDonnees extends Bloc<EnsembleDeDonnees> {
 		return "#" + structure.nom;
 	}
 
-	/* =====================
-	 * CONSTRUIRE UNE VALEUR
-	 * ===================== */
-
-
 	/* ============================
 	 * INTERACTION AVEC LES VALEURS
 	 * ============================ */
@@ -60,8 +51,12 @@ public class BlocEnsembleDeDonnees extends Bloc<EnsembleDeDonnees> {
 		value.afficherArchitecture(niveau);
 	}
 
+	/* =====================
+	 * CONSTRUIRE UNE VALEUR
+	 * ===================== */
+	
 	@Override
 	public EnsembleDeDonnees extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		return SequenceurLCFAEtat.instancier(structure).lireOctet(desequenceur, tailleLue);
+		return structure.lireOctet(desequenceur, tailleLue);
 	}
 }

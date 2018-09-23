@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.Utilitaire;
-import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
-import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Donnee;
 import fr.bruju.lcfreader.structure.Structure;
@@ -53,8 +51,9 @@ public class EnsembleDeDonnees {
 		donnees.add(blocData);
 
 		if (blocData.bloc.estUnChampIndiquantLaTaille()) {
-			if (tailles == null)
+			if (tailles == null) {
 				tailles = new HashMap<>();
+			}
 
 			tailles.put(blocData.bloc.nom, (Integer) blocData.value);
 		}
@@ -98,7 +97,7 @@ public class EnsembleDeDonnees {
 		case "LcfMapTree":
 			nomStruct = "TreeMap";
 			break;
-		// case "LcfDataBase": nomStruct = "Database";	break; // Non fonctionnel
+		case "LcfDataBase": nomStruct = "Database";	break; // Non fonctionnel
 		// case "LcfSaveData": nomStruct = "Save"; 	break; // Non fonctionnel
 			
 		default: // Type Inconnu
@@ -109,7 +108,7 @@ public class EnsembleDeDonnees {
 		// Sequencer le reste du fichier
 		
 		Structure structure = BaseDeDonneesDesStructures.getInstance().get(nomStruct);
-		return SequenceurLCFAEtat.instancier(structure).lireOctet(lecteur, lecteur.octetsRestants());
+		return structure.lireOctet(lecteur, lecteur.octetsRestants());
 	}
 
 	/* =================

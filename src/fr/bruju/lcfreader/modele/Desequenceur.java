@@ -1,9 +1,11 @@
-package fr.bruju.lcfreader.sequenceur.lecteurs;
+package fr.bruju.lcfreader.modele;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import fr.bruju.lcfreader.Utilitaire;
 
 
 /**
@@ -25,11 +27,12 @@ import java.nio.file.Paths;
  *
  */
 public class Desequenceur {
-	
+	private final String fichier;
 	private final byte[] octetsDuFichier;
 	
 	private int position = 0;
 	
+	public final int debut;
 	public final int fin;
 	
 	/**
@@ -42,6 +45,8 @@ public class Desequenceur {
 		Path fichier = Paths.get(chemin);
 		octetsDuFichier = Files.readAllBytes(fichier);
 		fin = octetsDuFichier.length;
+		debut = 0;
+		this.fichier = chemin;
 	}
 	
 	private Desequenceur(Desequenceur base, int nombreDOctetsPris) {
@@ -53,6 +58,8 @@ public class Desequenceur {
 		this.position = base.position;
 		this.fin = this.position + nombreDOctetsPris;
 		base.position += nombreDOctetsPris;
+		debut = position;
+		fichier = base.fichier;
 	}
 	
 	public Desequenceur sousSequencer(int taille) {
@@ -62,7 +69,7 @@ public class Desequenceur {
 	
 	public byte suivant() {
 		if (position >= fin) {
-			throw new RuntimeException("Lecture illégale");
+			throw new RuntimeException("Lecture illégale " + Utilitaire.toHex(position) + " " + fichier + " " + Utilitaire.toHex(debut));
 		}
 		
 		return octetsDuFichier[position++];

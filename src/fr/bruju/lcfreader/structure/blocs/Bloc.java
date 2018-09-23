@@ -1,8 +1,8 @@
 package fr.bruju.lcfreader.structure.blocs;
 
-import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
-import fr.bruju.lcfreader.sequenceur.sequences.Sequenceur;
+import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.structure.Donnee;
+import fr.bruju.lcfreader.structure.Sequenceur;
 
 /**
  * Un bloc est une manière de représenter un type de données à savoir comment l'afficher, comment le décrypter,
@@ -74,7 +74,7 @@ public abstract class Bloc<T> implements Sequenceur<Donnee<T>> {
 		return new Donnee<>(this, extraireDonnee(desequenceur, tailleLue));
 	}
 	
-	public abstract T extraireDonnee(Desequenceur desequenceur, int tailleLue);
+	abstract T extraireDonnee(Desequenceur desequenceur, int tailleLue);
 
 	/* ============================
 	 * INTERACTION AVEC LES VALEURS

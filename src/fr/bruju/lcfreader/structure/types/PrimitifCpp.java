@@ -3,8 +3,8 @@ package fr.bruju.lcfreader.structure.types;
 import java.util.HashMap;
 import java.util.Map;
 
-import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
-import fr.bruju.lcfreader.sequenceur.sequences.Sequenceur;
+import fr.bruju.lcfreader.modele.Desequenceur;
+import fr.bruju.lcfreader.structure.Sequenceur;
 
 public interface PrimitifCpp extends Sequenceur<Integer> {
 

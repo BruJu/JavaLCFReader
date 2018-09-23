@@ -1,7 +1,7 @@
 package fr.bruju.lcfreader.structure.types;
 
-import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
-import fr.bruju.lcfreader.sequenceur.sequences.Sequenceur;
+import fr.bruju.lcfreader.modele.Desequenceur;
+import fr.bruju.lcfreader.structure.Sequenceur;
 
 abstract class SequenceurIntATailleFixe implements Sequenceur<Integer>, PrimitifCpp {
 	static class Boolean extends SequenceurIntATailleFixe {

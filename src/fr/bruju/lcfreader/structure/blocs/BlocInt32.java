@@ -1,6 +1,6 @@
 package fr.bruju.lcfreader.structure.blocs;
 
-import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
+import fr.bruju.lcfreader.modele.Desequenceur;
 
 /**
  * Un bloc de données concernant un int32

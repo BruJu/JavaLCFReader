@@ -4,9 +4,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
-import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
-import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
 import fr.bruju.lcfreader.structure.Structure;
 
 /**
@@ -24,14 +23,11 @@ public class BlocArray extends Bloc<Map<Integer, EnsembleDeDonnees>> {
 
 	private Structure structure;
 	
-	/** Nom de la structure contenue dans chaque case du tableau */
-	private String nomStructure;
-
 	/**
 	 * Bloc constitué d'un tableau d'ensemble de données
 	 * 
 	 * @param champ Les caractéristiques
-	 * @param nomStructure Le nom de l'ensemble
+	 * @param structure La structure
 	 */
 	public BlocArray(Champ champ, Structure structure) {
 		super(champ);
@@ -44,7 +40,7 @@ public class BlocArray extends Bloc<Map<Integer, EnsembleDeDonnees>> {
 
 	@Override
 	public String getNomType() {
-		return "Tableau[" + nomStructure + "]";
+		return "Tableau[" + structure.nom + "]";
 	}
 
 	/* ============================
@@ -74,31 +70,15 @@ public class BlocArray extends Bloc<Map<Integer, EnsembleDeDonnees>> {
 	/* =====================
 	 * CONSTRUIRE UNE VALEUR
 	 * ===================== */
-
-
-	/* =============
-	 * CONVERTISSEUR
-	 * ============= */
-
-
+	
 	@Override
 	public Map<Integer, EnsembleDeDonnees> extraireDonnee(Desequenceur desequenceur, int tailleLue) {
 		int nombreElements = desequenceur.$lireUnNombreBER();
 		
-		int id;
-		EnsembleDeDonnees ensemble;
-		
 		Map<Integer, EnsembleDeDonnees> carte = new LinkedHashMap<>();
 		
-		
 		while (nombreElements != 0) {
-			id = desequenceur.$lireUnNombreBER();
-			
-			
-			ensemble = SequenceurLCFAEtat.instancier(structure).lireOctet(desequenceur, -1);
-			
-			carte.put(id, ensemble);
-			
+			carte.put(desequenceur.$lireUnNombreBER(), structure.lireOctet(desequenceur, -1));
 			nombreElements--;
 		}
 		

@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
-import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
-import fr.bruju.lcfreader.sequenceur.sequences.Sequenceur;
-import fr.bruju.lcfreader.sequenceur.sequences.SequenceurLCFAEtat;
+import fr.bruju.lcfreader.structure.Sequenceur;
 import fr.bruju.lcfreader.structure.Structure;
 
 /**
@@ -18,8 +17,6 @@ import fr.bruju.lcfreader.structure.Structure;
  *
  */
 public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
-	
-
 	/* =========================
 	 * ATTRIBUTS ET CONSTRUCTEUR
 	 * ========================= */
@@ -47,11 +44,6 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 		return "Vector<#" + structure.nom + ">";
 	}
 
-	/* =====================
-	 * CONSTRUIRE UNE VALEUR
-	 * ===================== */
-
-
 	/* ============================
 	 * INTERACTION AVEC LES VALEURS
 	 * ============================ */
@@ -75,11 +67,10 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 		value.forEach(data -> data.afficherArchitecture(niveau));
 	}
 
-	/* =============
-	 * CONVERTISSEUR
-	 * ============= */
-
-
+	/* =====================
+	 * CONSTRUIRE UNE VALEUR
+	 * ===================== */
+	
 	@Override
 	public List<EnsembleDeDonnees> extraireDonnee(Desequenceur desequenceur, int taille) {
 		if (taille == -1) {
@@ -90,12 +81,9 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 			throw new RuntimeException("!!");
 		
 		List<EnsembleDeDonnees> ensembles = new ArrayList<>();
-		Sequenceur<EnsembleDeDonnees> sequenceur = null;
+		Sequenceur<EnsembleDeDonnees> sequenceur = structure;
 		
 		while (desequenceur.nonVide()) {
-			// TODO : garder le même séquenceur quand les objets seront devenus stateless
-			sequenceur = SequenceurLCFAEtat.instancier(structure);
-			
 			ensembles.add(sequenceur.lireOctet(desequenceur, -1));
 		}
 		

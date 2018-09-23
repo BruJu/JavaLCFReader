@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
+import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.structure.types.PrimitifCpp;
 
 /**

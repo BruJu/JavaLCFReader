@@ -54,13 +54,21 @@ public class Blocs {
 		boolean sized = donnees[2].equals("t");
 		String type = donnees[3];
 
+		
 		int index = 0;
 
 		if (!donnees[4].equals(""))
 			index = Integer.decode(donnees[4]);
+		
+
+		
 
 		Champ champ = new Champ(index, nom, sized, donnees[3]);
 
+		if (type.equals("MoveRoute")) {
+			return new BlocInconnu(champ, "MoveRoute");
+		}
+		
 		Bloc<?> bloc;
 		if (sized) {
 			bloc = new BlocInt32(champ, donnees[5]);

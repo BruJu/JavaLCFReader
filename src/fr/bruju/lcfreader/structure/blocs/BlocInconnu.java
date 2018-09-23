@@ -1,7 +1,7 @@
 package fr.bruju.lcfreader.structure.blocs;
 
 import fr.bruju.lcfreader.Utilitaire;
-import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
+import fr.bruju.lcfreader.modele.Desequenceur;
 
 /**
  * Un bloc dont les données ne peuvent être décryptées.
@@ -38,9 +38,6 @@ public class BlocInconnu extends Bloc<byte[]> {
 		return "Inconnu {" + type + "}";
 	}
 
-	/* =====================
-	 * CONSTRUIRE UNE VALEUR
-	 * ===================== */
 
 	/* ============================
 	 * INTERACTION AVEC LES VALEURS
@@ -68,10 +65,9 @@ public class BlocInconnu extends Bloc<byte[]> {
 		return sb.toString();
 	}
 
-	/* =============
-	 * CONVERTISSEUR
-	 * ============= */
-
+	/* =====================
+	 * CONSTRUIRE UNE VALEUR
+	 * ===================== */
 
 	@Override
 	public byte[] extraireDonnee(Desequenceur desequenceur, int tailleLue) {

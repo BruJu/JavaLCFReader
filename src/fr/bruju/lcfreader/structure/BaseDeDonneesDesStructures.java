@@ -86,7 +86,16 @@ public class BaseDeDonneesDesStructures {
 			// Lire les noms de structure
 			lireToutesLesLignes(file, ligne -> {
 				String[] donnees = ligne.split(",", -1);
-				structures.putIfAbsent(donnees[0], new Structure(donnees[0]));
+				Structure structure;
+				
+				if (donnees[4].equals("")) {
+					structure = new StructureSerie(donnees[0]);
+				} else {
+					structure = new StructureDiscontinue(donnees[0]);
+				}
+				
+				
+				structures.putIfAbsent(donnees[0], structure);
 			});
 
 			// Lire les arguments
