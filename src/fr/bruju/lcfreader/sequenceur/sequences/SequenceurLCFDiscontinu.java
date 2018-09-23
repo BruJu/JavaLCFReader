@@ -2,6 +2,7 @@ package fr.bruju.lcfreader.sequenceur.sequences;
 
 import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
+import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Donnee;
 import fr.bruju.lcfreader.structure.Structure;
@@ -39,6 +40,45 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 	 * SEQUENCEUR LCF A ETAT
 	 * ===================== */
 
+
+	@Override
+	public EnsembleDeDonnees lireOctet(Desequenceur desequenceur) {
+		EnsembleDeDonnees ensembleConstruit = data;
+		
+		Integer numeroDeBloc;
+		int taille;
+		
+		while (desequenceur.nonVide()) {
+			numeroDeBloc = Byte.toUnsignedInt(desequenceur.suivant());
+			
+			if (numeroDeBloc == 0) {
+				return ensembleConstruit;
+			}
+			
+			Bloc<?> bloc = structure.getBloc(numeroDeBloc);
+			
+			if (bloc == null) {
+				throw new RuntimeException("Bloc inconnu");
+			}
+			
+			taille = desequenceur.$lireUnNombreBER();
+			
+			if (taille != 0) {
+				// === Réutilisation à LecteurDeSequence ===
+				Etat etat;
+				Etat nouvelEtat = new EtatLireDonnees<>(bloc.getHandler(taille));
+				
+				do {
+					etat = nouvelEtat;
+					nouvelEtat = etat.lireOctet(desequenceur.suivant());
+				} while (etat != nouvelEtat);
+				// === Réutilisation à LecteurDeSequence ===
+			}
+		}
+		
+		return ensembleConstruit;
+	}
+	
 	@Override
 	public boolean lireOctet(byte octet) {
 		etat = etat.lireOctet(octet);
@@ -137,5 +177,6 @@ public class SequenceurLCFDiscontinu implements SequenceurLCFAEtat {
 			}
 		}
 	}
+
 
 }

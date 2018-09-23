@@ -3,6 +3,7 @@ package fr.bruju.lcfreader.sequenceur.sequences;
 import java.util.List;
 
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
+import fr.bruju.lcfreader.sequenceur.lecteurs.Desequenceur;
 import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
 import fr.bruju.lcfreader.structure.Donnee;
 import fr.bruju.lcfreader.structure.Structure;
@@ -79,5 +80,11 @@ public class SequenceurLCFEnSerie implements SequenceurLCFAEtat {
 		Bloc<?> blocAExplorer = blocsAExplorer.get(indiceBlocActuel);
 		handler = blocAExplorer.getHandler(data.getTaille(blocAExplorer));
 		return true;
+	}
+
+	@Override
+	public EnsembleDeDonnees lireOctet(Desequenceur desequenceur) {
+		while (lireOctet(desequenceur.suivant()));
+		return data;
 	}
 }

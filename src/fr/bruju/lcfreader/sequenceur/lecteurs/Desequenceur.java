@@ -28,7 +28,7 @@ import fr.bruju.lcfreader.sequenceur.sequences.LecteurDeSequence;
  */
 public class Desequenceur {
 	
-	private byte[] octetsDuFichier;
+	private final byte[] octetsDuFichier;
 	
 	private int position = 0;
 	
@@ -46,6 +46,22 @@ public class Desequenceur {
 		fin = octetsDuFichier.length;
 	}
 	
+	private Desequenceur(Desequenceur base, int nombreDOctetsPris) {
+		if (base.position + nombreDOctetsPris > base.fin) {
+			throw new IndexOutOfBoundsException();
+		}
+		
+		this.octetsDuFichier = base.octetsDuFichier;
+		this.position = base.position;
+		this.fin = this.position + nombreDOctetsPris;
+		base.position += nombreDOctetsPris;
+	}
+	
+	public Desequenceur sousSequencer(int taille) {
+		return new Desequenceur(this, taille);
+	}
+	
+	
 	/**
 	 * Lance la lecteur d'octets en utilisant le sequenceur donné. La lecteur se fait jusqu'à que le sequenceur renvoie
 	 * faux ou que l'on arrive à la fin du fichier. Dans ce dernier cas, le flux est fermé.
@@ -56,7 +72,7 @@ public class Desequenceur {
 	public <T> T sequencer(LecteurDeSequence<T> sequenceur) {
 		int byteLu;
 
-		while (position != fin) {
+		while (nonVide()) {
 			byteLu = suivant();
 			
 			// Octet à soumettre
@@ -71,7 +87,7 @@ public class Desequenceur {
 		return sequenceur.getResultat();
 	}
 	
-	private byte suivant() {
+	public byte suivant() {
 		return octetsDuFichier[position++];
 	}
 	
@@ -113,6 +129,12 @@ public class Desequenceur {
 
 		return String.valueOf(caracteres);
 	}
+
+	public boolean nonVide() {
+		return position != fin;
+	}
+	
+	
 	
 	
 }

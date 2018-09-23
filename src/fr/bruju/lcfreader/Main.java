@@ -26,12 +26,12 @@ public class Main {
 		int numeroDeMap = 2;
 		
 	
-		//testerLecture(chemin, "Save01.lsd");
+		testerLecture(chemin, "RPG_RT.lmt");
 
 		
-		testerLecture(chemin, construireNomDeMap(numeroDeMap));
+		//testerLecture(chemin, construireNomDeMap(numeroDeMap));
 
-		testMap(chemin, numeroDeMap);
+		//testMap(chemin, numeroDeMap);
 	}
 	
 	private static void testMap(String chemin, int numeroDeMap) {
