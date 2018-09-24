@@ -77,9 +77,13 @@ public class BlocInconnu extends Bloc<byte[]> {
 		
 		byte[] octets = new byte[tailleLue];
 		
+		Desequenceur.balise("INCONNU_" + this.nom);
+		
 		for (int i = 0 ; i != tailleLue ; i++) {
 			octets[i] = desequenceur.suivant();
 		}
+		
+		Desequenceur.fermer();
 		
 		return octets;
 	}

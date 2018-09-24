@@ -24,11 +24,12 @@ public class Desequenceur {
 	public static String xml = "";
 	public static boolean a = false;
 	private static List<String> balises = new ArrayList<>();
-	
-	static {
+
+
+	public static void vider() {
+		xml = "";
+		balises.clear();
 		balise("Document");
-		
-		
 	}
 	
 	public static void ajouterXML(byte octet) {
@@ -50,6 +51,30 @@ public class Desequenceur {
 		xml += "</" + balise + ">";
 		a = false;
 		balises.remove(balises.size() - 1);
+	}
+
+	public static void fermer(String string) {
+		String balise = balises.get(balises.size() - 1);
+		if (!balise.endsWith(string))
+			throw new RuntimeException("Veut dépiler " + string + " mais a trouvé " + balise);
+		
+		xml += "</" + balise + ">";
+		a = false;
+		balises.remove(balises.size() - 1);
+	}
+
+	
+	public static void ecrireDebug() throws IOException {
+		
+		while (!balises.isEmpty()) {
+			fermer();
+		}
+		
+		PrintWriter pWriter = new PrintWriter(new FileWriter("../debug.xml", false));
+        pWriter.print(xml);
+        pWriter.close();
+        
+        xml = "";
 	}
 	
 	
@@ -167,16 +192,6 @@ public class Desequenceur {
 	
 	// Services proposés
 	
-	public static void ecrireDebug() throws IOException {
-		while (!balises.isEmpty()) {
-			fermer();
-		}
-		
-		PrintWriter pWriter = new PrintWriter(new FileWriter("../debug.xml", false));
-        pWriter.print(xml);
-        pWriter.close();
-	}
-	
 	
 	public int $lireUnNombreBER() {
 		int valeur = 0;
@@ -189,7 +204,6 @@ public class Desequenceur {
 		} while ((octetLu & 0x80) != 0);
 		
 		xml += " [" + valeur + "]";
-		
 		
 		return valeur;
 	}
@@ -214,8 +228,6 @@ public class Desequenceur {
 	public int octetsRestants() {
 		return fin - position;
 	}
-	
-	
 	
 	
 }

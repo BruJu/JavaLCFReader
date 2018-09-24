@@ -1,5 +1,6 @@
 package fr.bruju.lcfreader.modele;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +85,9 @@ public class EnsembleDeDonnees {
 	 */
 	public static EnsembleDeDonnees lireFichier(String chemin) {
 		Desequenceur lecteur = Desequenceur.instancier(chemin);
-		
+
+
+		Desequenceur.vider();
 		// Connaître le type de fichier
 		Desequenceur.balise("TypeDeFichier");
 		int taille = lecteur.$lireUnNombreBER();
@@ -112,11 +115,18 @@ public class EnsembleDeDonnees {
 
 		// Sequencer le reste du fichier
 		
+		
 		Desequenceur.balise("ENSEMBLE_" + nomStruct);
 		Structure structure = Structures.getInstance().get(nomStruct);
 		EnsembleDeDonnees ensemble = structure.lireOctet(lecteur, lecteur.octetsRestants());
 		
-		Desequenceur.fermer();
+		Desequenceur.fermer("ENSEMBLE_" + nomStruct);
+
+		try {
+			Desequenceur.ecrireDebug();
+		} catch (IOException e) {
+		}
+		
 		return ensemble;
 	}
 

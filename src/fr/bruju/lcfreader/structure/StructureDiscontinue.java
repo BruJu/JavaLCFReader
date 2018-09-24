@@ -3,6 +3,7 @@ package fr.bruju.lcfreader.structure;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
@@ -28,11 +29,14 @@ public class StructureDiscontinue extends Structure {
 		int taille;
 		
 		while (desequenceur.nonVide()) {
-			Desequenceur.balise("Index");
-			numeroDeBloc = Byte.toUnsignedInt(desequenceur.suivant());
-			Desequenceur.fermer();
+			Desequenceur.balise("Bloc");
+			
+			byte octet = desequenceur.suivant();
+			numeroDeBloc = Byte.toUnsignedInt(octet);
+			Desequenceur.xml += Utilitaire.toHex(octet);
 			
 			if (numeroDeBloc == 0) {
+				Desequenceur.fermer();
 				Desequenceur.fermer();
 				return ensembleConstruit;
 			}
@@ -42,22 +46,22 @@ public class StructureDiscontinue extends Structure {
 			if (bloc == null) {
 				throw new RuntimeException("Bloc inconnu");
 			}
+			
+			Desequenceur.xml += " " +bloc.nom + " | ";
 
-			Desequenceur.balise("Taille");
 			taille = desequenceur.$lireUnNombreBER();
-			Desequenceur.fermer();
+			Desequenceur.xml += " | ";
 			
 			if (taille != 0) {
-				Desequenceur.balise("Contenu");
 				Desequenceur sousDesequenceur = desequenceur.sousSequencer(taille);
 				
 				ensembleConstruit.push(bloc.lireOctet(sousDesequenceur, taille));
-				Desequenceur.fermer();
 				
 				if (parametre != -1 && sousDesequenceur.nonVide()) {
 					throw new RuntimeException("Lecture d'un bloc non terminé " + sousDesequenceur.octetsRestants());
 				}
 			}
+			Desequenceur.fermer();
 		}
 
 		Desequenceur.fermer();

@@ -41,7 +41,15 @@ public interface PrimitifCpp extends Sequenceur<Integer> {
 
 		@Override
 		public Integer lireOctet(Desequenceur desequenceur, int parametre) {
-			return (Byte.toUnsignedInt(desequenceur.suivant()) + Byte.toUnsignedInt(desequenceur.suivant()) * 0x100);
+			byte octet1 = desequenceur.suivant();
+			byte octet2 = desequenceur.suivant();
+			int valeur = Byte.toUnsignedInt(octet1) + Byte.toUnsignedInt(octet2) * 0x100;
+			
+			Desequenceur.ajouterXML(octet1);
+			Desequenceur.ajouterXML(octet2);
+			Desequenceur.xml += " [" + valeur + "]";
+			
+			return valeur;
 		}
 	}
 

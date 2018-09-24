@@ -80,12 +80,18 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 		if (taille != desequenceur.octetsRestants())
 			throw new RuntimeException("!!");
 		
+		Desequenceur.balise("VECTEURENSEMBLE_" + structure.nom);
+		
 		List<EnsembleDeDonnees> ensembles = new ArrayList<>();
 		Sequenceur<EnsembleDeDonnees> sequenceur = structure;
 		
 		while (desequenceur.nonVide()) {
+			Desequenceur.balise("Data");
 			ensembles.add(sequenceur.lireOctet(desequenceur, -1));
+			Desequenceur.fermer();
 		}
+		
+		Desequenceur.fermer();
 		
 		return ensembles;
 	}

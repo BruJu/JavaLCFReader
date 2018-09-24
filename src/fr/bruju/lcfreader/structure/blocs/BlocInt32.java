@@ -53,6 +53,9 @@ public class BlocInt32 extends Bloc<Integer> {
 
 	@Override
 	public Integer extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		return desequenceur.$lireUnNombreBER();
+		Desequenceur.balise("Nombre_" + this.nom);
+		Integer valeur = desequenceur.$lireUnNombreBER();
+		Desequenceur.fermer();
+		return valeur;
 	}
 }

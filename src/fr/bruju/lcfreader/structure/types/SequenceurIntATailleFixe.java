@@ -59,10 +59,15 @@ abstract class SequenceurIntATailleFixe implements Sequenceur<Integer>, Primitif
 	@Override
 	public Integer lireOctet(Desequenceur desequenceur, int parametre) {
 		int valeur = 0;
+		byte octet;
 		
 		for (int i = 0 ; i != this.nombreDOctetsUtilises ; i++) {
-			valeur = (valeur * 0x100) + Byte.toUnsignedInt(desequenceur.suivant());
+			octet = desequenceur.suivant();
+			Desequenceur.ajouterXML(octet);
+			valeur = (valeur * 0x100) + Byte.toUnsignedInt(octet);
 		}
+		
+		Desequenceur.xml += " [" + valeur + "]"; 
 		
 		return valeur;
 	}

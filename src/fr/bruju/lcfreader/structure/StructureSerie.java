@@ -31,7 +31,9 @@ public class StructureSerie extends Structure {
 		EnsembleDeDonnees ensemble = new EnsembleDeDonnees(this);
 		
 		for (Bloc<?> bloc : getSerie()) {
+			Desequenceur.balise("bloc");
 			ensemble.push(bloc.lireOctet(desequenceur, -1));
+			Desequenceur.fermer();
 		}
 		
 		Desequenceur.fermer();
