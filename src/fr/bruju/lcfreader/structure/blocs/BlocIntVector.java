@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import fr.bruju.lcfreader.modele.Desequenceur;
+import fr.bruju.lcfreader.modele.XMLInsecticide;
 import fr.bruju.lcfreader.structure.types.PrimitifCpp;
 
 /**
@@ -52,12 +53,12 @@ public class BlocIntVector extends Bloc<int[]> {
 
 	@Override
 	public int[] extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		Desequenceur.balise("IntVector_" + this.nom + "_" + nomPrimitive);
+		XMLInsecticide.balise("IntVector_" + this.nom + "_" + nomPrimitive);
 		
 		if (tailleLue == -1) {
-			Desequenceur.balise("Taille");
+			XMLInsecticide.balise("Taille");
 			tailleLue = desequenceur.$lireUnNombreBER();
-			Desequenceur.fermer();
+			XMLInsecticide.fermer();
 		}
 		
 		List<Integer> nombres = new ArrayList<>();
@@ -68,7 +69,7 @@ public class BlocIntVector extends Bloc<int[]> {
 			remplirPrimitives(desequenceur, nombres, tailleLue);
 		}
 
-		Desequenceur.fermer();
+		XMLInsecticide.fermer();
 		
 		return convertirEnTableau(nombres);
 	}

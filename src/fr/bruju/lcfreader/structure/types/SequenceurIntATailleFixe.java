@@ -1,6 +1,7 @@
 package fr.bruju.lcfreader.structure.types;
 
 import fr.bruju.lcfreader.modele.Desequenceur;
+import fr.bruju.lcfreader.modele.XMLInsecticide;
 import fr.bruju.lcfreader.structure.Sequenceur;
 
 abstract class SequenceurIntATailleFixe implements Sequenceur<Integer>, PrimitifCpp {
@@ -63,11 +64,11 @@ abstract class SequenceurIntATailleFixe implements Sequenceur<Integer>, Primitif
 		
 		for (int i = 0 ; i != this.nombreDOctetsUtilises ; i++) {
 			octet = desequenceur.suivant();
-			Desequenceur.ajouterXML(octet);
+			XMLInsecticide.ajouterXML(octet);
 			valeur = (valeur * 0x100) + Byte.toUnsignedInt(octet);
 		}
 		
-		Desequenceur.xml += " [" + valeur + "]"; 
+		XMLInsecticide.xml(" [" + valeur + "]"); 
 		
 		return valeur;
 	}

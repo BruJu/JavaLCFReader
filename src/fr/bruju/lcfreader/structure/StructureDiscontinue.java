@@ -6,6 +6,7 @@ import java.util.Map;
 import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
+import fr.bruju.lcfreader.modele.XMLInsecticide;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 import fr.bruju.lcfreader.structure.blocs.Blocs;
 
@@ -23,21 +24,21 @@ public class StructureDiscontinue extends Structure {
 	public EnsembleDeDonnees lireOctet(Desequenceur desequenceur, int parametre) {
 		EnsembleDeDonnees ensembleConstruit = new EnsembleDeDonnees(this);
 		
-		Desequenceur.balise("data");
+		XMLInsecticide.balise("data");
 		
 		Integer numeroDeBloc;
 		int taille;
 		
 		while (desequenceur.nonVide()) {
-			Desequenceur.balise("Bloc");
+			XMLInsecticide.balise("Bloc");
 			
 			byte octet = desequenceur.suivant();
 			numeroDeBloc = Byte.toUnsignedInt(octet);
-			Desequenceur.xml += Utilitaire.toHex(octet);
+			XMLInsecticide.xml(Utilitaire.toHex(octet));
 			
 			if (numeroDeBloc == 0) {
-				Desequenceur.fermer();
-				Desequenceur.fermer();
+				XMLInsecticide.fermer();
+				XMLInsecticide.fermer();
 				return ensembleConstruit;
 			}
 			
@@ -47,10 +48,10 @@ public class StructureDiscontinue extends Structure {
 				throw new RuntimeException("Bloc inconnu");
 			}
 			
-			Desequenceur.xml += " " +bloc.nom + " | ";
+			XMLInsecticide.xml( " " +bloc.nom + " | ");
 
 			taille = desequenceur.$lireUnNombreBER();
-			Desequenceur.xml += " | ";
+			XMLInsecticide.xml(" | ");
 			
 			if (taille != 0) {
 				Desequenceur sousDesequenceur = desequenceur.sousSequencer(taille);
@@ -61,10 +62,10 @@ public class StructureDiscontinue extends Structure {
 					throw new RuntimeException("Lecture d'un bloc non terminé " + sousDesequenceur.octetsRestants());
 				}
 			}
-			Desequenceur.fermer();
+			XMLInsecticide.fermer();
 		}
 
-		Desequenceur.fermer();
+		XMLInsecticide.fermer();
 		
 		return ensembleConstruit;
 	}

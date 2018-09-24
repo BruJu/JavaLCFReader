@@ -1,6 +1,7 @@
 package fr.bruju.lcfreader.structure.blocs;
 
 import fr.bruju.lcfreader.modele.Desequenceur;
+import fr.bruju.lcfreader.modele.XMLInsecticide;
 
 /**
  * Un bloc de données concernant une chaîne
@@ -47,16 +48,16 @@ public class BlocString extends Bloc<String> {
 
 	@Override
 	public String extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		Desequenceur.balise("CHAINE_" + this.nom);
+		XMLInsecticide.balise("CHAINE_" + this.nom);
 		
 		if (tailleLue == -1) {
 			tailleLue = desequenceur.$lireUnNombreBER();
-			Desequenceur.xml += " ==== ";
+			XMLInsecticide.xml( " ==== ");
 		}
 		
 		String chaine = desequenceur.$lireUneChaine(tailleLue);
 		
-		Desequenceur.fermer();
+		XMLInsecticide.fermer();
 		return chaine;
 	}
 }

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
+import fr.bruju.lcfreader.modele.XMLInsecticide;
 import fr.bruju.lcfreader.structure.Structure;
 
 /**
@@ -73,30 +74,30 @@ public class BlocArray extends Bloc<Map<Integer, EnsembleDeDonnees>> {
 	
 	@Override
 	public Map<Integer, EnsembleDeDonnees> extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		Desequenceur.balise("TABLEAU_" + structure.nom);
+		XMLInsecticide.balise("TABLEAU_" + structure.nom);
 
 		
-		Desequenceur.balise("NombreElements");
+		XMLInsecticide.balise("NombreElements");
 		int nombreElements = desequenceur.$lireUnNombreBER();
-		Desequenceur.fermer();
+		XMLInsecticide.fermer();
 		
 		Map<Integer, EnsembleDeDonnees> carte = new LinkedHashMap<>();
 		
 		while (nombreElements != 0) {
-			Desequenceur.balise("Element");
+			XMLInsecticide.balise("Element");
 			
-			Desequenceur.balise("id");
+			XMLInsecticide.balise("id");
 			int id = desequenceur.$lireUnNombreBER();
-			Desequenceur.fermer();
-			Desequenceur.balise("data");
+			XMLInsecticide.fermer();
+			XMLInsecticide.balise("data");
 			EnsembleDeDonnees ensemble = structure.lireOctet(desequenceur, -1);
-			Desequenceur.fermer();
-			Desequenceur.fermer();
+			XMLInsecticide.fermer();
+			XMLInsecticide.fermer();
 			carte.put(id, ensemble);
 			nombreElements--;
 		}
 		
-		Desequenceur.fermer();
+		XMLInsecticide.fermer();
 		
 		return carte;
 	}

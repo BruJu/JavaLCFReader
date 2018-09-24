@@ -2,6 +2,7 @@ package fr.bruju.lcfreader.structure.blocs;
 
 import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.modele.Desequenceur;
+import fr.bruju.lcfreader.modele.XMLInsecticide;
 
 /**
  * Un bloc dont les données ne peuvent être décryptées.
@@ -77,13 +78,13 @@ public class BlocInconnu extends Bloc<byte[]> {
 		
 		byte[] octets = new byte[tailleLue];
 		
-		Desequenceur.balise("INCONNU_" + this.nom);
+		XMLInsecticide.balise("INCONNU_" + this.nom);
 		
 		for (int i = 0 ; i != tailleLue ; i++) {
 			octets[i] = desequenceur.suivant();
 		}
 		
-		Desequenceur.fermer();
+		XMLInsecticide.fermer();
 		
 		return octets;
 	}

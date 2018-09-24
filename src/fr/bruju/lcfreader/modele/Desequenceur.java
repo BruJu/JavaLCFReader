@@ -1,13 +1,9 @@
 package fr.bruju.lcfreader.modele;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 import fr.bruju.lcfreader.Utilitaire;
 
@@ -20,62 +16,7 @@ import fr.bruju.lcfreader.Utilitaire;
  *
  */
 public class Desequenceur {
-	// Affichage des données reçues en xml (pour le debug)
-	public static String xml = "";
-	public static boolean a = false;
-	private static List<String> balises = new ArrayList<>();
 
-
-	public static void vider() {
-		xml = "";
-		balises.clear();
-		balise("Document");
-	}
-	
-	public static void ajouterXML(byte octet) {
-		if (a) {
-			xml += " ";
-		}
-		
-		xml += Utilitaire.toHex(octet);
-		a = true;
-	}
-	public static void balise(String nom) {
-		xml += "<" + nom + ">";
-		a = false;
-		balises.add(nom);
-	}
-	
-	public static void fermer() {
-		String balise = balises.get(balises.size() - 1);
-		xml += "</" + balise + ">";
-		a = false;
-		balises.remove(balises.size() - 1);
-	}
-
-	public static void fermer(String string) {
-		String balise = balises.get(balises.size() - 1);
-		if (!balise.endsWith(string))
-			throw new RuntimeException("Veut dépiler " + string + " mais a trouvé " + balise);
-		
-		xml += "</" + balise + ">";
-		a = false;
-		balises.remove(balises.size() - 1);
-	}
-
-	
-	public static void ecrireDebug() throws IOException {
-		
-		while (!balises.isEmpty()) {
-			fermer();
-		}
-		
-		PrintWriter pWriter = new PrintWriter(new FileWriter("../debug.xml", false));
-        pWriter.print(xml);
-        pWriter.close();
-        
-        xml = "";
-	}
 	
 	
 	/** Nom du fichier lu */
@@ -165,9 +106,9 @@ public class Desequenceur {
 					+ Utilitaire.toHex(position));
 			
 			try {
-				xml += "Crash";
+				XMLInsecticide.xml("Crash");
 				
-				ecrireDebug();
+				XMLInsecticide.ecrireDebug();
 				
 				
 			} catch (IOException e) {
@@ -199,11 +140,11 @@ public class Desequenceur {
 		
 		do {
 			octetLu = Byte.toUnsignedInt(suivant());
-			ajouterXML((byte) octetLu);
+			XMLInsecticide.ajouterXML((byte) octetLu);
 			valeur = (valeur * 0x80) + (octetLu & 0x7F);
 		} while ((octetLu & 0x80) != 0);
 		
-		xml += " [" + valeur + "]";
+		XMLInsecticide.xml(" [" + valeur + "]");
 		
 		return valeur;
 	}
@@ -213,10 +154,10 @@ public class Desequenceur {
 		
 		for (int i = 0; i != taille; i++) {
 			caracteres[i] = (char) suivant();
-			ajouterXML((byte) caracteres[i]);
+			XMLInsecticide.ajouterXML((byte) caracteres[i]);
 		}
 		
-		xml += " [" + String.valueOf(caracteres) + "]";
+		XMLInsecticide.xml(" [" + String.valueOf(caracteres) + "]");
 
 		return String.valueOf(caracteres);
 	}

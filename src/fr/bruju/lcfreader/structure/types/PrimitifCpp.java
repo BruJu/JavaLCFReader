@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fr.bruju.lcfreader.modele.Desequenceur;
+import fr.bruju.lcfreader.modele.XMLInsecticide;
 import fr.bruju.lcfreader.structure.Sequenceur;
 
 public interface PrimitifCpp extends Sequenceur<Integer> {
@@ -45,9 +46,9 @@ public interface PrimitifCpp extends Sequenceur<Integer> {
 			byte octet2 = desequenceur.suivant();
 			int valeur = Byte.toUnsignedInt(octet1) + Byte.toUnsignedInt(octet2) * 0x100;
 			
-			Desequenceur.ajouterXML(octet1);
-			Desequenceur.ajouterXML(octet2);
-			Desequenceur.xml += " [" + valeur + "]";
+			XMLInsecticide.ajouterXML(octet1);
+			XMLInsecticide.ajouterXML(octet2);
+			XMLInsecticide.xml(" [" + valeur + "]");
 			
 			return valeur;
 		}

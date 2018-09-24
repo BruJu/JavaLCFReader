@@ -1,6 +1,7 @@
 package fr.bruju.lcfreader.structure.blocs;
 
 import fr.bruju.lcfreader.modele.Desequenceur;
+import fr.bruju.lcfreader.modele.XMLInsecticide;
 
 /**
  * Un bloc de données concernant un int32
@@ -53,9 +54,9 @@ public class BlocInt32 extends Bloc<Integer> {
 
 	@Override
 	public Integer extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		Desequenceur.balise("Nombre_" + this.nom);
+		XMLInsecticide.balise("Nombre_" + this.nom);
 		Integer valeur = desequenceur.$lireUnNombreBER();
-		Desequenceur.fermer();
+		XMLInsecticide.fermer();
 		return valeur;
 	}
 }

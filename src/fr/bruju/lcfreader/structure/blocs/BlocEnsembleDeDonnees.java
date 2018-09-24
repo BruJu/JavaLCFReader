@@ -2,6 +2,7 @@ package fr.bruju.lcfreader.structure.blocs;
 
 import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
+import fr.bruju.lcfreader.modele.XMLInsecticide;
 import fr.bruju.lcfreader.structure.Structure;
 /**
  * Un bloc de données correspondant à un ensemble de données
@@ -57,9 +58,9 @@ public class BlocEnsembleDeDonnees extends Bloc<EnsembleDeDonnees> {
 	
 	@Override
 	public EnsembleDeDonnees extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		Desequenceur.balise("ENSEMBLE_" + structure.nom);
+		XMLInsecticide.balise("ENSEMBLE_" + structure.nom);
 		EnsembleDeDonnees ensemble = structure.lireOctet(desequenceur, tailleLue);
-		Desequenceur.fermer();
+		XMLInsecticide.fermer();
 		return ensemble;
 	}
 }

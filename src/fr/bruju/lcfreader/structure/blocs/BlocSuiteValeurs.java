@@ -1,10 +1,9 @@
 package fr.bruju.lcfreader.structure.blocs;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import fr.bruju.lcfreader.modele.Desequenceur;
+import fr.bruju.lcfreader.modele.XMLInsecticide;
 import fr.bruju.lcfreader.structure.types.PrimitifCpp;
 
 /**
@@ -51,14 +50,14 @@ public class BlocSuiteValeurs extends Bloc<int[]> {
 
 	@Override
 	public int[] extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		Desequenceur.balise("IntVector_" + nombreDeValeurs +"_" + this.nom + "_" + primitif.getNom());
+		XMLInsecticide.balise("IntVector_" + nombreDeValeurs +"_" + this.nom + "_" + primitif.getNom());
 		
 
 		int[] nombres = new int[nombreDeValeurs];
 		
 		remplirPrimitives(desequenceur, nombres);
 
-		Desequenceur.fermer();
+		XMLInsecticide.fermer();
 		
 		return nombres;
 	}

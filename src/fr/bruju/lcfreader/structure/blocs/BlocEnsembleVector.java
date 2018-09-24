@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
+import fr.bruju.lcfreader.modele.XMLInsecticide;
 import fr.bruju.lcfreader.structure.Sequenceur;
 import fr.bruju.lcfreader.structure.Structure;
 
@@ -80,18 +81,18 @@ public class BlocEnsembleVector extends Bloc<List<EnsembleDeDonnees>> {
 		if (taille != desequenceur.octetsRestants())
 			throw new RuntimeException("!!");
 		
-		Desequenceur.balise("VECTEURENSEMBLE_" + structure.nom);
+		XMLInsecticide.balise("VECTEURENSEMBLE_" + structure.nom);
 		
 		List<EnsembleDeDonnees> ensembles = new ArrayList<>();
 		Sequenceur<EnsembleDeDonnees> sequenceur = structure;
 		
 		while (desequenceur.nonVide()) {
-			Desequenceur.balise("Data");
+			XMLInsecticide.balise("Data");
 			ensembles.add(sequenceur.lireOctet(desequenceur, -1));
-			Desequenceur.fermer();
+			XMLInsecticide.fermer();
 		}
 		
-		Desequenceur.fermer();
+		XMLInsecticide.fermer();
 		
 		return ensembles;
 	}
