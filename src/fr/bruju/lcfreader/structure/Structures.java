@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import fr.bruju.lcfreader.structure.redefinitions.StructureParameters;
+
 /**
  * Il s'agit de la classe indiquant à quoi correspondent les différents codes rencontrés dans l'encodage BER. <br>
  * Les fichiers sont en effet encodés sous la forme ([Code] [Taille] [Données])*. Il est donc important d'avoir la
@@ -99,7 +101,9 @@ public class Structures {
 				
 				structures.putIfAbsent(donnees[0], structure);
 			});
-
+			
+			structures.put("Parameters", new StructureParameters());
+			
 			// Lire les champs
 			lireToutesLesLignes(file, ligne -> {
 				String[] donnees = ligne.split(",", -1);
@@ -108,6 +112,14 @@ public class Structures {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		/*
+		 * Certaines structures données par fields.csv ne sont pas automatisables facilement avec la manière générique
+		 * implémentée. On les redéfini donc ici.
+		 */
+		
+		
+		
 	}
 
 	/**

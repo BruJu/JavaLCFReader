@@ -21,33 +21,30 @@ public class StructureSerie extends Structure {
 	}
 
 	/** Liste des blocs pour un décodage en série */
-	private List<Bloc<?>> serie = new ArrayList<>();
-
+	protected List<Bloc<?>> serie = new ArrayList<>();
 
 	@Override
 	public EnsembleDeDonnees lireOctet(Desequenceur desequenceur, int parametre) {
 		Desequenceur.balise("dataDisc");
-		
+
 		EnsembleDeDonnees ensemble = new EnsembleDeDonnees(this);
-		
+
 		for (Bloc<?> bloc : getSerie()) {
 			Desequenceur.balise("bloc");
 			ensemble.push(bloc.lireOctet(desequenceur, -1));
 			Desequenceur.fermer();
 		}
-		
+
 		Desequenceur.fermer();
-		
+
 		return ensemble;
 	}
 
 	@Override
 	public void ajouterChamp(String[] donnees) {
 		Bloc<?> bloc = Blocs.instancier(donnees);
-			serie.add(bloc);
-		}
-
-
+		serie.add(bloc);
+	}
 
 	/**
 	 * Donne la liste des blocs à lire pour cette structure
@@ -65,11 +62,8 @@ public class StructureSerie extends Structure {
 				return bloc;
 			}
 		}
-		
+
 		return null;
 	}
 
-
-
-	
 }

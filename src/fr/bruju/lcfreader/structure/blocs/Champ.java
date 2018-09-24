@@ -7,7 +7,7 @@ package fr.bruju.lcfreader.structure.blocs;
  * @author Bruju
  *
  */
-class Champ {
+public class Champ {
 	/** Index */
 	final int index;
 	/** Nom */
@@ -20,7 +20,7 @@ class Champ {
 	/**
 	 * Construit le champ
 	 */
-	Champ(int index, String nom, boolean sized, String vraiType) {
+	public Champ(int index, String nom, boolean sized, String vraiType) {
 		this.index = index;
 		this.nom = nom;
 		this.sized = sized;
