@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.Utilitaire;
-import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
+import fr.bruju.lcfreader.structure.Structures;
 import fr.bruju.lcfreader.structure.Donnee;
 import fr.bruju.lcfreader.structure.Structure;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
@@ -86,8 +86,13 @@ public class EnsembleDeDonnees {
 		Desequenceur lecteur = Desequenceur.instancier(chemin);
 		
 		// Connaître le type de fichier
-		String type = lecteur.$lireUneChaine(lecteur.$lireUnNombreBER());
+		Desequenceur.balise("TypeDeFichier");
+		int taille = lecteur.$lireUnNombreBER();
 		
+		Desequenceur.xml += " ==== ";
+		String type = lecteur.$lireUneChaine(taille);
+		
+		Desequenceur.fermer();
 		String nomStruct;
 
 		switch (type) {
@@ -107,8 +112,12 @@ public class EnsembleDeDonnees {
 
 		// Sequencer le reste du fichier
 		
-		Structure structure = BaseDeDonneesDesStructures.getInstance().get(nomStruct);
-		return structure.lireOctet(lecteur, lecteur.octetsRestants());
+		Desequenceur.balise("ENSEMBLE_" + nomStruct);
+		Structure structure = Structures.getInstance().get(nomStruct);
+		EnsembleDeDonnees ensemble = structure.lireOctet(lecteur, lecteur.octetsRestants());
+		
+		Desequenceur.fermer();
+		return ensemble;
 	}
 
 	/* =================
@@ -116,7 +125,7 @@ public class EnsembleDeDonnees {
 	 * ================= */
 	
 	public <T> T getDonnee(String nomBloc, Class<T> classe) {
-		Bloc<?> bloc = BaseDeDonneesDesStructures.getInstance().get(nomStruct).getBloc(nomBloc);
+		Bloc<?> bloc = Structures.getInstance().get(nomStruct).getBloc(nomBloc);
 		
 		for (Donnee<?> donnee : donnees) {
 			if (donnee.bloc == bloc) {

@@ -23,7 +23,7 @@ import java.util.function.Consumer;
  * @author Bruju
  *
  */
-public class BaseDeDonneesDesStructures {
+public class Structures {
 	/* =========
 	 * SINGLETON
 	 * ========= */
@@ -38,19 +38,19 @@ public class BaseDeDonneesDesStructures {
 			return;
 		}
 
-		instance = new BaseDeDonneesDesStructures();
+		instance = new Structures();
 		instance.remplirStructures(fichier);
 	}
 
 	/** Instance connue */
-	private static BaseDeDonneesDesStructures instance;
+	private static Structures instance;
 
 	/** Constructeur privé */
-	private BaseDeDonneesDesStructures() {
+	private Structures() {
 	}
 
 	/** Donne l'instance de la base de données */
-	public static BaseDeDonneesDesStructures getInstance() {
+	public static Structures getInstance() {
 		return instance;
 	}
 
@@ -77,8 +77,11 @@ public class BaseDeDonneesDesStructures {
 	 * @param fichier Le chemin vers le fichier
 	 */
 	private void remplirStructures(String fichier) {
-		// Lit deux fois le fichiers parce que c'est plus simple et permet de référencer des types plus loin dans la
-		// liste
+		// On lit deux fois le fichier resssource :
+		// - Une première fois pour le nom des structures
+		// - Une seconde fois pour les champs
+		// Cela est fait pour pouvoir référencer des structures qui sont plus loin dans la liste
+		
 		File file = new File(fichier);
 		structures = new HashMap<>();
 
@@ -94,11 +97,10 @@ public class BaseDeDonneesDesStructures {
 					structure = new StructureDiscontinue(donnees[0]);
 				}
 				
-				
 				structures.putIfAbsent(donnees[0], structure);
 			});
 
-			// Lire les arguments
+			// Lire les champs
 			lireToutesLesLignes(file, ligne -> {
 				String[] donnees = ligne.split(",", -1);
 				structures.get(donnees[0]).ajouterChamp(donnees);

@@ -1,38 +1,68 @@
 package fr.bruju.lcfreader.modele;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.bruju.lcfreader.Utilitaire;
 
 
 /**
- * == DESEQUENCEUR ==
- * Un déséquenceur est une interface permettant à des lecteurs de séquence de lire des octets. <br>
- * Par exemple, si il on veut lire dans un fichier, le déséquenceur s'occupe de la partie "extraire les octets du
- * fichier". Lorsque la méthode séquencer est appelée, il va lire des octets depuis le fichier, et transmettre ces
- * octets au sequenceur via sequenceur.lireOctet(octet) jusqu'à que cette méthode renvoie faux. <br>
- * <br>
- * L'objectif de cette interface est donc de séparer la lecture du fichier et l'interprétation des données de ce
- * fichier.
- * 
- * == LECTEUR DE FICHIER OCTETS PAR OCTETS ==
- * Lecteur de fichier qui lit les fichiers octets par octets en donnant les octets lus à un objet qui traite l'octet
- * (nommés séquenceurs). <br>
- * Cette classe ne jette pas d'exception. A la place elle se contente de renvoyer null en cas d'erreur.
+ * Classe permettant de lire les octets d'un fichier.
+ * <br>Un service est proposé pour extraire une sous section et détecter les dépassements. 
  * 
  * @author Bruju
  *
  */
 public class Desequenceur {
+	// Affichage des données reçues en xml (pour le debug)
+	public static String xml = "";
+	public static boolean a = false;
+	private static List<String> balises = new ArrayList<>();
+	
+	static {
+		balise("Document");
+		
+		
+	}
+	
+	public static void ajouterXML(byte octet) {
+		if (a) {
+			xml += " ";
+		}
+		
+		xml += Utilitaire.toHex(octet);
+		a = true;
+	}
+	public static void balise(String nom) {
+		xml += "<" + nom + ">";
+		a = false;
+		balises.add(nom);
+	}
+	
+	public static void fermer() {
+		String balise = balises.get(balises.size() - 1);
+		xml += "</" + balise + ">";
+		a = false;
+		balises.remove(balises.size() - 1);
+	}
+	
+	
+	/** Nom du fichier lu */
 	private final String fichier;
+	/** Octets du fichier */
 	private final byte[] octetsDuFichier;
 	
+	/** Position actuelle */
 	private int position = 0;
-	
+	/** Début */
 	public final int debut;
+	/** Fin */
 	public final int fin;
 	
 	/**
@@ -49,30 +79,75 @@ public class Desequenceur {
 		this.fichier = chemin;
 	}
 	
+	/**
+	 * Extrait une sous séquence d'octets partant de la position actuelle et contenant le nombre d'octets demandés
+	 * @param base La séquence de base
+	 * @param nombreDOctetsPris Le nombre d'octets à gérer avec cette sous séquence
+	 */
 	private Desequenceur(Desequenceur base, int nombreDOctetsPris) {
 		if (base.position + nombreDOctetsPris > base.fin) {
 			throw new IndexOutOfBoundsException();
 		}
 		
+		// Invariants
+		this.fichier = base.fichier;
 		this.octetsDuFichier = base.octetsDuFichier;
+		// Curseur
+		this.debut = base.position;
 		this.position = base.position;
 		this.fin = this.position + nombreDOctetsPris;
-		base.position += nombreDOctetsPris;
-		debut = position;
-		fichier = base.fichier;
+		// Modifier le curseur du père
+		base.position += nombreDOctetsPris;	
 	}
 	
+
+	/**
+	 * Extrait une sous séquence d'octets partant de la position actuelle et contenant le nombre d'octets demandés
+	 * @param nombreDOctetsPris Le nombre d'octets à gérer avec cette sous séquence
+	 */
 	public Desequenceur sousSequencer(int taille) {
 		return new Desequenceur(this, taille);
 	}
 	
-	
+	/**
+	 * Donne l'octet suivant
+	 * @return L'octet suivant
+	 */
 	public byte suivant() {
 		if (position >= fin) {
-			throw new RuntimeException("Lecture illégale " + Utilitaire.toHex(position) + " " + fichier + " " + Utilitaire.toHex(debut));
+			throw new LectureIllegale(fichier, debut, position);
 		}
 		
 		return octetsDuFichier[position++];
+	}
+	
+	private static class LectureIllegale extends RuntimeException {
+		/** Serial id */
+		private static final long serialVersionUID = 760742337368045553L;
+
+		/**
+		 * Construit une exception de lecture illégale
+		 * @param fichier Nom du fichier
+		 * @param debut Position du premier octet
+		 * @param position Position du curseur
+		 */
+		public LectureIllegale(String fichier, int debut, int position) {
+			super("Lecture illégale dans "
+					+ fichier
+					+ ", segment commençant à "
+					+ Utilitaire.toHex(debut)
+					+ " avec un curseur à "
+					+ Utilitaire.toHex(position));
+			
+			try {
+				xml += "Crash";
+				
+				ecrireDebug();
+				
+				
+			} catch (IOException e) {
+			}
+		}
 	}
 	
 	
@@ -92,24 +167,42 @@ public class Desequenceur {
 	
 	// Services proposés
 	
+	public static void ecrireDebug() throws IOException {
+		while (!balises.isEmpty()) {
+			fermer();
+		}
+		
+		PrintWriter pWriter = new PrintWriter(new FileWriter("../debug.xml", false));
+        pWriter.print(xml);
+        pWriter.close();
+	}
+	
+	
 	public int $lireUnNombreBER() {
 		int valeur = 0;
 		int octetLu;
 		
 		do {
 			octetLu = Byte.toUnsignedInt(suivant());
+			ajouterXML((byte) octetLu);
 			valeur = (valeur * 0x80) + (octetLu & 0x7F);
 		} while ((octetLu & 0x80) != 0);
+		
+		xml += " [" + valeur + "]";
+		
 		
 		return valeur;
 	}
 	
 	public String $lireUneChaine(int taille) {
 		char[] caracteres = new char[taille];
-
+		
 		for (int i = 0; i != taille; i++) {
 			caracteres[i] = (char) suivant();
+			ajouterXML((byte) caracteres[i]);
 		}
+		
+		xml += " [" + String.valueOf(caracteres) + "]";
 
 		return String.valueOf(caracteres);
 	}

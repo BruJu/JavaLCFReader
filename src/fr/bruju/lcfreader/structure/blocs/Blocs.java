@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fr.bruju.lcfreader.Utilitaire;
-import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
+import fr.bruju.lcfreader.structure.Structures;
 import fr.bruju.lcfreader.structure.Structure;
 import fr.bruju.lcfreader.structure.types.PrimitifCpp;
 
@@ -164,7 +164,7 @@ public class Blocs {
 				return null;
 
 			String vraiType = type.substring(6, type.length() - 1); // Array<X>
-			Structure structure = BaseDeDonneesDesStructures.getInstance().get(vraiType);
+			Structure structure = Structures.getInstance().get(vraiType);
 			return structure == null ? null : new BlocArray(champ, structure);
 		}
 	}
@@ -185,7 +185,7 @@ public class Blocs {
 				return new BlocIntVector(champ, sousType);
 			}
 
-			Structure structure = BaseDeDonneesDesStructures.getInstance().get(sousType);
+			Structure structure = Structures.getInstance().get(sousType);
 			
 			if (structure != null) {
 				return new BlocEnsembleVector(champ, structure);
@@ -199,7 +199,7 @@ public class Blocs {
 	private class ProcedeEnsembleDeDonnees implements Procede {
 		@Override
 		public Bloc<?> generer(Champ champ, String type, String defaut) {
-			Structure structure = BaseDeDonneesDesStructures.getInstance().get(type);
+			Structure structure = Structures.getInstance().get(type);
 			return structure == null ? null : new BlocEnsembleDeDonnees(champ, structure);
 		}
 	}

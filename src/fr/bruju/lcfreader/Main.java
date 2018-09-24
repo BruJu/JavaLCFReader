@@ -13,7 +13,7 @@ import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.modele.FabriqueLCF;
 import fr.bruju.lcfreader.rmobjets.RMMap;
-import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
+import fr.bruju.lcfreader.structure.Structures;
 
 @SuppressWarnings("unused")
 public class Main {
@@ -25,10 +25,10 @@ public class Main {
 		int numeroDeMap = 2;
 		
 	
-		//testerLecture(chemin, "RPG_RT.lmt");
+		testerLecture(chemin, "RPG_RT.ldb");
 
 		
-		testerLecture(chemin, construireNomDeMap(numeroDeMap));
+		//testerLecture(chemin, construireNomDeMap(numeroDeMap));
 
 		//testMap(chemin, numeroDeMap);
 	}
@@ -63,7 +63,7 @@ public class Main {
 	}
 
 	private static void testerLecture(String chemin, String nomDeFichier) {
-		BaseDeDonneesDesStructures.initialiser("ressources\\liblcf\\fields.csv");
+		Structures.initialiser("ressources\\liblcf\\fields.csv");
 		String vraiChemin = chemin + nomDeFichier;
 		doubleAffichage(vraiChemin);
 	}

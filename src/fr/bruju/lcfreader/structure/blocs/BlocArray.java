@@ -73,14 +73,30 @@ public class BlocArray extends Bloc<Map<Integer, EnsembleDeDonnees>> {
 	
 	@Override
 	public Map<Integer, EnsembleDeDonnees> extraireDonnee(Desequenceur desequenceur, int tailleLue) {
+		Desequenceur.balise("TABLEAU_" + structure.nom);
+
+		
+		Desequenceur.balise("NombreElements");
 		int nombreElements = desequenceur.$lireUnNombreBER();
+		Desequenceur.fermer();
 		
 		Map<Integer, EnsembleDeDonnees> carte = new LinkedHashMap<>();
 		
 		while (nombreElements != 0) {
-			carte.put(desequenceur.$lireUnNombreBER(), structure.lireOctet(desequenceur, -1));
+			Desequenceur.balise("Element");
+			
+			Desequenceur.balise("id");
+			int id = desequenceur.$lireUnNombreBER();
+			Desequenceur.fermer();
+			Desequenceur.balise("data");
+			EnsembleDeDonnees ensemble = structure.lireOctet(desequenceur, -1);
+			Desequenceur.fermer();
+			Desequenceur.fermer();
+			carte.put(id, ensemble);
 			nombreElements--;
 		}
+		
+		Desequenceur.fermer();
 		
 		return carte;
 	}

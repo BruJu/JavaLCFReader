@@ -8,11 +8,11 @@ import fr.bruju.lcfreader.rmobjets.RMEvenement;
 import fr.bruju.lcfreader.rmobjets.RMInstruction;
 import fr.bruju.lcfreader.rmobjets.RMMap;
 import fr.bruju.lcfreader.rmobjets.RMPage;
-import fr.bruju.lcfreader.structure.BaseDeDonneesDesStructures;
+import fr.bruju.lcfreader.structure.Structures;
 
 public class Ensembles {
 	public static RMMap map(String cheminProjet, int idCarte) {
-		BaseDeDonneesDesStructures.initialiser("ressources\\liblcf\\fields.csv");
+		Structures.initialiser("ressources\\liblcf\\fields.csv");
 		
 		String cheminCarte = cheminProjet + "\\Map" + String.format("%04d", idCarte) + ".lmu";
 

@@ -26,20 +26,18 @@ public class StructureSerie extends Structure {
 
 	@Override
 	public EnsembleDeDonnees lireOctet(Desequenceur desequenceur, int parametre) {
-			return lireSerie(desequenceur, parametre);
-	}
-	
-	public EnsembleDeDonnees lireSerie(Desequenceur desequenceur, int parametre) {
+		Desequenceur.balise("dataDisc");
+		
 		EnsembleDeDonnees ensemble = new EnsembleDeDonnees(this);
 		
 		for (Bloc<?> bloc : getSerie()) {
 			ensemble.push(bloc.lireOctet(desequenceur, -1));
 		}
 		
+		Desequenceur.fermer();
+		
 		return ensemble;
 	}
-	
-	
 
 	@Override
 	public void ajouterChamp(String[] donnees) {

@@ -22,13 +22,18 @@ public class StructureDiscontinue extends Structure {
 	public EnsembleDeDonnees lireOctet(Desequenceur desequenceur, int parametre) {
 		EnsembleDeDonnees ensembleConstruit = new EnsembleDeDonnees(this);
 		
+		Desequenceur.balise("data");
+		
 		Integer numeroDeBloc;
 		int taille;
 		
 		while (desequenceur.nonVide()) {
+			Desequenceur.balise("Index");
 			numeroDeBloc = Byte.toUnsignedInt(desequenceur.suivant());
+			Desequenceur.fermer();
 			
 			if (numeroDeBloc == 0) {
+				Desequenceur.fermer();
 				return ensembleConstruit;
 			}
 			
@@ -37,20 +42,25 @@ public class StructureDiscontinue extends Structure {
 			if (bloc == null) {
 				throw new RuntimeException("Bloc inconnu");
 			}
-			
+
+			Desequenceur.balise("Taille");
 			taille = desequenceur.$lireUnNombreBER();
+			Desequenceur.fermer();
 			
 			if (taille != 0) {
+				Desequenceur.balise("Contenu");
 				Desequenceur sousDesequenceur = desequenceur.sousSequencer(taille);
 				
 				ensembleConstruit.push(bloc.lireOctet(sousDesequenceur, taille));
-				
+				Desequenceur.fermer();
 				
 				if (parametre != -1 && sousDesequenceur.nonVide()) {
 					throw new RuntimeException("Lecture d'un bloc non terminé " + sousDesequenceur.octetsRestants());
 				}
 			}
 		}
+
+		Desequenceur.fermer();
 		
 		return ensembleConstruit;
 	}
