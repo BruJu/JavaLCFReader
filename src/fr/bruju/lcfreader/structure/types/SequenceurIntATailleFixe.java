@@ -68,7 +68,7 @@ abstract class SequenceurIntATailleFixe implements Sequenceur<Integer>, Primitif
 			valeur = (valeur * 0x100) + Byte.toUnsignedInt(octet);
 		}
 		
-		// XMLInsecticide.xml(" [" + valeur + "]"); 
+		// XMLInsecticide.crocheter(valeur); 
 		
 		return valeur;
 	}

@@ -139,7 +139,7 @@ public class Desequenceur {
 			valeur = (valeur * 0x80) + (octetLu & 0x7F);
 		} while ((octetLu & 0x80) != 0);
 		
-		// XMLInsecticide.xml(" [" + valeur + "]");
+		// XMLInsecticide.crocheter(valeur);
 		
 		return valeur;
 	}
@@ -152,7 +152,7 @@ public class Desequenceur {
 			// XMLInsecticide.ajouterXML((byte) caracteres[i]);
 		}
 		
-		// XMLInsecticide.xml(" [" + String.valueOf(caracteres) + "]");
+		// XMLInsecticide.crocheter(String.valueOf(caracteres));
 
 		return String.valueOf(caracteres);
 	}

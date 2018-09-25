@@ -58,7 +58,7 @@ public class StructureDiscontinue extends Structure {
 				*/
 			}
 			
-			// XMLInsecticide.xml( " " +bloc.nom + " | ");
+			// XMLInsecticide.xml( " ", bloc.nom, " | ");
 
 			taille = desequenceur.$lireUnNombreBER();
 			// XMLInsecticide.xml(" | ");

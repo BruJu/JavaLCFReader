@@ -48,7 +48,7 @@ public interface PrimitifCpp extends Sequenceur<Integer> {
 			
 			// XMLInsecticide.ajouterXML(octet1);
 			// XMLInsecticide.ajouterXML(octet2);
-			// XMLInsecticide.xml(" [" + valeur + "]");
+			// XMLInsecticide.crocheter(valeur);
 			
 			return valeur;
 		}

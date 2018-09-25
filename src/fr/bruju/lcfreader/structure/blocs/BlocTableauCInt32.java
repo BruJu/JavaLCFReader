@@ -57,7 +57,7 @@ public class BlocTableauCInt32 extends Bloc<int[]> {
 				valeur += Byte.toUnsignedInt(octet) << (j * 8);
 			}
 			
-			// XMLInsecticide.xml(valeur + " | ");
+			// XMLInsecticide.xml(valeur, " | ");
 		}
 		
 		// XMLInsecticide.fermer();
