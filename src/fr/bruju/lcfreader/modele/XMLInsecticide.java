@@ -23,21 +23,21 @@ public class XMLInsecticide {
 	
 	public static void ajouterXML(byte octet) {
 		if (a) {
-			xml += " ";
+			xml( " ");
 		}
 		
-		xml += Utilitaire.toHex(octet);
+		xml( Utilitaire.toHex(octet));
 		a = true;
 	}
 	public static void balise(String nom) {
-		xml += "<" + nom + ">";
+		xml("<" + nom + ">");
 		a = false;
 		balises.add(nom);
 	}
 	
 	public static void fermer() {
 		String balise = balises.get(balises.size() - 1);
-		xml += "</" + balise + ">";
+		xml("</" + balise + ">");
 		a = false;
 		balises.remove(balises.size() - 1);
 	}
@@ -47,7 +47,7 @@ public class XMLInsecticide {
 		if (!balise.endsWith(string))
 			throw new RuntimeException("Veut dépiler " + string + " mais a trouvé " + balise);
 		
-		xml += "</" + balise + ">";
+		xml( "</" + balise + ">");
 		a = false;
 		balises.remove(balises.size() - 1);
 	}

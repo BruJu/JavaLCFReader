@@ -64,11 +64,11 @@ abstract class SequenceurIntATailleFixe implements Sequenceur<Integer>, Primitif
 		
 		for (int i = 0 ; i != this.nombreDOctetsUtilises ; i++) {
 			octet = desequenceur.suivant();
-			XMLInsecticide.ajouterXML(octet);
+			// XMLInsecticide.ajouterXML(octet);
 			valeur = (valeur * 0x100) + Byte.toUnsignedInt(octet);
 		}
 		
-		XMLInsecticide.xml(" [" + valeur + "]"); 
+		// XMLInsecticide.xml(" [" + valeur + "]"); 
 		
 		return valeur;
 	}

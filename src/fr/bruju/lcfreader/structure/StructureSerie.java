@@ -5,7 +5,6 @@ import java.util.List;
 
 import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
-import fr.bruju.lcfreader.modele.XMLInsecticide;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 import fr.bruju.lcfreader.structure.blocs.Blocs;
 
@@ -26,17 +25,17 @@ public class StructureSerie extends Structure {
 
 	@Override
 	public EnsembleDeDonnees lireOctet(Desequenceur desequenceur, int parametre) {
-		XMLInsecticide.balise("dataDisc");
+		// XMLInsecticide.balise("dataDisc");
 
 		EnsembleDeDonnees ensemble = new EnsembleDeDonnees(this);
 
 		for (Bloc<?> bloc : getSerie()) {
-			XMLInsecticide.balise("bloc");
+			// XMLInsecticide.balise("bloc");
 			ensemble.push(bloc.lireOctet(desequenceur, -1));
-			XMLInsecticide.fermer();
+			// XMLInsecticide.fermer();
 		}
 
-		XMLInsecticide.fermer();
+		// XMLInsecticide.fermer();
 
 		return ensemble;
 	}

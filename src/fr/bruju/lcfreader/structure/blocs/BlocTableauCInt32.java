@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.XMLInsecticide;
-import fr.bruju.lcfreader.structure.types.PrimitifCpp;
 
 /**
  * Un bloc qui correspond à un vecteur de nombres
@@ -12,26 +11,18 @@ import fr.bruju.lcfreader.structure.types.PrimitifCpp;
  * @author Bruju
  *
  */
-public class BlocSuiteValeurs extends Bloc<int[]> {
+public class BlocTableauCInt32 extends Bloc<int[]> {
 	/* =========================
 	 * ATTRIBUTS ET CONSTRUCTEUR
 	 * ========================= */
-	
-	/** Type primitif c++ */
-	public final PrimitifCpp primitif;
-	
-	public final int nombreDeValeurs;
-
 	/**
 	 * Bloc qui est un vecteur d'un type primitif c++ qui est converti ici en int
 	 * 
 	 * @param champ Les caractéristiques
 	 * @param nomPrimitive Le nom du type
 	 */
-	public BlocSuiteValeurs(Champ champ, String nomPrimitive, int nombreDeValeurs) {
+	public BlocTableauCInt32(Champ champ) {
 		super(champ);
-		primitif = PrimitifCpp.map.get(nomPrimitive);
-		this.nombreDeValeurs = nombreDeValeurs;
 	}
 
 	/* ====================
@@ -40,7 +31,7 @@ public class BlocSuiteValeurs extends Bloc<int[]> {
 
 	@Override
 	public String getNomType() {
-		return "Vector<" + primitif.getNom() + ", " + nombreDeValeurs + ">";
+		return "TableauC";
 	}
 
 	/* =====================
@@ -50,24 +41,30 @@ public class BlocSuiteValeurs extends Bloc<int[]> {
 
 	@Override
 	public int[] extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		// XMLInsecticide.balise("IntVector_" + nombreDeValeurs +"_" + this.nom + "_" + primitif.getNom());
+		// XMLInsecticide.balise("TableauC_" + this.nom);
 		
-
-		int[] nombres = new int[nombreDeValeurs];
+		int[] nombres = new int[tailleLue / 4];
 		
-		remplirPrimitives(desequenceur, nombres);
-
+		byte octet;
+		
+		for (int i = 0 ; i != nombres.length ; i++) {
+			int valeur = 0;
+			
+			for (int j = 0 ; j != 4 ; j++) {
+				octet = desequenceur.suivant();
+				// XMLInsecticide.ajouterXML(octet);
+				
+				valeur += Byte.toUnsignedInt(octet) << (j * 8);
+			}
+			
+			// XMLInsecticide.xml(valeur + " | ");
+		}
+		
 		// XMLInsecticide.fermer();
 		
 		return nombres;
 	}
 	
-	private void remplirPrimitives(Desequenceur desequenceur, int[] nombres) {
-		for (int i = 0 ; i != nombreDeValeurs ; i++) {
-			nombres[i] = primitif.lireOctet(desequenceur, 0);
-		}
-	}
-
 
 	
 
@@ -79,11 +76,4 @@ public class BlocSuiteValeurs extends Bloc<int[]> {
 	public String convertirEnChaineUneValeur(int[] values) {
 		return Arrays.toString(values);
 	}
-	
-
-	/* =============
-	 * CONVERTISSEUR
-	 * ============= */
-
-
 }

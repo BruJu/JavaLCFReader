@@ -69,6 +69,10 @@ public class Blocs {
 			return new BlocInconnu(champ, "MoveRoute");
 		}
 		
+		if (nom.equals("battle_commands")) {
+			return new BlocTableauCInt32(champ);
+		}
+		
 		Bloc<?> bloc;
 		if (sized) {
 			bloc = new BlocInt32(champ, donnees[5]);

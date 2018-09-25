@@ -48,16 +48,16 @@ public class BlocString extends Bloc<String> {
 
 	@Override
 	public String extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		XMLInsecticide.balise("CHAINE_" + this.nom);
+		// XMLInsecticide.balise("CHAINE_" + this.nom);
 		
 		if (tailleLue == -1) {
 			tailleLue = desequenceur.$lireUnNombreBER();
-			XMLInsecticide.xml( " ==== ");
+			// XMLInsecticide.xml( " ==== ");
 		}
 		
 		String chaine = desequenceur.$lireUneChaine(tailleLue);
 		
-		XMLInsecticide.fermer();
+		// XMLInsecticide.fermer();
 		return chaine;
 	}
 }
