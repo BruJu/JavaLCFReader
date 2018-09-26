@@ -58,9 +58,9 @@ public class BlocEnsembleDeDonnees extends Bloc<EnsembleDeDonnees> {
 	
 	@Override
 	public EnsembleDeDonnees extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		// XMLInsecticide.balise("ENSEMBLE_" + structure.nom);
+		XMLInsecticide.balise("ENSEMBLE_" + structure.nom);
 		EnsembleDeDonnees ensemble = structure.lireOctet(desequenceur, tailleLue);
-		// XMLInsecticide.fermer();
+		XMLInsecticide.fermer();
 		return ensemble;
 	}
 }

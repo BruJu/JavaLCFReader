@@ -53,12 +53,12 @@ public class BlocIntVector extends Bloc<int[]> {
 
 	@Override
 	public int[] extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		// XMLInsecticide.balise("IntVector_" + this.nom + "_" + nomPrimitive);
+		XMLInsecticide.balise("IntVector_" + this.nom + "_" + nomPrimitive);
 		
 		if (tailleLue == -1) {
-			// XMLInsecticide.balise("Taille");
+			XMLInsecticide.balise("Taille");
 			tailleLue = desequenceur.$lireUnNombreBER();
-			// XMLInsecticide.fermer();
+			XMLInsecticide.fermer();
 		}
 		
 		List<Integer> nombres = new ArrayList<>();
@@ -69,7 +69,7 @@ public class BlocIntVector extends Bloc<int[]> {
 			remplirPrimitives(desequenceur, nombres, tailleLue);
 		}
 
-		// XMLInsecticide.fermer();
+		XMLInsecticide.fermer();
 		
 		return convertirEnTableau(nombres);
 	}

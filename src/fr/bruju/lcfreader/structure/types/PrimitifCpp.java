@@ -46,9 +46,9 @@ public interface PrimitifCpp extends Sequenceur<Integer> {
 			byte octet2 = desequenceur.suivant();
 			int valeur = Byte.toUnsignedInt(octet1) + Byte.toUnsignedInt(octet2) * 0x100;
 			
-			// XMLInsecticide.ajouterXML(octet1);
-			// XMLInsecticide.ajouterXML(octet2);
-			// XMLInsecticide.crocheter(valeur);
+			XMLInsecticide.ajouterXML(octet1);
+			XMLInsecticide.ajouterXML(octet2);
+			XMLInsecticide.crocheter(valeur);
 			
 			return valeur;
 		}

@@ -41,7 +41,7 @@ public class BlocTableauCInt32 extends Bloc<int[]> {
 
 	@Override
 	public int[] extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		// XMLInsecticide.balise("TableauC_" + this.nom);
+		XMLInsecticide.balise("TableauC_" + this.nom);
 		
 		int[] nombres = new int[tailleLue / 4];
 		
@@ -52,15 +52,15 @@ public class BlocTableauCInt32 extends Bloc<int[]> {
 			
 			for (int j = 0 ; j != 4 ; j++) {
 				octet = desequenceur.suivant();
-				// XMLInsecticide.ajouterXML(octet);
+				XMLInsecticide.ajouterXML(octet);
 				
 				valeur += Byte.toUnsignedInt(octet) << (j * 8);
 			}
 			
-			// XMLInsecticide.xml(valeur, " | ");
+			XMLInsecticide.xml(valeur, " | ");
 		}
 		
-		// XMLInsecticide.fermer();
+		XMLInsecticide.fermer();
 		
 		return nombres;
 	}

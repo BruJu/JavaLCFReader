@@ -66,13 +66,19 @@ public class XMLInsecticide {
 	}
 
 	
-	public static void ecrireDebug() throws IOException {
+	public static void ecrireDebug() {
 		
 		while (!balises.isEmpty()) {
 			fermer();
 		}
 		
-		PrintWriter pWriter = new PrintWriter(new FileWriter("../debug.xml", false));
+		PrintWriter pWriter;
+		try {
+			pWriter = new PrintWriter(new FileWriter("../debug.xml", false));
+		} catch (IOException e) {
+			vider();
+			return;
+		}
         pWriter.print(xml);
         pWriter.close();
         
@@ -98,6 +104,17 @@ public class XMLInsecticide {
 		xml.append(CROCHETOUVRANT);
 		xml.append(string);
 		xml.append(CROCHETFERMANT);
+	}
+
+	public static void crocheter(int valeur) {
+		xml.append(CROCHETOUVRANT);
+		xml.append(valeur);
+		xml.append(CROCHETFERMANT);
+	}
+
+	public static void xml(int s1, String s2) {
+		xml.append(s1);
+		xml.append(s2);
 	}
 	
 	

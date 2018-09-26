@@ -78,13 +78,13 @@ public class BlocInconnu extends Bloc<byte[]> {
 		
 		byte[] octets = new byte[tailleLue];
 		
-		// XMLInsecticide.balise("INCONNU_" + this.nom);
+		XMLInsecticide.balise("INCONNU_" + this.nom);
 		
 		for (int i = 0 ; i != tailleLue ; i++) {
 			octets[i] = desequenceur.suivant();
 		}
 		
-		// XMLInsecticide.fermer();
+		XMLInsecticide.fermer();
 		
 		return octets;
 	}

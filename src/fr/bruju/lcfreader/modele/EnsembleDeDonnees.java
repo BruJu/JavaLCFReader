@@ -1,6 +1,5 @@
 package fr.bruju.lcfreader.modele;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,8 +40,7 @@ public class EnsembleDeDonnees {
 		donnees = new ArrayList<>();
 		this.nomStruct = structure.nom;
 	}
-
-	// Services offerts pour la cons
+	
 	/**
 	 * Enregistre le bloc de données dans l'ensemble
 	 * 
@@ -87,15 +85,15 @@ public class EnsembleDeDonnees {
 		Desequenceur lecteur = Desequenceur.instancier(chemin);
 
 
-		// XMLInsecticide.vider();
+		XMLInsecticide.vider();
 		// Connaître le type de fichier
-		// XMLInsecticide.balise("TypeDeFichier");
+		XMLInsecticide.balise("TypeDeFichier");
 		int taille = lecteur.$lireUnNombreBER();
 		
-		// XMLInsecticide.xml(" ==== ");
+		XMLInsecticide.xml(" ==== ");
 		String type = lecteur.$lireUneChaine(taille);
 		
-		// XMLInsecticide.fermer();
+		XMLInsecticide.fermer();
 		String nomStruct;
 
 		switch (type) {
@@ -116,13 +114,13 @@ public class EnsembleDeDonnees {
 		// Sequencer le reste du fichier
 		
 		
-		// XMLInsecticide.balise("ENSEMBLE_" + nomStruct);
+		XMLInsecticide.balise("ENSEMBLE_" + nomStruct);
 		Structure structure = Structures.getInstance().get(nomStruct);
 		EnsembleDeDonnees ensemble = structure.lireOctet(lecteur, lecteur.octetsRestants());
 		
-		// XMLInsecticide.fermer("ENSEMBLE_" + nomStruct);
+		XMLInsecticide.fermer("ENSEMBLE_" + nomStruct);
 
-		// XMLInsecticide.ecrireDebug();
+		XMLInsecticide.ecrireDebug();
 
 		
 		return ensemble;

@@ -74,30 +74,30 @@ public class BlocArray extends Bloc<Map<Integer, EnsembleDeDonnees>> {
 	
 	@Override
 	public Map<Integer, EnsembleDeDonnees> extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		// XMLInsecticide.balise("TABLEAU_" + structure.nom);
+		XMLInsecticide.balise("TABLEAU_" + structure.nom);
 
 		
-		// XMLInsecticide.balise("NombreElements");
+		XMLInsecticide.balise("NombreElements");
 		int nombreElements = desequenceur.$lireUnNombreBER();
-		// XMLInsecticide.fermer();
+		XMLInsecticide.fermer();
 		
 		Map<Integer, EnsembleDeDonnees> carte = new LinkedHashMap<>();
 		
 		while (nombreElements != 0) {
-			// XMLInsecticide.balise("Element");
+			XMLInsecticide.balise("Element");
 			
-			// XMLInsecticide.balise("id");
+			XMLInsecticide.balise("id");
 			int id = desequenceur.$lireUnNombreBER();
-			// XMLInsecticide.fermer();
-			// XMLInsecticide.balise("data");
+			XMLInsecticide.fermer();
+			XMLInsecticide.balise("data");
 			EnsembleDeDonnees ensemble = structure.lireOctet(desequenceur, -1);
-			// XMLInsecticide.fermer();
-			// XMLInsecticide.fermer();
+			XMLInsecticide.fermer();
+			XMLInsecticide.fermer();
 			carte.put(id, ensemble);
 			nombreElements--;
 		}
 		
-		// XMLInsecticide.fermer();
+		XMLInsecticide.fermer();
 		
 		return carte;
 	}

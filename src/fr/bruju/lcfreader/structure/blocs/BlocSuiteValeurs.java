@@ -50,14 +50,14 @@ public class BlocSuiteValeurs extends Bloc<int[]> {
 
 	@Override
 	public int[] extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		// XMLInsecticide.balise("IntVector_" + nombreDeValeurs +"_" + this.nom + "_" + primitif.getNom());
+		XMLInsecticide.balise("IntVector_" + nombreDeValeurs +"_" + this.nom + "_" + primitif.getNom());
 		
 
 		int[] nombres = new int[nombreDeValeurs];
 		
 		remplirPrimitives(desequenceur, nombres);
 
-		// XMLInsecticide.fermer();
+		XMLInsecticide.fermer();
 		
 		return nombres;
 	}

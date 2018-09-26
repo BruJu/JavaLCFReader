@@ -25,17 +25,17 @@ public class StructureSerie extends Structure {
 
 	@Override
 	public EnsembleDeDonnees lireOctet(Desequenceur desequenceur, int parametre) {
-		// XMLInsecticide.balise("dataDisc");
+		XMLInsecticide.balise("dataDisc");
 
 		EnsembleDeDonnees ensemble = new EnsembleDeDonnees(this);
 
 		for (Bloc<?> bloc : getSerie()) {
-			// XMLInsecticide.balise("bloc");
+			XMLInsecticide.balise("bloc");
 			ensemble.push(bloc.lireOctet(desequenceur, -1));
-			// XMLInsecticide.fermer();
+			XMLInsecticide.fermer();
 		}
 
-		// XMLInsecticide.fermer();
+		XMLInsecticide.fermer();
 
 		return ensemble;
 	}
