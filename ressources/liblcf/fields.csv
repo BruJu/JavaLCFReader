@@ -164,7 +164,7 @@
 163,Skill,attribute_effects,Boolean,Vector,0x2C,,Array - Flag
 164,Skill,affect_attr_defence,Boolean,,0x2D,False,Flag
 165,Skill,battler_animation,Int32,,0x31,1,Integer - RPG2003
-166,Skill,battler_animation_data,BattlerAnimationData:Ref<Actor>,Array,0x32,,? - RPG2003
+166,Skill,battler_animation_data,Int32,Array,0x32,,? - RPG2003
 167,ItemAnimation,type,Int32,,0x03,0,
 168,ItemAnimation,weapon_anim,Int32,,0x04,0,
 169,ItemAnimation,movement,Int32,,0x05,0,

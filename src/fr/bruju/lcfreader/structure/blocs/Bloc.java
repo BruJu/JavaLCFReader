@@ -74,7 +74,7 @@ public abstract class Bloc<T> implements Sequenceur<Donnee<T>> {
 		return new Donnee<>(this, extraireDonnee(desequenceur, tailleLue));
 	}
 	
-	abstract T extraireDonnee(Desequenceur desequenceur, int tailleLue);
+	protected abstract T extraireDonnee(Desequenceur desequenceur, int tailleLue);
 
 	/* ============================
 	 * INTERACTION AVEC LES VALEURS

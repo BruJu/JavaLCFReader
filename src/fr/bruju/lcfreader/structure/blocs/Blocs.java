@@ -1,10 +1,14 @@
 package fr.bruju.lcfreader.structure.blocs;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import fr.bruju.lcfreader.Utilitaire;
+import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.structure.Structures;
+import fr.bruju.lcfreader.structure.dispositions.Disposition;
+import fr.bruju.lcfreader.structure.Sequenceur;
 import fr.bruju.lcfreader.structure.Structure;
 import fr.bruju.lcfreader.structure.types.PrimitifCpp;
 
@@ -43,6 +47,69 @@ public class Blocs {
 	 * FONCTIONNEMENT
 	 * ============== */
 
+	private Bloc<?> nouvelleImplementation(String[] donnees) {
+		String nom = donnees[2];
+		boolean sized = donnees[3].equals("SizeField");
+		String type = donnees[3];
+		String disposition = donnees[4];
+
+		int index = 0;
+
+		if (!donnees[5].equals(""))
+			index = Integer.decode(donnees[5]);
+		
+		Champ champ = new Champ(index, nom, sized, donnees[3] + "_" + donnees[4]);
+		
+		if (sized) {
+			return new BlocInt32(champ, donnees[6]);
+		}
+		
+		Disposition dispo = Disposition.get(disposition, type);
+		Sequenceur<?> sequenceur = getSequenceur(nom, type);
+		
+		
+		
+		return dispo.decorer(champ, sequenceur);
+	}
+	
+	private Sequenceur<?> getSequenceur(String nom, String type) {
+		
+		switch (type) {
+		case "Int32":
+			return (o, s) -> o.$lireUnNombreBER();
+		case "String":
+			return (o, s) -> o.$lireUneChaine(s);
+		}
+		
+		if (PrimitifCpp.map.containsKey(type)) {
+			return PrimitifCpp.map.get(type);
+		}
+		
+		if (Structures.getInstance().get(type) != null) {
+			return Structures.getInstance().get(type);
+		}
+		
+		System.out.println("Pas de séquenceur pour " + type + " " + nom);
+		
+		return new Sequenceur<byte[]>() {
+
+			@Override
+			public byte[] lireOctet(Desequenceur desequenceur, int parametre) {
+				
+				byte[] tableau = new byte[desequenceur.octetsRestants()];
+				
+				for (int i = 0 ; i != tableau.length ; i++) {
+					tableau[i] = desequenceur.suivant();
+				}
+				
+				return tableau;
+			}
+			
+			
+			
+		};
+	}
+
 	/**
 	 * Décrypte les paramètres du tableau de données et renvoie le bloc associé
 	 * 
@@ -50,6 +117,9 @@ public class Blocs {
 	 * @return Le bloc permettant de traiter les données décrites par cet enregistrement du fichier fields.csv
 	 */
 	private Bloc<?> instancierBloc(String[] donnees) {
+		if (true)
+			return nouvelleImplementation(donnees);
+			
 		String nom = donnees[2];
 		boolean sized = donnees[3].equals("SizeField");
 		String type = donnees[3];
