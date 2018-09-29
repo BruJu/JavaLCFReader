@@ -8,6 +8,7 @@ package fr.bruju.lcfreader.structure.blocs;
  *
  */
 public class Champ {
+	
 	/** Index */
 	final int index;
 	/** Nom */

@@ -93,13 +93,13 @@ public class Structures {
 				String[] donnees = ligne.split(",", -1);
 				Structure structure;
 				
-				if (donnees[4].equals("")) {
+				if (donnees[5].equals("")) {
 					structure = new StructureSerie(donnees[0]);
 				} else {
 					structure = new StructureDiscontinue(donnees[0]);
 				}
 				
-				structures.putIfAbsent(donnees[0], structure);
+				structures.putIfAbsent(donnees[1], structure);
 			});
 			
 			structures.put("Parameters", new StructureParameters());
@@ -107,16 +107,11 @@ public class Structures {
 			// Lire les champs
 			lireToutesLesLignes(file, ligne -> {
 				String[] donnees = ligne.split(",", -1);
-				structures.get(donnees[0]).ajouterChamp(donnees);
+				structures.get(donnees[1]).ajouterChamp(donnees);
 			});
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		/*
-		 * Certaines structures données par fields.csv ne sont pas automatisables facilement avec la manière générique
-		 * implémentée. On les redéfini donc ici.
-		 */
 		
 		
 		

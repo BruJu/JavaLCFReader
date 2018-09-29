@@ -24,8 +24,8 @@ public class Blocs {
 	private Map<String, Procede> getTypesDeBase() {
 		Map<String, Procede> carteDesTypesDeBase = new HashMap<>();
 
-		carteDesTypesDeBase.put("Int32", (c, t, d) -> new BlocInt32(c, d));
-		carteDesTypesDeBase.put("String", (c, t, d) -> new BlocString(c, d));
+		carteDesTypesDeBase.put("Int32", (c, t, d, z) -> new BlocInt32(c, d));
+		carteDesTypesDeBase.put("String", (c, t, d, z) -> new BlocString(c, d));
 
 		return carteDesTypesDeBase;
 	}
@@ -50,20 +50,30 @@ public class Blocs {
 	 * @return Le bloc permettant de traiter les données décrites par cet enregistrement du fichier fields.csv
 	 */
 	private Bloc<?> instancierBloc(String[] donnees) {
-		String nom = donnees[1];
-		boolean sized = donnees[2].equals("t");
+		String nom = donnees[2];
+		boolean sized = donnees[3].equals("SizeField");
 		String type = donnees[3];
-
+		String disposition = donnees[4];
+		int idDispo = 0;
+		
+		if (disposition.equals("Array")) {
+			idDispo = 1;
+		}
+		
+		if (disposition.equals("Vector")) {
+			idDispo = 2;
+		}
+		
 		
 		int index = 0;
 
-		if (!donnees[4].equals(""))
-			index = Integer.decode(donnees[4]);
+		if (!donnees[5].equals(""))
+			index = Integer.decode(donnees[5]);
 		
 
 		
 
-		Champ champ = new Champ(index, nom, sized, donnees[3]);
+		Champ champ = new Champ(index, nom, sized, donnees[3] + "_" + donnees[4]);
 
 		if (type.equals("MoveRoute")) {
 			return new BlocInconnu(champ, "MoveRoute");
@@ -75,9 +85,9 @@ public class Blocs {
 		
 		Bloc<?> bloc;
 		if (sized) {
-			bloc = new BlocInt32(champ, donnees[5]);
+			bloc = new BlocInt32(champ, donnees[6]);
 		} else {
-			bloc = getInstance().getBloc(champ, type, donnees[5]);
+			bloc = getInstance().getBloc(champ, type, donnees[6], idDispo);
 		}
 
 		return bloc;
@@ -91,13 +101,11 @@ public class Blocs {
 	 * @param defaut La valeur par défaut
 	 * @return Un bloc correspondant à la valeur
 	 */
-	private Bloc<?> getBloc(Champ champ, String type, String defaut) {
+	private Bloc<?> getBloc(Champ champ, String type, String defaut, int idDispo) {
 		Bloc<?> bloc;
-		
-		type = enleverRef(type);
 
 		for (Procede procede : procedes) {
-			bloc = procede.generer(champ, type, defaut);
+			bloc = procede.generer(champ, type, defaut, idDispo);
 			if (bloc != null) {
 				return bloc;
 			}
@@ -107,6 +115,9 @@ public class Blocs {
 	}
 
 	private String enleverRef(String type) {
+		return type;
+		
+		/*
 		if (!(type.startsWith("Ref<") && type.endsWith(">"))) {
 			return type;
 		} else {
@@ -121,6 +132,7 @@ public class Blocs {
 				return split[1];
 			}
 		}
+		*/
 	}
 
 	/* ================================
@@ -140,7 +152,7 @@ public class Blocs {
 		 * @param defaut La valeur par défaut (null si aucune)
 		 * @return null si ce procédé ne peut pas instancier le bloc. Le bloc si il le peut
 		 */
-		Bloc<?> generer(Champ champ, String type, String defaut);
+		Bloc<?> generer(Champ champ, String type, String defaut, int idDispo);
 	}
 
 	/**
@@ -151,10 +163,10 @@ public class Blocs {
 		private Map<String, Procede> carteDesTypesDeBase = getTypesDeBase();
 
 		@Override
-		public Bloc<?> generer(Champ champ, String type, String defaut) {
-			String typeAConsiderer = type.startsWith("Enum<") ? "Int32" : type;
+		public Bloc<?> generer(Champ champ, String type, String defaut, int idDispo) {
+			String typeAConsiderer = type; //type.startsWith("Enum<") ? "Int32" : type;
 			Procede procede = carteDesTypesDeBase.get(typeAConsiderer);
-			return Utilitaire.appel(procede, p -> p.generer(champ, typeAConsiderer, defaut));
+			return Utilitaire.appel(procede, p -> p.generer(champ, typeAConsiderer, defaut, idDispo));
 		}
 	}
 
@@ -163,11 +175,11 @@ public class Blocs {
 	 */
 	private class ProcedeArray implements Procede {
 		@Override
-		public Bloc<?> generer(Champ champ, String type, String defaut) {
-			if (!type.startsWith("Array<") || !type.endsWith(">"))
+		public Bloc<?> generer(Champ champ, String type, String defaut, int idDispo) {
+			if (idDispo != 1)
 				return null;
-
-			String vraiType = type.substring(6, type.length() - 1); // Array<X>
+			
+			String vraiType = type;
 			Structure structure = Structures.getInstance().get(vraiType);
 			return structure == null ? null : new BlocArray(champ, structure);
 		}
@@ -178,12 +190,12 @@ public class Blocs {
 	 */
 	private class ProcedeVector implements Procede {
 		@Override
-		public Bloc<?> generer(Champ champ, String type, String defaut) {
-			if (!type.startsWith("Vector<") || !type.endsWith(">"))
+		public Bloc<?> generer(Champ champ, String type, String defaut, int idDispo) {
+			if (idDispo != 2)
 				return null;
 
 			// Extraction de la chaîne entre Vector< et >
-			String sousType = enleverRef(type.substring(7, type.length() - 1));
+			String sousType = type;
 
 			if (PrimitifCpp.map.get(sousType) != null) {
 				return new BlocIntVector(champ, sousType);
@@ -202,7 +214,10 @@ public class Blocs {
 	/** Instancie un bloc pour ensemble de données si une structure permettant de le décrypter est connue */
 	private class ProcedeEnsembleDeDonnees implements Procede {
 		@Override
-		public Bloc<?> generer(Champ champ, String type, String defaut) {
+		public Bloc<?> generer(Champ champ, String type, String defaut, int idDispo) {
+			if (idDispo != 0)
+				return null;
+			
 			Structure structure = Structures.getInstance().get(type);
 			return structure == null ? null : new BlocEnsembleDeDonnees(champ, structure);
 		}
@@ -213,7 +228,10 @@ public class Blocs {
 	 */
 	private class ProcedePrimitif implements Procede {
 		@Override
-		public Bloc<?> generer(Champ champ, String type, String defaut) {
+		public Bloc<?> generer(Champ champ, String type, String defaut, int idDispo) {
+			if (idDispo != 0)
+				return null;
+			
 			if (PrimitifCpp.map.get(type) != null) {
 				return new BlocPrimitifCpp(champ, type, defaut);
 			} else {
