@@ -8,19 +8,20 @@ import fr.bruju.lcfreader.modele.XMLInsecticide;
 import fr.bruju.lcfreader.structure.Sequenceur;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 import fr.bruju.lcfreader.structure.blocs.Champ;
+import fr.bruju.lcfreader.structure.blocs.MiniBloc;
 
 public class DispositionVecteur implements Disposition {
 	@Override
-	public <T> Bloc<List<T>> decorer(Champ champ, Sequenceur<T> sequenceur) {
+	public <T> Bloc<List<T>> decorer(Champ champ, MiniBloc<T> sequenceur) {
 		return new BlocVecteur<>(champ, sequenceur);
 	}
 	
 	
 	public static class BlocVecteur<T> extends Bloc<List<T>> {
-		private Sequenceur<T> sequenceur;
+		private MiniBloc<T> sequenceur;
 		private String nomChamp;
 
-		public BlocVecteur(Champ champ, Sequenceur<T> sequenceur) {
+		public BlocVecteur(Champ champ, MiniBloc<T> sequenceur) {
 			super(champ);
 			this.sequenceur = sequenceur;
 			this.nomChamp = "Vecteur_" + champ.vraiType;
@@ -32,7 +33,7 @@ public class DispositionVecteur implements Disposition {
 		}
 
 		@Override
-		protected List<T> extraireDonnee(Desequenceur desequenceur, int tailleLue) {
+		public List<T> extraireDonnee(Desequenceur desequenceur, int tailleLue) {
 			if (tailleLue < 0) {
 				throw new RuntimeException("Taille Lue = " + tailleLue);
 			}
@@ -42,9 +43,7 @@ public class DispositionVecteur implements Disposition {
 			List<T> liste = new ArrayList<>();
 			
 			while (desequenceur.nonVide()) {
-				XMLInsecticide.balise("data");
-				sequenceur.lireOctet(desequenceur, -1);
-				XMLInsecticide.fermer();
+				sequenceur.extraireDonnee(desequenceur, -1);
 			}
 			
 			XMLInsecticide.fermer();

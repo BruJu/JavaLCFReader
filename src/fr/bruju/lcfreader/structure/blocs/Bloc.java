@@ -12,7 +12,7 @@ import fr.bruju.lcfreader.structure.Sequenceur;
  *
  * @param <T> Le type de données utilisé pour représenter les données en Java
  */
-public abstract class Bloc<T> implements Sequenceur<Donnee<T>> {
+public abstract class Bloc<T> implements MiniBloc<T> , Sequenceur<Donnee<T>> {
 	/* =========================
 	 * ATTRIBUTS ET CONSTRUCTEUR
 	 * ========================= */
@@ -74,29 +74,13 @@ public abstract class Bloc<T> implements Sequenceur<Donnee<T>> {
 		return new Donnee<>(this, extraireDonnee(desequenceur, tailleLue));
 	}
 	
-	protected abstract T extraireDonnee(Desequenceur desequenceur, int tailleLue);
+	
 
 	/* ============================
 	 * INTERACTION AVEC LES VALEURS
 	 * ============================ */
 
 
-	/**
-	 * Converti la valeur en une chaîne comme si elle était issue du bloc
-	 * @param valeur La valeur
-	 * @return Une représentation en chaîne de la valeur
-	 */
-	public String convertirEnChaineUneValeur(T valeur) {
-		return valeur.toString();
-	}
-
-	/**
-	 * Affiche les ensembles de données contenus par la valeur passée
-	 * @param niveau Le niveau d'indentation actuel
-	 * @param value La valeur dont on souhaite connaître les sous ensembles de données
-	 */
-	public void afficherSousArchi(int niveau, T value) {
-	}
 
 	
 	/* =========
@@ -121,8 +105,4 @@ public abstract class Bloc<T> implements Sequenceur<Donnee<T>> {
 		  .toString();
 	}
 
-
-	public Bloc<byte[]> inconnu() {
-		return new BlocInconnu(new Champ(index, nom, sized, vraiType), vraiType);
-	}
 }

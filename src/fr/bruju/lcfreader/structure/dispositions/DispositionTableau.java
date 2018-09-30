@@ -8,11 +8,12 @@ import fr.bruju.lcfreader.modele.XMLInsecticide;
 import fr.bruju.lcfreader.structure.Sequenceur;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 import fr.bruju.lcfreader.structure.blocs.Champ;
+import fr.bruju.lcfreader.structure.blocs.MiniBloc;
 
 public class DispositionTableau implements Disposition {
 
 	@Override
-	public <T> Bloc<Map<Integer, T>> decorer(Champ champ, Sequenceur<T> sequenceur) {
+	public <T> Bloc<Map<Integer, T>> decorer(Champ champ, MiniBloc<T> sequenceur) {
 		return new BlocIndexeur<>(champ, sequenceur);
 	}
 
@@ -20,9 +21,9 @@ public class DispositionTableau implements Disposition {
 	
 	public static class BlocIndexeur<T> extends Bloc<Map<Integer, T>> {
 		private final String nomBloc; 
-		private final Sequenceur<T> sequenceur;
+		private final MiniBloc<T> sequenceur;
 
-		public BlocIndexeur(Champ champ, Sequenceur<T> sequenceur) {
+		public BlocIndexeur(Champ champ, MiniBloc<T> sequenceur) {
 			super(champ);
 			this.sequenceur = sequenceur;
 			nomBloc = "TableauIndexe_" + champ.vraiType;
@@ -34,7 +35,7 @@ public class DispositionTableau implements Disposition {
 		}
 
 		@Override
-		protected Map<Integer, T> extraireDonnee(Desequenceur desequenceur, int tailleLue) {
+		public Map<Integer, T> extraireDonnee(Desequenceur desequenceur, int tailleLue) {
 			XMLInsecticide.balise(nomBloc);
 			
 			XMLInsecticide.balise("NombreElements");
@@ -53,9 +54,7 @@ public class DispositionTableau implements Disposition {
 						id = desequenceur.$lireUnNombreBER();
 						XMLInsecticide.fermer();
 					} {
-						XMLInsecticide.balise("data");
-						donnee = sequenceur.lireOctet(desequenceur, -1);
-						XMLInsecticide.fermer();
+						donnee = sequenceur.extraireDonnee(desequenceur, -1);
 					}
 					XMLInsecticide.fermer();
 				}

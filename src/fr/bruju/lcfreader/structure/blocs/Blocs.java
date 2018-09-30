@@ -6,6 +6,7 @@ import java.util.Map;
 
 import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.modele.Desequenceur;
+import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.structure.Structures;
 import fr.bruju.lcfreader.structure.dispositions.Disposition;
 import fr.bruju.lcfreader.structure.Sequenceur;
@@ -65,14 +66,14 @@ public class Blocs {
 		}
 		
 		Disposition dispo = Disposition.get(disposition, type);
-		Sequenceur<?> sequenceur = getSequenceur(nom, type);
+		MiniBloc<?> sequenceur = getSequenceur(nom, type);
 		
 		
 		
 		return dispo.decorer(champ, sequenceur);
 	}
 	
-	private Sequenceur<?> getSequenceur(String nom, String type) {
+	private MiniBloc<?> getSequenceur(String nom, String type) {
 		
 		switch (type) {
 		case "Int32":
@@ -82,19 +83,30 @@ public class Blocs {
 		}
 		
 		if (PrimitifCpp.map.containsKey(type)) {
-			return PrimitifCpp.map.get(type);
+			return (o, s) -> PrimitifCpp.map.get(type).lireOctet(o, s);
 		}
 		
 		if (Structures.getInstance().get(type) != null) {
-			return Structures.getInstance().get(type);
+			return new MiniBloc<EnsembleDeDonnees>() {
+
+				@Override
+				public EnsembleDeDonnees extraireDonnee(Desequenceur o, int s) {
+					return Structures.getInstance().get(type).lireOctet(o, s);
+				}
+
+				@Override
+				public String convertirEnChaineUneValeur(EnsembleDeDonnees valeur) {
+					return valeur.getRepresentationEnLigne();
+				}
+			};
 		}
 		
 		System.out.println("Pas de séquenceur pour " + type + " " + nom);
 		
-		return new Sequenceur<byte[]>() {
+		return new MiniBloc<byte[]>() {
 
 			@Override
-			public byte[] lireOctet(Desequenceur desequenceur, int parametre) {
+			public byte[] extraireDonnee(Desequenceur desequenceur, int parametre) {
 				
 				byte[] tableau = new byte[desequenceur.octetsRestants()];
 				

@@ -8,22 +8,23 @@ import fr.bruju.lcfreader.modele.XMLInsecticide;
 import fr.bruju.lcfreader.structure.Sequenceur;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 import fr.bruju.lcfreader.structure.blocs.Champ;
+import fr.bruju.lcfreader.structure.blocs.MiniBloc;
 
 public class DispositionListe implements Disposition {
 	@Override
-	public <T> Bloc<List<T>> decorer(Champ champ, Sequenceur<T> sequenceur) {
-		return new BlocListe<>(champ, sequenceur);
+	public <T> Bloc<List<T>> decorer(Champ champ, MiniBloc<T> miniBloc) {
+		return new BlocListe<>(champ, miniBloc);
 	}
 	
 	
 	public static class BlocListe<T> extends Bloc<List<T>> {
-		private Sequenceur<T> sequenceur;
+		private MiniBloc<T> miniBloc;
 		private String nomChamp;
 
-		public BlocListe(Champ champ, Sequenceur<T> sequenceur) {
+		public BlocListe(Champ champ, MiniBloc<T> miniBloc) {
 			super(champ);
-			this.sequenceur = sequenceur;
-			this.nomChamp = "Liste_" + champ.vraiType;
+			this.miniBloc = miniBloc;
+			this.nomChamp = "Liste_" + champ.vraiType + "_" + this.nom;
 		}
 
 		@Override
@@ -32,11 +33,7 @@ public class DispositionListe implements Disposition {
 		}
 
 		@Override
-		protected List<T> extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-			if (tailleLue < 0) {
-				throw new RuntimeException("Taille Lue = " + tailleLue);
-			}
-			
+		public List<T> extraireDonnee(Desequenceur desequenceur, int tailleLue) {
 			XMLInsecticide.balise(nomChamp);
 			
 			XMLInsecticide.balise("nbElem");
@@ -46,9 +43,7 @@ public class DispositionListe implements Disposition {
 			List<T> liste = new ArrayList<>(nombreDElements);
 			
 			while (nombreDElements != 0) {
-				XMLInsecticide.balise("data");
-				sequenceur.lireOctet(desequenceur, -1);
-				XMLInsecticide.fermer();
+				miniBloc.extraireDonnee(desequenceur, -1);
 				nombreDElements --;
 			}
 			
