@@ -1,29 +1,94 @@
 package fr.bruju.lcfreader.modele;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.rmobjets.RMEvenement;
+import fr.bruju.lcfreader.rmobjets.RMEvenementCommun;
 import fr.bruju.lcfreader.rmobjets.RMInstruction;
 import fr.bruju.lcfreader.rmobjets.RMMap;
 import fr.bruju.lcfreader.rmobjets.RMPage;
-import fr.bruju.lcfreader.structure.structure.Structures;
 
 public class Ensembles {
-	public static RMMap map(String cheminProjet, int idCarte) {
-		Structures.initialiser("..\\LectureDeLCF\\ressources\\liblcf\\fields.csv");
+	private static Map<Integer, RMMap> cartes = new HashMap<>();
+	
+	static Map<Integer, RMEvenementCommun> evenements = null;
+	
+	@SuppressWarnings("unchecked")
+	public static RMEvenementCommun ec(String cheminProjet, int idEvenement) {
+		if (evenements == null) {
+			evenements = new HashMap<>();
+			
+			String chemin = cheminProjet + "\\RPG_RT.ldb";
+			EnsembleDeDonnees bdd =  EnsembleDeDonnees.lireFichier(chemin);
+			if (bdd == null) {
+				throw new RuntimeException("Fichier bdd illisible");
+			}
+			
+			
+			Map<Integer, EnsembleDeDonnees> evenements = bdd.getDonnee("commonevents", Map.class);
+			
+			for (Map.Entry<Integer, EnsembleDeDonnees> entree : evenements.entrySet()) {
+				Ensembles.evenements.put(entree.getKey(), new $EC(entree.getKey(), entree.getValue()));
+			}
+		}
 		
-		String cheminCarte = cheminProjet + "\\Map" + String.format("%04d", idCarte) + ".lmu";
+		return evenements.get(idEvenement);
+	}
+	
+	public static class $EC implements RMEvenementCommun {
+		private final int id;
+		private final EnsembleDeDonnees ensemble;
+		
+		
+		public $EC(Integer id, EnsembleDeDonnees ensemble) {
+			this.id = id;
+			this.ensemble = ensemble;
+		}
 
-		EnsembleDeDonnees map =  EnsembleDeDonnees.lireFichier(cheminCarte); // -> 35 secondes
+		@Override
+		public int id() {
+			return id;
+		}
+
+		@Override
+		public String nom() {
+			return ensemble.getDonnee("name", String.class);
+		}
+
+		@Override
+		public List<RMInstruction> instructions() {
+			@SuppressWarnings("unchecked")
+			List<EnsembleDeDonnees> instructions = ensemble.getDonnee("event_commands", List.class);
+			return instructions.stream()
+							   .map($Instruction::instancier)
+							   .filter(e -> e != null)
+							   .collect(Collectors.toList());
+		}
 		
 		
-		if (!map.nomStruct.equals("Map"))
-			return null;
 		
-		return new $Map(map, idCarte);
+	}
+	
+	
+	
+	public static RMMap map(String cheminProjet, int idCarte) {
+		if (cartes.get(idCarte) == null) {
+			String cheminCarte = cheminProjet + "\\Map" + String.format("%04d", idCarte) + ".lmu";
+
+			EnsembleDeDonnees map =  EnsembleDeDonnees.lireFichier(cheminCarte); // -> 35 secondes
+			
+			
+			if (!map.nomStruct.equals("Map"))
+				return null;
+			
+			cartes.put(idCarte, new $Map(map, idCarte));
+		}
+		
+		return cartes.get(idCarte);
 	}
 
 	

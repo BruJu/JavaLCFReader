@@ -32,11 +32,7 @@ public class StructureDiscontinue extends Structure {
 		while (desequenceur.nonVide()) {
 			XMLInsecticide.balise("Bloc");
 			
-			//byte octet = desequenceur.suivant();
 			numeroDeBloc = desequenceur.$lireUnNombreBER();
-			
-			//numeroDeBloc = Byte.toUnsignedInt(octet);
-			//XMLInsecticide.xml(Utilitaire.toHex(octet));
 			
 			if (numeroDeBloc == 0) {
 				XMLInsecticide.fermer();

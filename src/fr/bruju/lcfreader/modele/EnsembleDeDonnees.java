@@ -1,5 +1,8 @@
 package fr.bruju.lcfreader.modele;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -151,7 +154,22 @@ public class EnsembleDeDonnees {
 
 	/** Affiche les données contenues par l'objet */
 	public void afficherDonnees() {
-		donnees.forEach(data -> System.out.println(data.bloc.getTypeEnString() + " -> " + data.getString()));
+		StringBuilder sb = new StringBuilder();
+		
+		donnees.forEach(data -> sb.append(data.bloc.getTypeEnString() + " -> " + data.getString()).append("\n"));
+		
+		String chaine = sb.toString();
+		
+
+		PrintWriter pWriter;
+		try {
+			pWriter = new PrintWriter(new FileWriter("../structure.xml", false));
+		} catch (IOException e) {
+			return;
+		}
+        pWriter.print(chaine);
+        pWriter.close();
+		
 	}
 
 	/** Affiche l'architecture des données en considérant que le niveau est 0 */

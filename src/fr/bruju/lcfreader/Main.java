@@ -2,30 +2,52 @@ package fr.bruju.lcfreader;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Consumer;
 
 import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.modele.FabriqueLCF;
+import fr.bruju.lcfreader.rmobjets.RMEvenementCommun;
+import fr.bruju.lcfreader.rmobjets.RMInstruction;
 import fr.bruju.lcfreader.rmobjets.RMMap;
 import fr.bruju.lcfreader.structure.structure.Structures;
 
 @SuppressWarnings("unused")
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
+
+		//String chemin = "A:\\Dev\\Projet\\";
 		
 		
-		//String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
-		String chemin = "A:\\Dev\\Projet\\";
-		int numeroDeMap = 2;
+		String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
+		
+		/*
+		int idEv = 610;
+		
+		FabriqueLCF fabrique = new FabriqueLCF(chemin);
+		
+		RMEvenementCommun evenementCommun = fabrique.evenementCommun(idEv);
+		
+		List<RMInstruction> instructions = evenementCommun.instructions();
+		
+		instructions.forEach(i -> System.out.println(i.code() + " " + i.argument() + " " + Arrays.toString(i.parametres())));
+		*/
+		
+		
+		
+		//int numeroDeMap = 2;
 		
 	
-		testerLecture(chemin, "RPG_RT.ldb");
+		testerLecture(chemin, "Save01.lsd");
 
 		
 		//testerLecture(chemin, construireNomDeMap(numeroDeMap));
@@ -60,10 +82,10 @@ public class Main {
 		});
 		
 		System.out.println(sb.toString());
+		
 	}
 
 	private static void testerLecture(String chemin, String nomDeFichier) {
-		Structures.initialiser("ressources\\liblcf\\fields.csv");
 		String vraiChemin = chemin + nomDeFichier;
 		doubleAffichage(vraiChemin);
 	}

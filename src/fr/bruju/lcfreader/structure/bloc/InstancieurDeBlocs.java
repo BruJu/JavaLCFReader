@@ -23,6 +23,7 @@ public class InstancieurDeBlocs {
 		PrimitifCpp.remplirHashMap(miniBlocsConnus, new PrimitifCpp[] {
 					new PrimitifCpp.Int16(),
 					new PrimitifCpp.Int32(),
+					new PrimitifCpp.Int32LittleEndian(),
 					new SequenceurIntATailleFixe.UInt8(),
 					new SequenceurIntATailleFixe.UInt16(),
 					new SequenceurIntATailleFixe.UInt32(),

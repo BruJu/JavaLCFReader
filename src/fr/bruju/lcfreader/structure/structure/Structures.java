@@ -54,6 +54,8 @@ public class Structures {
 
 	/** Donne l'instance de la base de données */
 	public static Structures getInstance() {
+		Structures.initialiser("..\\LectureDeLCF\\ressources\\liblcf\\fields.csv");
+		
 		return instance;
 	}
 

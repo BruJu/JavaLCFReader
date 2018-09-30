@@ -1,5 +1,7 @@
 package fr.bruju.lcfreader.structure.types;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Map;
 
 import fr.bruju.lcfreader.modele.Desequenceur;
@@ -31,6 +33,39 @@ public interface PrimitifCpp extends MiniBloc<Integer> {
 			
 			XMLInsecticide.ajouterXML(octet1);
 			XMLInsecticide.ajouterXML(octet2);
+			XMLInsecticide.crocheter(valeur);
+			
+			return valeur;
+		}
+
+		@Override
+		public Integer convertirDefaut(String defaut) {
+			return Integer.parseInt(defaut);
+		}
+	}
+	
+
+
+	public class Int32LittleEndian implements PrimitifCpp {
+		@Override
+		public String getNom() {
+			return "Int32LittleEndian";
+		}
+
+		@Override
+		public Integer extraireDonnee(Desequenceur desequenceur, int parametre) {
+			byte[] octets = {
+					desequenceur.suivant(), desequenceur.suivant(), desequenceur.suivant(), desequenceur.suivant()
+			};
+			
+			int valeur = 0;
+			
+			valeur = ByteBuffer.wrap(octets).order(ByteOrder.LITTLE_ENDIAN).getInt();
+			
+			for (int i = 0 ; i != 4 ; i++) {
+				XMLInsecticide.ajouterXML(octets[i]);
+			}
+			
 			XMLInsecticide.crocheter(valeur);
 			
 			return valeur;

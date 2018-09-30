@@ -32,7 +32,7 @@ public class FabriqueLCF implements RMFabrique {
 
 	@Override
 	public RMEvenementCommun evenementCommun(int idEvenementCommun) {
-		throw new UnsupportedOperationException("Les évènements communs ne sont pas gérés");
+		return Ensembles.ec(chemin, idEvenementCommun);
 	}
 
 	@Override
@@ -48,7 +48,10 @@ public class FabriqueLCF implements RMFabrique {
 
 	@Override
 	public List<RMEvenementCommun> evenementsCommuns() {
-		throw new UnsupportedOperationException("Les évènements communs ne sont pas gérés");
+		// remplir les valeurs
+		Ensembles.ec(chemin, -1);
+		
+		// renvoyer la liste
+		return Ensembles.evenements.values().stream().collect(Collectors.toList());
 	}
-
 }
