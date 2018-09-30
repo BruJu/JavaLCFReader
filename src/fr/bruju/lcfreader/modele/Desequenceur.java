@@ -165,5 +165,8 @@ public class Desequenceur {
 		return fin - position;
 	}
 	
+	public int getPosition() {
+		return position;
+	}
 	
 }

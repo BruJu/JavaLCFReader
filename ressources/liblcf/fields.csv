@@ -33,7 +33,7 @@
 32,Actor,state_ranks,UInt8,Vector,0x48,,Array - Short
 33,Actor,attribute_ranks,SizeField,,0x49,,Integer
 34,Actor,attribute_ranks,UInt8,Vector,0x4A,,Array - Short
-35,Actor,battle_commands,Int32,List,0x50,,Array - RPG::BattleCommand - RPG2003
+35,Actor,battle_commands,UInt32,Tuple_7,0x50,,Array - RPG::BattleCommand - RPG2003
 36,Sound,name,String,,0x01,'',String
 37,Sound,volume,Int32,,0x03,100,Integer
 38,Sound,tempo,Int32,,0x04,100,Integer

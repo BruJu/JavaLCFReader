@@ -32,9 +32,11 @@ public class StructureDiscontinue extends Structure {
 		while (desequenceur.nonVide()) {
 			XMLInsecticide.balise("Bloc");
 			
-			byte octet = desequenceur.suivant();
-			numeroDeBloc = Byte.toUnsignedInt(octet);
-			XMLInsecticide.xml(Utilitaire.toHex(octet));
+			//byte octet = desequenceur.suivant();
+			numeroDeBloc = desequenceur.$lireUnNombreBER();
+			
+			//numeroDeBloc = Byte.toUnsignedInt(octet);
+			//XMLInsecticide.xml(Utilitaire.toHex(octet));
 			
 			if (numeroDeBloc == 0) {
 				XMLInsecticide.fermer();
@@ -43,6 +45,15 @@ public class StructureDiscontinue extends Structure {
 			}
 			
 			Bloc<?> bloc = getBloc(numeroDeBloc);
+			
+			if (bloc == null) {
+
+				XMLInsecticide.xml("Crash");
+				
+				XMLInsecticide.ecrireDebug();
+				
+				throw new RuntimeException("Pas de bloc numéro " + Utilitaire.toHex(numeroDeBloc) + " dans " + nom + Utilitaire.toHex(desequenceur.getPosition()));
+			}
 			
 			XMLInsecticide.xml( " ", bloc.nom, " | ");
 

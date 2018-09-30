@@ -31,7 +31,7 @@ public class XMLInsecticide {
 	}
 	private static String INFERIEUR = "<";
 	private static String INFERIEURSLASH = "</";
-	private static String SUPERIEUR = "<";
+	private static String SUPERIEUR = ">";
 	private static String CROCHETOUVRANT = " [";
 	private static String CROCHETFERMANT = "]";
 	
