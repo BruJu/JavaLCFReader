@@ -9,12 +9,14 @@ import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.modele.XMLInsecticide;
 import fr.bruju.lcfreader.structure.blocs.mini.MiniBloc;
 
-public class BlocListe<T> extends Bloc<List<T>> {
+public class BlocTuple<T> extends Bloc<List<T>> {
 	private final MiniBloc<T> miniBloc;
+	private final int nombreDElements;
 
-	public BlocListe(int index, String nom, String type, MiniBloc<T> miniBloc) {
-		super(index, nom, "Liste_" + type);
+	public BlocTuple(int index, String nom, String type, int nombreDElements, MiniBloc<T> miniBloc) {
+		super(index, nom, "Tuple_" + nombreDElements + "_" + type);
 		this.miniBloc = miniBloc;
+		this.nombreDElements = nombreDElements;
 	}
 
 	@Override
@@ -26,9 +28,7 @@ public class BlocListe<T> extends Bloc<List<T>> {
 	public List<T> extraireDonnee(Desequenceur desequenceur, int tailleLue) {
 		XMLInsecticide.balise(typeComplet);
 		
-		XMLInsecticide.balise("nbElem");
-		int nombreDElements = desequenceur.$lireUnNombreBER();
-		XMLInsecticide.fermer();
+		int nombreDElements = this.nombreDElements;
 		
 		List<T> liste = new ArrayList<>(nombreDElements);
 		

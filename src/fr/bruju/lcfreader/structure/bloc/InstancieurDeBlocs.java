@@ -93,6 +93,11 @@ public class InstancieurDeBlocs {
 			return new BlocIndexeur<>(index, nom, type, miniBloc);
 		}
 		
+		if (disposition.startsWith("Tuple_")) {
+			int nombreDElements = Integer.parseInt(disposition.substring(6));
+			return new BlocTuple<>(index, nom, type, nombreDElements, miniBloc);
+		}
+		
 		throw new RuntimeException("Disposition inconnue : " + disposition + " (" + nom + ")");
 	}
 

@@ -4,12 +4,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import fr.bruju.lcfreader.structure.blocs.mini.MiniBloc;
-import fr.bruju.lcfreader.structure.redefinitions.StructureParameters;
 
 /**
  * Il s'agit de la classe indiquant à quoi correspondent les différents codes rencontrés dans l'encodage BER. <br>
@@ -90,8 +90,10 @@ public class Structures {
 
 		try {
 			// Lire les noms de structure
-			lireToutesLesLignes(file, ligne -> {
-				String[] donnees = ligne.split(",", -1);
+			
+			List<String[]> donneesLues = lireToutesLesLignes(file);
+			
+			donneesLues.forEach(donnees -> {
 				String nomStructure = donnees[1];
 				
 				if (!structures.containsKey(nomStructure)) {
@@ -101,20 +103,13 @@ public class Structures {
 					structures.put(nomStructure, structure);
 				}
 			});
+
+			donneesLues.forEach(donnees -> structures.get(donnees[1]).ajouterChamp(donnees));
 			
-			structures.put("Parameters", new StructureParameters());
-			
-			// Lire les champs
-			lireToutesLesLignes(file, ligne -> {
-				String[] donnees = ligne.split(",", -1);
-				structures.get(donnees[1]).ajouterChamp(donnees);
-			});
+			donneesLues.clear();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
-		
 	}
 
 	/**
@@ -124,26 +119,22 @@ public class Structures {
 	 * @param action L'action à réaliser
 	 * @throws IOException
 	 */
-	private static void lireToutesLesLignes(File file, Consumer<String> action) throws IOException {
-		FileReader fileReader = new FileReader(file);
-		BufferedReader buffer = new BufferedReader(fileReader);
+	private static List<String[]> lireToutesLesLignes(File file) throws IOException {
+		List<String[]> donneesLues = new ArrayList<>();
+		
+		BufferedReader buffer = new BufferedReader(new FileReader(file));
 
 		String ligne;
 
-		while (true) {
-			ligne = buffer.readLine();
-
-			if (ligne == null) {
-				break;
+		while ((ligne = buffer.readLine()) != null) {
+			if (!ligne.startsWith("#") && !ligne.equals("")) {
+				donneesLues.add(ligne.split(",", -1));
 			}
-
-			if (ligne.startsWith("#") || ligne.equals(""))
-				continue;
-
-			action.accept(ligne);
 		}
-
+		
 		buffer.close();
+		
+		return donneesLues;
 	}
 
 	public void injecter(Map<String, MiniBloc<?>> miniBlocsConnus) {
