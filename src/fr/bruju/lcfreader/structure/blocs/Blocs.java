@@ -1,13 +1,17 @@
 package fr.bruju.lcfreader.structure.blocs;
 
-import fr.bruju.lcfreader.modele.Desequenceur;
-import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
+import java.util.HashMap;
+import java.util.Map;
+
 import fr.bruju.lcfreader.structure.Structures;
-import fr.bruju.lcfreader.structure.blocs.mini.MiniBER;
+import fr.bruju.lcfreader.structure.bloc.BlocIndexeur;
+import fr.bruju.lcfreader.structure.bloc.BlocListe;
+import fr.bruju.lcfreader.structure.bloc.BlocSimple;
+import fr.bruju.lcfreader.structure.bloc.BlocVecteur;
 import fr.bruju.lcfreader.structure.blocs.mini.MiniBloc;
 import fr.bruju.lcfreader.structure.blocs.mini.MiniInconnu;
-import fr.bruju.lcfreader.structure.dispositions.Disposition;
 import fr.bruju.lcfreader.structure.types.PrimitifCpp;
+import fr.bruju.lcfreader.structure.types.SequenceurIntATailleFixe;
 
 /**
  * Classe permettant d'instancier un bloc selon les données
@@ -16,6 +20,21 @@ import fr.bruju.lcfreader.structure.types.PrimitifCpp;
  *
  */
 public class Blocs {
+	private final Map<String, MiniBloc<?>> miniBlocsConnus = new HashMap<>();
+	
+	private void remplir() {
+		PrimitifCpp.remplirHashMap(miniBlocsConnus, new PrimitifCpp[] {
+					new PrimitifCpp.Int16(),
+					new PrimitifCpp.Int32(),
+					new SequenceurIntATailleFixe.UInt8(),
+					new SequenceurIntATailleFixe.UInt16(),
+					new SequenceurIntATailleFixe.UInt32(),
+					new SequenceurIntATailleFixe.Boolean(),
+				});
+		
+		Structures.getInstance().injecter(miniBlocsConnus);
+	}
+	
 
 	/* ==============
 	 * FONCTIONNEMENT
@@ -23,9 +42,9 @@ public class Blocs {
 
 	private MiniBloc<?> getSequenceur(String nom, String type, int index) {
 		
+		
+		
 		switch (type) {
-		case "Int32":
-			return MiniBER.instance;
 		case "String":
 			if (index == 0)
 				return (o, s) -> o.$lireUneChaine(o.$lireUnNombreBER());
@@ -33,23 +52,10 @@ public class Blocs {
 			return (o, s) -> o.$lireUneChaine(s);
 		}
 		
-		if (PrimitifCpp.map.containsKey(type)) {
-			return (o, s) -> PrimitifCpp.map.get(type).lireOctet(o, s);
-		}
-		
-		if (Structures.getInstance().get(type) != null) {
-			return new MiniBloc<EnsembleDeDonnees>() {
 
-				@Override
-				public EnsembleDeDonnees extraireDonnee(Desequenceur o, int s) {
-					return Structures.getInstance().get(type).lireOctet(o, s);
-				}
-
-				@Override
-				public String convertirEnChaineUneValeur(EnsembleDeDonnees valeur) {
-					return valeur.getRepresentationEnLigne();
-				}
-			};
+		MiniBloc<?> miniBloc = miniBlocsConnus.get(type);
+		if (miniBloc != null) {
+			return miniBloc;
 		}
 		
 		System.out.println("Pas de séquenceur pour " + type + " " + nom);
@@ -68,6 +74,7 @@ public class Blocs {
 		boolean sized = donnees[3].equals("SizeField");
 		String type = donnees[3];
 		String disposition = donnees[4];
+		String defaut = donnees[6];
 
 		int index = 0;
 
@@ -77,17 +84,30 @@ public class Blocs {
 		Champ champ = new Champ(index, nom, sized, donnees[3] + "_" + donnees[4]);
 		
 		if (sized) {
-			return new BlocInt32(champ, donnees[6]);
+			return new BlocInt32(champ, defaut);
 		}
 		
-		Disposition dispo = Disposition.get(disposition, type);
 		MiniBloc<?> sequenceur = getSequenceur(nom, type, index);
 		
-		
-		
-		return dispo.decorer(champ, sequenceur);
+
+		return instancier(disposition, champ, sequenceur, defaut);
 	}
 
+
+	public Bloc<?> instancier(String disposition, Champ champ, MiniBloc<?> miniBloc, String defaut) {
+		switch (disposition) {
+		case "":
+			return new BlocSimple<>(champ, miniBloc, defaut);
+		case "List":
+			return new BlocListe<>(champ, miniBloc);
+		case "Vector":
+			return new BlocVecteur<>(champ, miniBloc);
+		case "Array":
+			return new BlocIndexeur<>(champ, miniBloc);
+		}
+		
+		throw new RuntimeException("Disposition inconnue : " + disposition);
+	}
 
 	/* =========
 	 * SINGLETON
@@ -98,6 +118,7 @@ public class Blocs {
 
 	/** On ne peut pas instancier Blocs de l'extérieur */
 	private Blocs() {
+		remplir();
 	}
 
 	/**

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import fr.bruju.lcfreader.structure.blocs.mini.MiniBloc;
 import fr.bruju.lcfreader.structure.redefinitions.StructureParameters;
 
 /**
@@ -144,5 +145,9 @@ public class Structures {
 		}
 
 		buffer.close();
+	}
+
+	public void injecter(Map<String, MiniBloc<?>> miniBlocsConnus) {
+		miniBlocsConnus.putAll(structures);
 	}
 }

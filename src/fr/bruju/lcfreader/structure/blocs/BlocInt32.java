@@ -54,4 +54,9 @@ public class BlocInt32 extends Bloc<Integer> {
 		XMLInsecticide.fermer();
 		return valeur;
 	}
+
+	@Override
+	public Integer convertirDefaut(String defaut) {
+		return Integer.parseInt(defaut);
+	}
 }

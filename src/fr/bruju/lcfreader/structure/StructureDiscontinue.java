@@ -9,7 +9,6 @@ import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.modele.XMLInsecticide;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 import fr.bruju.lcfreader.structure.blocs.Blocs;
-import fr.bruju.lcfreader.structure.blocs.Champ;
 
 public class StructureDiscontinue extends Structure {
 
@@ -22,7 +21,7 @@ public class StructureDiscontinue extends Structure {
 	}
 
 	@Override
-	public EnsembleDeDonnees lireOctet(Desequenceur desequenceur, int parametre) {
+	public EnsembleDeDonnees extraireDonnee(Desequenceur desequenceur, int parametre) {
 		EnsembleDeDonnees ensembleConstruit = new EnsembleDeDonnees(this);
 		
 		XMLInsecticide.balise("data");

@@ -25,7 +25,7 @@ public class StructureSerie extends Structure {
 	protected List<Bloc<?>> serie = new ArrayList<>();
 
 	@Override
-	public EnsembleDeDonnees lireOctet(Desequenceur desequenceur, int parametre) {
+	public EnsembleDeDonnees extraireDonnee(Desequenceur desequenceur, int parametre) {
 		XMLInsecticide.balise("dataDisc");
 
 		EnsembleDeDonnees ensemble = new EnsembleDeDonnees(this);

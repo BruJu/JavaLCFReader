@@ -24,4 +24,9 @@ public interface MiniBloc<T> {
 	 */
 	public default void afficherSousArchi(int niveau, T value) {
 	}
+
+
+	public default T convertirDefaut(String defaut) {
+		return null;
+	}
 }

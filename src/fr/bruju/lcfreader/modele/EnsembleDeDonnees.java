@@ -116,7 +116,7 @@ public class EnsembleDeDonnees {
 		
 		XMLInsecticide.balise("ENSEMBLE_" + nomStruct);
 		Structure structure = Structures.getInstance().get(nomStruct);
-		EnsembleDeDonnees ensemble = structure.lireOctet(lecteur, lecteur.octetsRestants());
+		EnsembleDeDonnees ensemble = structure.extraireDonnee(lecteur, lecteur.octetsRestants());
 		
 		XMLInsecticide.fermer("ENSEMBLE_" + nomStruct);
 
