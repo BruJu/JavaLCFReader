@@ -4,10 +4,9 @@ import java.util.Arrays;
 
 import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.XMLInsecticide;
-import fr.bruju.lcfreader.structure.StructureSerie;
-import fr.bruju.lcfreader.structure.blocs.Bloc;
-import fr.bruju.lcfreader.structure.blocs.Champ;
+import fr.bruju.lcfreader.structure.bloc.Bloc;
 import fr.bruju.lcfreader.structure.blocs.mini.MiniBloc;
+import fr.bruju.lcfreader.structure.structure.StructureSerie;
 import fr.bruju.lcfreader.structure.types.PrimitifCpp;
 
 public class StructureParameters extends StructureSerie {
@@ -20,7 +19,7 @@ public class StructureParameters extends StructureSerie {
 		String[] champs = {"maxhp", "maxsp", "attack", "defense", "spirit", "agility"};
 		
 		for (String nomChamp : champs) {
-			serie.add(new BlocSuiteValeurs(new Champ(0, nomChamp, false, "Int16"), new PrimitifCpp.Int16(), 99));
+			serie.add(new BlocSuiteValeurs(nomChamp, new PrimitifCpp.Int16(), 99));
 		}
 	}
 
@@ -51,8 +50,8 @@ public class StructureParameters extends StructureSerie {
 		 * @param champ Les caractéristiques
 		 * @param nomPrimitive Le nom du type
 		 */
-		public BlocSuiteValeurs(Champ champ, MiniBloc<Integer> miniBloc, int nombreDeValeurs) {
-			super(champ);
+		public BlocSuiteValeurs(String nomChamp, MiniBloc<Integer> miniBloc, int nombreDeValeurs) {
+			super(0, nomChamp, nomChamp);
 			primitif = miniBloc;
 			this.nombreDeValeurs = nombreDeValeurs;
 		}

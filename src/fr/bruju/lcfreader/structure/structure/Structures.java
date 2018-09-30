@@ -1,4 +1,4 @@
-package fr.bruju.lcfreader.structure;
+package fr.bruju.lcfreader.structure.structure;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -92,15 +92,14 @@ public class Structures {
 			// Lire les noms de structure
 			lireToutesLesLignes(file, ligne -> {
 				String[] donnees = ligne.split(",", -1);
-				Structure structure;
+				String nomStructure = donnees[1];
 				
-				if (donnees[5].equals("")) {
-					structure = new StructureSerie(donnees[0]);
-				} else {
-					structure = new StructureDiscontinue(donnees[0]);
+				if (!structures.containsKey(nomStructure)) {
+					Structure structure = (donnees[5].equals("")) ?
+							new StructureSerie(nomStructure) : new StructureDiscontinue(nomStructure);
+					
+					structures.put(nomStructure, structure);
 				}
-				
-				structures.putIfAbsent(donnees[1], structure);
 			});
 			
 			structures.put("Parameters", new StructureParameters());

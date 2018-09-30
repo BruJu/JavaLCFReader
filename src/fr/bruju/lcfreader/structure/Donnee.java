@@ -1,6 +1,6 @@
 package fr.bruju.lcfreader.structure;
 
-import fr.bruju.lcfreader.structure.blocs.Bloc;
+import fr.bruju.lcfreader.structure.bloc.Bloc;
 
 /**
  * Une donnée représente une valeur par rapport à un bloc.

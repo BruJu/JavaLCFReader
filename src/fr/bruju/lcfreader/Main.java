@@ -13,7 +13,7 @@ import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.modele.FabriqueLCF;
 import fr.bruju.lcfreader.rmobjets.RMMap;
-import fr.bruju.lcfreader.structure.Structures;
+import fr.bruju.lcfreader.structure.structure.Structures;
 
 @SuppressWarnings("unused")
 public class Main {

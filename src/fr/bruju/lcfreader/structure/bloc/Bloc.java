@@ -1,4 +1,4 @@
-package fr.bruju.lcfreader.structure.blocs;
+package fr.bruju.lcfreader.structure.bloc;
 
 import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.structure.Donnee;
@@ -13,7 +13,7 @@ import fr.bruju.lcfreader.structure.blocs.mini.MiniBloc;
  *
  * @param <T> Le type de données utilisé pour représenter les données en Java
  */
-public abstract class Bloc<T> implements MiniBloc<T> , Sequenceur<Donnee<T>> {
+public abstract class Bloc<T> implements MiniBloc<T>, Sequenceur<Donnee<T>> {
 	/* =========================
 	 * ATTRIBUTS ET CONSTRUCTEUR
 	 * ========================= */
@@ -22,20 +22,17 @@ public abstract class Bloc<T> implements MiniBloc<T> , Sequenceur<Donnee<T>> {
 	public final int index;
 	/** Nom des données représentées par le bloc */
 	public final String nom;
-	/** Vrai si le champ est un champ de taille */
-	protected final boolean sized;
-	
-	public final String vraiType;
+
+	public final String typeComplet;
 	
 	/**
 	 * Construit le bloc
 	 * @param champ Les données du bloc
 	 */
-	public Bloc(Champ champ) {
-		this.index = champ.index;
-		this.nom = champ.nom;
-		this.sized = champ.sized;
-		this.vraiType = champ.vraiType;
+	public Bloc(int index, String nom, String type) {
+		this.index = index;
+		this.nom = nom;
+		this.typeComplet = type;
 	}
 	
 	
@@ -54,7 +51,7 @@ public abstract class Bloc<T> implements MiniBloc<T> , Sequenceur<Donnee<T>> {
 	 * @return Vrai si ce bloc représente la taille d'un autre bloc
 	 */
 	public boolean estUnChampIndiquantLaTaille() {
-		return sized;
+		return false;
 	}
 
 	/**
@@ -75,15 +72,6 @@ public abstract class Bloc<T> implements MiniBloc<T> , Sequenceur<Donnee<T>> {
 		return new Donnee<>(this, extraireDonnee(desequenceur, tailleLue));
 	}
 	
-	
-
-	/* ============================
-	 * INTERACTION AVEC LES VALEURS
-	 * ============================ */
-
-
-
-	
 	/* =========
 	 * AFFICHAGE
 	 * ========= */
@@ -100,7 +88,7 @@ public abstract class Bloc<T> implements MiniBloc<T> , Sequenceur<Donnee<T>> {
 		  .append(" ")
 		  .append(nom)
 		  .append(" ")
-		  .append(getNomType())
+		  .append(typeComplet)
 		  .append(" ")
 		  .append(estUnChampIndiquantLaTaille())
 		  .toString();

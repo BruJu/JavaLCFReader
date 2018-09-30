@@ -1,15 +1,12 @@
-package fr.bruju.lcfreader.structure.blocs;
+package fr.bruju.lcfreader.structure.bloc;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import fr.bruju.lcfreader.structure.Structures;
-import fr.bruju.lcfreader.structure.bloc.BlocIndexeur;
-import fr.bruju.lcfreader.structure.bloc.BlocListe;
-import fr.bruju.lcfreader.structure.bloc.BlocSimple;
-import fr.bruju.lcfreader.structure.bloc.BlocVecteur;
 import fr.bruju.lcfreader.structure.blocs.mini.MiniBloc;
 import fr.bruju.lcfreader.structure.blocs.mini.MiniInconnu;
+import fr.bruju.lcfreader.structure.blocs.mini.MiniString;
+import fr.bruju.lcfreader.structure.structure.Structures;
 import fr.bruju.lcfreader.structure.types.PrimitifCpp;
 import fr.bruju.lcfreader.structure.types.SequenceurIntATailleFixe;
 
@@ -19,7 +16,7 @@ import fr.bruju.lcfreader.structure.types.SequenceurIntATailleFixe;
  * @author Bruju
  *
  */
-public class Blocs {
+public class InstancieurDeBlocs {
 	private final Map<String, MiniBloc<?>> miniBlocsConnus = new HashMap<>();
 	
 	private void remplir() {
@@ -41,25 +38,16 @@ public class Blocs {
 	 * ============== */
 
 	private MiniBloc<?> getSequenceur(String nom, String type, int index) {
-		
-		
-		
-		switch (type) {
-		case "String":
-			if (index == 0)
-				return (o, s) -> o.$lireUneChaine(o.$lireUnNombreBER());
-			
-			return (o, s) -> o.$lireUneChaine(s);
+		if ("String".equals(type)) {
+			return MiniString.getInstance(index != 0);
 		}
 		
-
 		MiniBloc<?> miniBloc = miniBlocsConnus.get(type);
 		if (miniBloc != null) {
 			return miniBloc;
 		}
 		
 		System.out.println("Pas de séquenceur pour " + type + " " + nom);
-		
 		return MiniInconnu.instance;
 	}
 
@@ -81,32 +69,31 @@ public class Blocs {
 		if (!donnees[5].equals(""))
 			index = Integer.decode(donnees[5]);
 		
-		Champ champ = new Champ(index, nom, sized, donnees[3] + "_" + donnees[4]);
 		
 		if (sized) {
-			return new BlocInt32(champ, defaut);
+			return new BlocDeTaille(index, nom, defaut);
 		}
 		
 		MiniBloc<?> sequenceur = getSequenceur(nom, type, index);
 		
 
-		return instancier(disposition, champ, sequenceur, defaut);
+		return instancier(disposition, type, index, nom, sequenceur, defaut);
 	}
 
 
-	public Bloc<?> instancier(String disposition, Champ champ, MiniBloc<?> miniBloc, String defaut) {
+	public Bloc<?> instancier(String disposition, String type, int index, String nom, MiniBloc<?> miniBloc, String defaut) {
 		switch (disposition) {
 		case "":
-			return new BlocSimple<>(champ, miniBloc, defaut);
+			return new BlocSimple<>(index, nom, type, miniBloc, defaut);
 		case "List":
-			return new BlocListe<>(champ, miniBloc);
+			return new BlocListe<>(index, nom, type, miniBloc);
 		case "Vector":
-			return new BlocVecteur<>(champ, miniBloc);
+			return new BlocVecteur<>(index, nom, type, miniBloc);
 		case "Array":
-			return new BlocIndexeur<>(champ, miniBloc);
+			return new BlocIndexeur<>(index, nom, type, miniBloc);
 		}
 		
-		throw new RuntimeException("Disposition inconnue : " + disposition);
+		throw new RuntimeException("Disposition inconnue : " + disposition + " (" + nom + ")");
 	}
 
 	/* =========
@@ -114,10 +101,10 @@ public class Blocs {
 	 * ========= */
 
 	/** Instance de blocs */
-	private static Blocs instance;
+	private static InstancieurDeBlocs instance;
 
 	/** On ne peut pas instancier Blocs de l'extérieur */
-	private Blocs() {
+	private InstancieurDeBlocs() {
 		remplir();
 	}
 
@@ -126,9 +113,9 @@ public class Blocs {
 	 * 
 	 * @return L'instance de Blocs
 	 */
-	public static Blocs getInstance() {
+	public static InstancieurDeBlocs getInstance() {
 		if (null == instance) {
-			instance = new Blocs();
+			instance = new InstancieurDeBlocs();
 		}
 		return instance;
 	}

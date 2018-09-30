@@ -1,4 +1,4 @@
-package fr.bruju.lcfreader.structure.blocs;
+package fr.bruju.lcfreader.structure.bloc;
 
 import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.XMLInsecticide;
@@ -9,7 +9,7 @@ import fr.bruju.lcfreader.modele.XMLInsecticide;
  * @author Bruju
  *
  */
-public class BlocInt32 extends Bloc<Integer> {
+public class BlocDeTaille extends Bloc<Integer> {
 	/* =========================
 	 * ATTRIBUTS ET CONSTRUCTEUR
 	 * ========================= */
@@ -22,20 +22,29 @@ public class BlocInt32 extends Bloc<Integer> {
 	 * 
 	 * @param defaut La valeur par défaut. Si de la forme a|b, prend b.
 	 */
-	public BlocInt32(Champ champ, String defaut) {
-		super(champ);
+	public BlocDeTaille(int index, String nom, String defaut) {
+		super(index, nom, "Taille");
 		if (!defaut.equals("")) {
 			this.defaut = Integer.parseInt(defaut);
 		}
 	}
 
+	
+	
 	/* ====================
 	 * PROPRIETES D'UN BLOC
 	 * ==================== */
 
 	@Override
+	public boolean estUnChampIndiquantLaTaille() {
+		return true;
+	}
+
+
+
+	@Override
 	public String getNomType() {
-		return "Integer(" + defaut + ")";
+		return "Taille(" + defaut + ")";
 	}
 
 	@Override
@@ -49,7 +58,7 @@ public class BlocInt32 extends Bloc<Integer> {
 
 	@Override
 	public Integer extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		XMLInsecticide.balise("Nombre_" + this.nom);
+		XMLInsecticide.balise(typeComplet);
 		Integer valeur = desequenceur.$lireUnNombreBER();
 		XMLInsecticide.fermer();
 		return valeur;

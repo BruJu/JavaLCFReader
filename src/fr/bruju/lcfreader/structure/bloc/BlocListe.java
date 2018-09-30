@@ -2,31 +2,29 @@ package fr.bruju.lcfreader.structure.bloc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.modele.Desequenceur;
+import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.modele.XMLInsecticide;
-import fr.bruju.lcfreader.structure.blocs.Bloc;
-import fr.bruju.lcfreader.structure.blocs.Champ;
 import fr.bruju.lcfreader.structure.blocs.mini.MiniBloc;
 
 public class BlocListe<T> extends Bloc<List<T>> {
-	private MiniBloc<T> miniBloc;
-	private String nomChamp;
+	private final MiniBloc<T> miniBloc;
 
-	public BlocListe(Champ champ, MiniBloc<T> miniBloc) {
-		super(champ);
+	public BlocListe(int index, String nom, String type, MiniBloc<T> miniBloc) {
+		super(index, nom, "Liste_" + type);
 		this.miniBloc = miniBloc;
-		this.nomChamp = "Liste_" + champ.vraiType + "_" + this.nom;
 	}
 
 	@Override
 	protected String getNomType() {
-		return nomChamp;
+		return typeComplet;
 	}
 
 	@Override
 	public List<T> extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		XMLInsecticide.balise(nomChamp);
+		XMLInsecticide.balise(typeComplet);
 		
 		XMLInsecticide.balise("nbElem");
 		int nombreDElements = desequenceur.$lireUnNombreBER();
@@ -42,5 +40,34 @@ public class BlocListe<T> extends Bloc<List<T>> {
 		XMLInsecticide.fermer();
 		
 		return liste;
+	}
+
+	@Override
+	public String convertirEnChaineUneValeur(List<T> valeur) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+		
+		sb.append(valeur.stream()
+			            .map(v -> miniBloc.convertirEnChaineUneValeur(v))
+			            .collect(Collectors.joining(", ")));
+		
+		sb.append("]");
+		
+		return sb.toString();
+	}
+
+	@Override
+	public void afficherSousArchi(int niveau, List<T> value) {
+		if (value.isEmpty())
+			return;
+		
+		T premierElement = value.get(0);
+		
+		if (!(premierElement instanceof EnsembleDeDonnees)) {
+			return;
+		}
+		
+		
+        value.forEach(data -> ((EnsembleDeDonnees) data).afficherArchitecture(niveau));
 	}
 }

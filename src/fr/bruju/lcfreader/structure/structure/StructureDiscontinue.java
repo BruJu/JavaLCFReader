@@ -1,4 +1,4 @@
-package fr.bruju.lcfreader.structure;
+package fr.bruju.lcfreader.structure.structure;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -7,8 +7,8 @@ import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.modele.XMLInsecticide;
-import fr.bruju.lcfreader.structure.blocs.Bloc;
-import fr.bruju.lcfreader.structure.blocs.Blocs;
+import fr.bruju.lcfreader.structure.bloc.Bloc;
+import fr.bruju.lcfreader.structure.bloc.InstancieurDeBlocs;
 
 public class StructureDiscontinue extends Structure {
 
@@ -69,7 +69,7 @@ public class StructureDiscontinue extends Structure {
 	
 	@Override
 	public void ajouterChamp(String[] donnees) {
-		Bloc<?> bloc = Blocs.instancier(donnees);
+		Bloc<?> bloc = InstancieurDeBlocs.instancier(donnees);
 		champs.put(bloc.index, bloc);
 	}
 

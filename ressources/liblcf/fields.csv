@@ -637,7 +637,7 @@
 636,EventPageCondition,timer2_sec,Int32,,0x09,0,Integer - RPG2003
 637,EventPageCondition,compare_operator,Int32,,0x0A,1,Integer - RPG2003
 638,MoveRoute,move_commands,SizeField,,0x0B,,Integer
-639,MoveRoute,move_commands,MoveCommand,Vector,0x0C,,Array - RPG::MoveCommand
+639,MoveRoute,move_commands,MoveCommand,,0x0C,,Array - RPG::MoveCommand
 640,MoveRoute,repeat,Boolean,,0x15,True,Flag
 641,MoveRoute,skippable,Boolean,,0x16,False,Flag
 642,EventPage,condition,EventPageCondition,,0x02,,RPG::EventPageCondition
@@ -1093,11 +1093,11 @@
 1092,EventCommand,indent,Int32,,,0,
 1093,EventCommand,string,String,,,'',
 1094,EventCommand,parameters,Int32,List,,,
-1095,MoveCommand,command_id,Int32,,,0,
-1096,MoveCommand,parameter_string,String,,,'',
-1097,MoveCommand,parameter_a,Int32,,,0,
-1098,MoveCommand,parameter_b,Int32,,,0,
-1099,MoveCommand,parameter_c,Int32,,,0,
+#1095,MoveCommand,command_id,Int32,,,0,
+#1096,MoveCommand,parameter_string,String,,,'',
+#1097,MoveCommand,parameter_a,Int32,,,0,
+#1098,MoveCommand,parameter_b,Int32,,,0,
+#1099,MoveCommand,parameter_c,Int32,,,0,
 1100,Parameters,maxhp,Int16,Vector,,,
 1101,Parameters,maxsp,Int16,Vector,,,
 1102,Parameters,attack,Int16,Vector,,,

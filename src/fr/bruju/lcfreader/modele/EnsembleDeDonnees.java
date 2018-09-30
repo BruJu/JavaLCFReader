@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.Utilitaire;
-import fr.bruju.lcfreader.structure.Structures;
+import fr.bruju.lcfreader.structure.bloc.Bloc;
+import fr.bruju.lcfreader.structure.structure.Structure;
+import fr.bruju.lcfreader.structure.structure.Structures;
 import fr.bruju.lcfreader.structure.Donnee;
-import fr.bruju.lcfreader.structure.Structure;
-import fr.bruju.lcfreader.structure.blocs.Bloc;
 
 /**
  * Classe représentant les valeurs liées à une structure de données encodés dans le fichier binaire
@@ -53,7 +53,7 @@ public class EnsembleDeDonnees {
 			if (tailles == null) {
 				tailles = new HashMap<>();
 			}
-
+			
 			tailles.put(blocData.bloc.nom, (Integer) blocData.value);
 		}
 	}

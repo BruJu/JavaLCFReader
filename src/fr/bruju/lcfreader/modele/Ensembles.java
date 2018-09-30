@@ -4,15 +4,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import fr.bruju.lcfreader.Utilitaire;
 import fr.bruju.lcfreader.rmobjets.RMEvenement;
 import fr.bruju.lcfreader.rmobjets.RMInstruction;
 import fr.bruju.lcfreader.rmobjets.RMMap;
 import fr.bruju.lcfreader.rmobjets.RMPage;
-import fr.bruju.lcfreader.structure.Structures;
+import fr.bruju.lcfreader.structure.structure.Structures;
 
 public class Ensembles {
 	public static RMMap map(String cheminProjet, int idCarte) {
-		Structures.initialiser("ressources\\liblcf\\fields.csv");
+		Structures.initialiser("..\\LectureDeLCF\\ressources\\liblcf\\fields.csv");
 		
 		String cheminCarte = cheminProjet + "\\Map" + String.format("%04d", idCarte) + ".lmu";
 
@@ -120,6 +121,8 @@ public class Ensembles {
 	
 	private static class $Instruction implements RMInstruction {
 		private EnsembleDeDonnees ensemble;
+		private int[] parametres = null;
+		
 
 		private $Instruction(EnsembleDeDonnees ensemble) {
 			this.ensemble = ensemble;
@@ -145,9 +148,14 @@ public class Ensembles {
 			return ensemble.getDonnee("string", String.class);
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public int[] parametres() {
-			return ensemble.getDonnee("parameters", int[].class);
+			if (parametres == null) {
+				parametres = Utilitaire.transformerTableau(ensemble.getDonnee("parameters", List.class));
+			}
+			
+			return parametres;
 		}
 	}
 	

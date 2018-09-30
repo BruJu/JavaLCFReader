@@ -1,4 +1,4 @@
-package fr.bruju.lcfreader.structure;
+package fr.bruju.lcfreader.structure.structure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.List;
 import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.modele.XMLInsecticide;
-import fr.bruju.lcfreader.structure.blocs.Bloc;
-import fr.bruju.lcfreader.structure.blocs.Blocs;
+import fr.bruju.lcfreader.structure.bloc.Bloc;
+import fr.bruju.lcfreader.structure.bloc.InstancieurDeBlocs;
 
 /**
  * L'ensemble des associations index - champs pour un type de données
@@ -32,7 +32,7 @@ public class StructureSerie extends Structure {
 
 		for (Bloc<?> bloc : getSerie()) {
 			XMLInsecticide.balise("bloc");
-			ensemble.push(bloc.lireOctet(desequenceur, -1));
+			ensemble.push(bloc.lireOctet(desequenceur, ensemble.getTaille(bloc)));
 			XMLInsecticide.fermer();
 		}
 
@@ -43,7 +43,7 @@ public class StructureSerie extends Structure {
 
 	@Override
 	public void ajouterChamp(String[] donnees) {
-		Bloc<?> bloc = Blocs.instancier(donnees);
+		Bloc<?> bloc = InstancieurDeBlocs.instancier(donnees);
 		serie.add(bloc);
 	}
 

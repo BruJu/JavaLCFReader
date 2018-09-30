@@ -1,5 +1,6 @@
 package fr.bruju.lcfreader;
 
+import java.util.List;
 import java.util.function.Function;
 
 public class Utilitaire {
@@ -38,4 +39,15 @@ public class Utilitaire {
 	public static <O, R> R appel(O objet, Function<O, R> fonction) {
 		return objet == null ? null : fonction.apply(objet);
 	}
+	
+	public static int[] transformerTableau(List<Integer> liste) {
+		int[] tableau = new int[liste.size()];
+		
+		for (int i = 0 ; i != tableau.length ; i++) {
+			tableau[i] = liste.get(i);
+		}
+		
+		return tableau;
+	}
+	
 }
