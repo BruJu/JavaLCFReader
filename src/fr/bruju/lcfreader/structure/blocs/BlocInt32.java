@@ -25,11 +25,6 @@ public class BlocInt32 extends Bloc<Integer> {
 	public BlocInt32(Champ champ, String defaut) {
 		super(champ);
 		if (!defaut.equals("")) {
-			// On prend la valeur par défaut pour RPG Maker 2003
-			if (defaut.contains("|")) {
-				defaut = defaut.split("|")[1];
-			}
-
 			this.defaut = Integer.parseInt(defaut);
 		}
 	}

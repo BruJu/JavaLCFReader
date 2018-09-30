@@ -5,7 +5,7 @@ import fr.bruju.lcfreader.modele.XMLInsecticide;
 import fr.bruju.lcfreader.structure.Sequenceur;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 import fr.bruju.lcfreader.structure.blocs.Champ;
-import fr.bruju.lcfreader.structure.blocs.MiniBloc;
+import fr.bruju.lcfreader.structure.blocs.mini.MiniBloc;
 
 public class DispositionSimple implements Disposition {
 

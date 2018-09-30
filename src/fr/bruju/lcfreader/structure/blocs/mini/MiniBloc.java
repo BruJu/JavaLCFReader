@@ -1,4 +1,4 @@
-package fr.bruju.lcfreader.structure.blocs;
+package fr.bruju.lcfreader.structure.blocs.mini;
 
 import fr.bruju.lcfreader.modele.Desequenceur;
 

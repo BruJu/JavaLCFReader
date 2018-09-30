@@ -4,7 +4,7 @@ package fr.bruju.lcfreader.structure.dispositions;
 import fr.bruju.lcfreader.structure.Sequenceur;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
 import fr.bruju.lcfreader.structure.blocs.Champ;
-import fr.bruju.lcfreader.structure.blocs.MiniBloc;
+import fr.bruju.lcfreader.structure.blocs.mini.MiniBloc;
 
 public interface Disposition {
 	public static Disposition get(String disposition, String type) {

@@ -8,7 +8,6 @@ import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.modele.XMLInsecticide;
 import fr.bruju.lcfreader.structure.blocs.Bloc;
-import fr.bruju.lcfreader.structure.blocs.BlocInconnu;
 import fr.bruju.lcfreader.structure.blocs.Blocs;
 import fr.bruju.lcfreader.structure.blocs.Champ;
 
@@ -45,10 +44,6 @@ public class StructureDiscontinue extends Structure {
 			}
 			
 			Bloc<?> bloc = getBloc(numeroDeBloc);
-			
-			if (bloc == null) {
-				bloc = new BlocInconnu(new Champ(81, "Bloc 81", false, "Bloc 81"), "Bloc 81");
-			}
 			
 			XMLInsecticide.xml( " ", bloc.nom, " | ");
 
