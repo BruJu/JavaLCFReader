@@ -147,7 +147,7 @@ public class LecteurDeLCF implements RMFabrique {
 		
 		List<String> valeurs = new ArrayList<>();
 		
-		for (int i = 1 ; i != ensembles.values().size() ; i++) {
+		for (int i = 1 ; i <= ensembles.values().size() ; i++) {
 			valeurs.add(ensembles.get(i).getDonnee("name", String.class));
 		}
 		
