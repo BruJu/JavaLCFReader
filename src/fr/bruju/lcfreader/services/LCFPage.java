@@ -9,7 +9,6 @@ import fr.bruju.lcfreader.rmobjets.RMPage;
 import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
 
 public class LCFPage implements RMPage {
-	//private EnsembleDeDonnees ensemble;
 	private final int id;
 	private final List<RMInstruction> instructions;
 	

@@ -7,6 +7,11 @@ import fr.bruju.lcfreader.rmobjets.RMEvenementCommun;
 import fr.bruju.lcfreader.rmobjets.RMInstruction;
 import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
 
+/**
+ * Classe extrayant un évènement depuis l'ensemble de données lu dans un fichier RPT_RT.ldb
+ * @author Bruju
+ *
+ */
 public class LCFEvenementCommun implements RMEvenementCommun {
 	private final int id;
 	private final String nom;

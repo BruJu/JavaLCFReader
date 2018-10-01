@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 import fr.bruju.lcfreader.rmobjets.RMEvenementCommun;
 import fr.bruju.lcfreader.rmobjets.RMInstruction;
 import fr.bruju.lcfreader.rmobjets.RMMap;
-import fr.bruju.lcfreader.services.Arborescence;
+import fr.bruju.lcfreader.services.LecteurDeLCF;
 import fr.bruju.lcfreader.structure.modele.Desequenceur;
 import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.structure.structure.Structures;
@@ -27,9 +27,7 @@ public class Main {
 
 		String chemin = "A:\\Dev\\Projet\\";
 		
-		Arborescence arborescence = new Arborescence(chemin);
-		arborescence.charger(3);
-		arborescence.afficher();
+		LecteurDeLCF arborescence = new LecteurDeLCF(chemin);
 		
 		
 		//String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
@@ -60,7 +58,7 @@ public class Main {
 	}
 	
 	private static void testMap(String chemin, int numeroDeMap) {
-		RMMap carte = new Arborescence(chemin).map(numeroDeMap);
+		RMMap carte = new LecteurDeLCF(chemin).map(numeroDeMap);
 		afficherRMMap(carte);
 	}
 
