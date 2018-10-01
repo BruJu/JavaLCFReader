@@ -33,18 +33,11 @@ public class Main {
 		afficherRMMap(arborescence.map(1));
 		
 		
-		//String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
-		
 		/*
 		int idEv = 610;
 		
-		FabriqueLCF fabrique = new FabriqueLCF(chemin);
+		System.out.println(RMEvenementCommun.toString(arborescence.evenementCommun(idEv)));
 		
-		RMEvenementCommun evenementCommun = fabrique.evenementCommun(idEv);
-		
-		List<RMInstruction> instructions = evenementCommun.instructions();
-		
-		instructions.forEach(i -> System.out.println(i.code() + " " + i.argument() + " " + Arrays.toString(i.parametres())));
 		*/
 		
 		
@@ -66,27 +59,7 @@ public class Main {
 	}
 
 	public static void afficherRMMap(RMMap carte) {
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("• Carte " +carte.id() + " / " + carte.nom()).append("\n");
-		
-		carte.evenements().values().stream().forEach(evenement -> {
-			sb.append("•• Evenement " + evenement.id() + " [" + evenement.x() + ", " + evenement.y() + "]").append("\n");
-			evenement.pages().forEach(page -> {
-				sb.append("••• Page " + page.id()).append("\n");
-				page.instructions().forEach(instruction -> {
-					sb.append("•••• Instruction " + instruction.code() + " '" + instruction.argument() + "' ");
-					
-					for (int p : instruction.parametres()) {
-						sb.append(p + " ");
-					}
-					
-					sb.append("\n");
-				});
-			});
-		});
-		
-		System.out.println(sb.toString());
+		System.out.println(RMMap.toString(carte));
 	}
 
 	private static void testerLecture(String chemin, String nomDeFichier) {

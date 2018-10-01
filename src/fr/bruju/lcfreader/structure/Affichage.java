@@ -1,36 +1,12 @@
-package fr.bruju.lcfreader.rmobjets;
+package fr.bruju.lcfreader.structure;
 
-import java.util.Map;
+import fr.bruju.lcfreader.rmobjets.RMMap;
 
-/**
- * Représente une carte RPG Maker
- * 
- * @author Bruju
- *
- */
-public interface RMMap {
+public class Affichage {
 	/**
-	 * Donne le numéro de la carte
-	 * @return Le numéro de la carte
-	 */
-	public int id();
-	
-	/**
-	 * Donne le nom de la carte. L'interprétation de ce terme est laissé à l'implémentation.
-	 * @return Un nom pourla carte
-	 */
-	public String nom();
-	
-	/**
-	 * Donne la liste des évènements composant la carte
-	 * @return La liste des évènements
-	 */
-	public Map<Integer, RMEvenement> evenements();
-	
-	/**
-	 * Donne une représentation en chaîne la carte
+	 * Transforme en chaîne une carte
 	 * @param carte La carte
-	 * @return Une chaîne représentant les données contenues
+	 * @return Un affichage de la carte
 	 */
 	public static String toString(RMMap carte) {
 		StringBuilder sb = new StringBuilder();
@@ -55,4 +31,9 @@ public interface RMMap {
 		
 		return sb.toString();
 	}
+	
+	
+	
+	
+	
 }

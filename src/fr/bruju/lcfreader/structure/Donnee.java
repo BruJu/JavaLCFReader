@@ -31,9 +31,8 @@ public class Donnee<T> {
 	 * @param bloc Le bloc décrivant le type
 	 * @param value La valeur
 	 */
-	@SuppressWarnings("unchecked")
-	public Donnee(Bloc<?> bloc, T value) {
-		this.bloc = (Bloc<T>) bloc;
+	public Donnee(Bloc<T> bloc, T value) {
+		this.bloc = bloc;
 		this.value = value;
 	}
 

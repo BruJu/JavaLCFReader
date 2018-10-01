@@ -54,7 +54,7 @@ public class InstancieurDeBlocs {
 	 * Rempli la liste des mini blocs connus avec des primitives sur des nombres et les sous types connus
 	 */
 	private void remplir() {
-		PrimitifCpp.remplirHashMap(miniBlocsConnus, new PrimitifCpp[] {
+		remplirHashMap(miniBlocsConnus, new PrimitifCpp[] {
 					new PrimitifCpp.Int16(),
 					new PrimitifCpp.Int32(),
 					new PrimitifCpp.Int32LittleEndian(),
@@ -65,6 +65,17 @@ public class InstancieurDeBlocs {
 				});
 		
 		Structures.getInstance().injecter(miniBlocsConnus);
+	}
+	
+	/**
+	 * Rempli la liste des mini blocs avec le tableau de primitifs donné
+	 * @param map La carte à remplir
+	 * @param primitifCpps Un tableau avec tous les primitifs à insérer
+	 */
+	public static void remplirHashMap(Map<String, MiniBloc<?>> map, PrimitifCpp[] primitifCpps) {
+		for (PrimitifCpp primitif : primitifCpps) {
+			map.put(primitif.getNom(), primitif);
+		}
 	}
 	
 
@@ -116,7 +127,7 @@ public class InstancieurDeBlocs {
 		}
 		
 		// System.out.println("Pas de séquenceur pour " + type + " " + nom);
-		return MiniInconnu.instance;
+		return MiniInconnu.getInstance();
 	}
 	
 	/**

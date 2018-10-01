@@ -183,19 +183,28 @@ public class EnsembleDeDonnees {
 	 * @param niveau La marge
 	 */
 	public void afficherArchitecture(int niveau) {
-		Utilitaire.tab(niveau);
-		System.out.println(nomStructure);
+		StringBuilder sb = new StringBuilder();
+		sb.append(Utilitaire.tab(niveau))
+		  .append(nomStructure)
+		  .append("\n");
+		
 		donnees.values().forEach(data -> {
-			Utilitaire.tab(niveau);
-			System.out.print(data.bloc.getTypeEnString());
+			sb.append(Utilitaire.tab(niveau))
+			  .append(data.bloc.getTypeEnString());
 
 			if (data.value instanceof byte[]) {
 				System.out.print(data.getString());
 			}
-
-			System.out.println();
+			
+			sb.append("\n");
+			
+			System.out.println(sb.toString());
+			sb.setLength(0);
+			
 			data.afficherSousArchi(niveau + 1);
 		});
+		
+		System.out.println(sb.toString());
 	}
 
 	/**
