@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import fr.bruju.lcfreader.structure.MiniBloc;
 import fr.bruju.lcfreader.structure.bloc.Bloc;
+import fr.bruju.lcfreader.structure.modele.Desequenceur;
 import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
 
 /**
@@ -55,5 +56,15 @@ public abstract class Structure implements MiniBloc<EnsembleDeDonnees> {
 	@Override
 	public final String convertirEnChaineUneValeur(EnsembleDeDonnees valeur) {
 		return valeur.getRepresentationEnLigne();
+	}
+
+	@Override
+	public EnsembleDeDonnees extraireDonnee(Desequenceur desequenceur, int tailleLue) {
+		return null;
+	}
+
+	@Override
+	public String afficherSousArchi(int niveau, EnsembleDeDonnees ensemble) {
+		return ensemble.afficherArchitecture(niveau);
 	}
 }

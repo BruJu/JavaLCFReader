@@ -2,8 +2,13 @@ package fr.bruju.lcfreader;
 
 import java.util.List;
 
+/**
+ * Englobe des fonctions utilitaires
+ * 
+ * @author Bruju
+ *
+ */
 public class Utilitaire {
-
 	/**
 	 * Donne une représentation hexadécimale sur deux caractère de l'octet donné
 	 * 

@@ -62,7 +62,7 @@ public class BlocSimple<T> extends Bloc<T> {
 	}
 
 	@Override
-	public void afficherSousArchi(int niveau, T value) {
-		miniBloc.afficherSousArchi(niveau, value);
+	public String afficherSousArchi(int niveau, T value) {
+		return miniBloc.afficherSousArchi(niveau, value);
 	}
 }

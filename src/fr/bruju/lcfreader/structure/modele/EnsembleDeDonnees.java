@@ -1,8 +1,5 @@
 package fr.bruju.lcfreader.structure.modele;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -151,30 +148,20 @@ public class EnsembleDeDonnees {
 
 	// Pour le debug / comprendre ce qu'il y a dans cette classe
 
-	/** Affiche les données contenues par l'objet */
-	public void afficherDonnees() {
+	/**
+	 * Renvoie les données contenues sous forme de chaîne
+	 * @return Une chaîne représentant les données contenues
+	 */
+	public String afficherDonnees() {
 		StringBuilder sb = new StringBuilder();
-		
-		donnees.values().forEach(data -> sb.append(data.bloc.getTypeEnString() + " -> " + data.getString()).append("\n"));
-		
-		String chaine = sb.toString();
-
-		System.out.println(chaine);
-
-		PrintWriter pWriter;
-		try {
-			pWriter = new PrintWriter(new FileWriter("../structure.xml", false));
-		} catch (IOException e) {
-			return;
-		}
-        pWriter.print(chaine);
-        pWriter.close();
-		
+		donnees.values().forEach(data ->
+				sb.append(data.bloc.getTypeEnString() + " -> " + data.getString()).append("\n"));
+		return sb.toString();
 	}
 
 	/** Affiche l'architecture des données en considérant que le niveau est 0 */
-	public void afficherArchitecture() {
-		afficherArchitecture(0);
+	public String afficherArchitecture() {
+		return afficherArchitecture(0);
 	}
 
 	/**
@@ -182,7 +169,7 @@ public class EnsembleDeDonnees {
 	 * 
 	 * @param niveau La marge
 	 */
-	public void afficherArchitecture(int niveau) {
+	public String afficherArchitecture(int niveau) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(Utilitaire.tab(niveau))
 		  .append(nomStructure)
@@ -193,18 +180,15 @@ public class EnsembleDeDonnees {
 			  .append(data.bloc.getTypeEnString());
 
 			if (data.value instanceof byte[]) {
-				System.out.print(data.getString());
+				sb.append(data.getString());
 			}
 			
 			sb.append("\n");
 			
-			System.out.println(sb.toString());
-			sb.setLength(0);
-			
-			data.afficherSousArchi(niveau + 1);
+			sb.append(data.afficherSousArchi(niveau + 1));
 		});
 		
-		System.out.println(sb.toString());
+		return sb.toString();
 	}
 
 	/**

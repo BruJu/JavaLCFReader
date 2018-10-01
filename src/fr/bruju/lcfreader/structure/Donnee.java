@@ -52,7 +52,7 @@ public class Donnee<T> {
 	 * 
 	 * @param niveau Le niveau d'indentation
 	 */
-	public void afficherSousArchi(int niveau) {
-		bloc.afficherSousArchi(niveau, value);
+	public String afficherSousArchi(int niveau) {
+		return bloc.afficherSousArchi(niveau, value);
 	}
 }

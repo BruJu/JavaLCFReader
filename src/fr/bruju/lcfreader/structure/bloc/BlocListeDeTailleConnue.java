@@ -87,7 +87,9 @@ abstract class BlocListeDeTailleConnue<T> extends Bloc<List<T>> {
 	}
 
 	@Override
-	public final void afficherSousArchi(int niveau, List<T> valeurs) {
-		valeurs.forEach(valeur -> miniBloc.afficherSousArchi(niveau, valeur));
+	public final String afficherSousArchi(int niveau, List<T> valeurs) {
+		StringBuilder sb = new StringBuilder();
+		valeurs.forEach(valeur -> sb.append(miniBloc.afficherSousArchi(niveau, valeur)));
+		return sb.toString();
 	}
 }

@@ -91,7 +91,9 @@ public class BlocIndexeur<T> extends Bloc<Map<Integer, T>> {
 	}
 	
 	@Override
-	public void afficherSousArchi(int niveau, Map<Integer, T> valeurs) {
-		valeurs.values().forEach(valeur -> miniBloc.afficherSousArchi(niveau, valeur));
+	public String afficherSousArchi(int niveau, Map<Integer, T> valeurs) {
+		StringBuilder sb = new StringBuilder();
+		valeurs.values().forEach(valeur -> sb.append(miniBloc.afficherSousArchi(niveau, valeur)));
+		return sb.toString();
 	}
 }

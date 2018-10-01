@@ -29,11 +29,12 @@ public interface MiniBloc<T> {
 	}
 	
 	/**
-	 * Affiche les ensembles de données contenus par la valeur passée
+	 * Donne sous forme de chaîne les ensembles de données contenus par la valeur passée
 	 * @param niveau Le niveau d'indentation actuel
 	 * @param value La valeur dont on souhaite connaître les sous ensembles de données
 	 */
-	public default void afficherSousArchi(int niveau, T value) {
+	public default String afficherSousArchi(int niveau, T value) {
+		return "";
 	}
 
 	/**
