@@ -26,6 +26,7 @@ public class BlocSimple<T> extends Bloc<T> {
 		valeurParDefaut = defaut.equals("") ? null : miniBloc.convertirDefaut(defaut);
 	}
 
+	
 	/* ====================
 	 * PROPRIETES D'UN BLOC
 	 * ==================== */

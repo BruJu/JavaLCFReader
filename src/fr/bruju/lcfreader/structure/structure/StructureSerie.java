@@ -1,6 +1,7 @@
 package fr.bruju.lcfreader.structure.structure;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import fr.bruju.lcfreader.structure.bloc.Bloc;
@@ -10,13 +11,17 @@ import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
 
 
 /**
- * L'ensemble des associations index - champs pour un type de données
+ * Structure lisant en série les blocs. Ceux-ci sont disposés côte à côte et chaque sous bloc est reponsable de savoir
+ * quand il a terminé sa lecture.
  * 
  * @author Bruju
  *
  */
 public class StructureSerie extends Structure {
-
+	/**
+	 * Crée une structure de lecture de données en série
+	 * @param nom Le nom de la structure
+	 */
 	public StructureSerie(String nom) {
 		super(nom);
 	}
@@ -28,11 +33,10 @@ public class StructureSerie extends Structure {
 	public EnsembleDeDonnees extraireDonnee(Desequenceur desequenceur, int parametre) {
 		EnsembleDeDonnees ensemble = new EnsembleDeDonnees(this);
 
-		for (Bloc<?> bloc : getSerie()) {
-			ensemble.push(bloc.lireOctet(desequenceur, ensemble.getTaille(bloc)));
+		for (Bloc<?> bloc : obtenirTousLesBlocs()) {
+			ensemble.ajouter(bloc.lireOctet(desequenceur, ensemble.getTaille(bloc)));
 		}
-
-
+		
 		return ensemble;
 	}
 
@@ -42,24 +46,8 @@ public class StructureSerie extends Structure {
 		serie.add(bloc);
 	}
 
-	/**
-	 * Donne la liste des blocs à lire pour cette structure
-	 * 
-	 * @return La liste des blocs indiquant comment décrypter cette structure
-	 */
-	public List<Bloc<?>> getSerie() {
+	@Override
+	protected Collection<Bloc<?>> obtenirTousLesBlocs() {
 		return serie;
 	}
-
-	@Override
-	public Bloc<?> getBloc(String nomBloc) {
-		for (Bloc<?> bloc : serie) {
-			if (bloc.nom.equals(nomBloc) && !bloc.estUnChampIndiquantLaTaille()) {
-				return bloc;
-			}
-		}
-
-		return null;
-	}
-
 }

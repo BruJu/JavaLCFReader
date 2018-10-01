@@ -1,37 +1,59 @@
 package fr.bruju.lcfreader.structure.structure;
 
 import java.util.Collection;
-import java.util.Map;
 
 import fr.bruju.lcfreader.structure.MiniBloc;
 import fr.bruju.lcfreader.structure.bloc.Bloc;
-import fr.bruju.lcfreader.structure.modele.Desequenceur;
 import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
 
+/**
+ * Lecture de données composé d'autres données
+ * 
+ * @author Bruju
+ *
+ */
 public abstract class Structure implements MiniBloc<EnsembleDeDonnees> {
-	
+	/** Nom de la structure */
 	public final String nom;
 	
+	/**
+	 * Crée la structure ayant le nom donné
+	 * @param nom Le nom de la structure
+	 */
 	public Structure(String nom) {
 		this.nom = nom;
 	}
 	
-	
-	/** Ajoute un champ */
+	/**
+	 * Ajoute un champ à la structure
+	 * @param donnees Un tableau représentant les différentes informations lues dans le fichier fields.csv
+	 */
 	public abstract void ajouterChamp(String[] donnees);
 
-	public abstract Bloc<?> getBloc(String nomBloc);
+	/**
+	 * Donne le bloc possédant le nom demandé et ne portant pas sur la taille (permet de récupérer les valeurs par
+	 * défaut)
+	 * @param nomBloc Le nom du bloc
+	 * @return Le bloc demandé
+	 */
+	public final Bloc<?> getBloc(String nomBloc) {
+		for (Bloc<?> bloc : obtenirTousLesBlocs()) {
+			if (bloc.nom.equals(nomBloc) && !bloc.estUnChampIndiquantLaTaille()) {
+				return bloc;
+			}
+		}
 
-
-	@Override
-	public String convertirEnChaineUneValeur(EnsembleDeDonnees valeur) {
-		return valeur.getRepresentationEnLigne();
-	}
-
-
-	@Override
-	public EnsembleDeDonnees extraireDonnee(Desequenceur desequenceur, int tailleLue) {
 		return null;
 	}
+	
+	/**
+	 * Fourni la liste de tous les blocs de la structure
+	 * @return La liste de tous les blocs
+	 */
+	protected abstract Collection<Bloc<?>> obtenirTousLesBlocs();
 
+	@Override
+	public final String convertirEnChaineUneValeur(EnsembleDeDonnees valeur) {
+		return valeur.getRepresentationEnLigne();
+	}
 }

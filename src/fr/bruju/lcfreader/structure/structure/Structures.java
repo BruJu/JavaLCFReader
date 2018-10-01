@@ -83,7 +83,7 @@ public class Structures {
 	 * Rempli la structure
 	 */
 	private void remplirStructures() {
-		// On lit deux fois le fichier resssource :
+		// On parcours deux fois les données du fichier resssource :
 		// - Une première fois pour le nom des structures
 		// - Une seconde fois pour les champs
 		// Cela est fait pour pouvoir référencer des structures qui sont plus loin dans la liste
@@ -142,6 +142,10 @@ public class Structures {
 		return donneesLues;
 	}
 
+	/**
+	 * Ajoute dans la map donnée les champs connus
+	 * @param miniBlocsConnus La carte où ajouter les champs
+	 */
 	public void injecter(Map<String, MiniBloc<?>> miniBlocsConnus) {
 		miniBlocsConnus.putAll(structures);
 	}

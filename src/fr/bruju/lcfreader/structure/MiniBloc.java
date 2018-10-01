@@ -29,8 +29,4 @@ public interface MiniBloc<T> {
 	public default T convertirDefaut(String defaut) {
 		return null;
 	}
-	
-	public default boolean concerneUnEnsembleDeDonnees() {
-		return false;
-	}
 }

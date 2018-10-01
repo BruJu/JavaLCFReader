@@ -7,8 +7,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-import fr.bruju.lcfreader.Utilitaire;
-
 
 /**
  * Classe permettant de lire les octets d'un fichier.
@@ -18,8 +16,9 @@ import fr.bruju.lcfreader.Utilitaire;
  *
  */
 public class Desequenceur {
-
-	
+	/* =========================
+	 * ATTRIBUTS ET CONSTRUCTEUR
+	 * ========================= */
 	
 	/** Nom du fichier lu */
 	private final String fichier;
@@ -29,15 +28,11 @@ public class Desequenceur {
 	/** Position actuelle */
 	private int position = 0;
 	/** Début */
-	public final int debut;
+	private final int debut;
 	/** Fin */
-	public final int fin;
+	private final int fin;
 	
-	
-	public ByteBuffer wrapper(int nombreDOctets) {
-		position += nombreDOctets;
-		return ByteBuffer.wrap(octetsDuFichier, position - nombreDOctets, nombreDOctets);
-	}
+	// Constructeurs privés
 	
 	/**
 	 * Crée un lecteur de fichiers qui utilse un flux
@@ -73,48 +68,8 @@ public class Desequenceur {
 		// Modifier le curseur du père
 		base.position += nombreDOctetsPris;	
 	}
-	
 
-	/**
-	 * Extrait une sous séquence d'octets partant de la position actuelle et contenant le nombre d'octets demandés
-	 * @param nombreDOctetsPris Le nombre d'octets à gérer avec cette sous séquence
-	 */
-	public Desequenceur sousSequencer(int taille) {
-		return new Desequenceur(this, taille);
-	}
-	
-	/**
-	 * Donne l'octet suivant
-	 * @return L'octet suivant
-	 */
-	public byte suivant() {
-		if (position >= fin) {
-			throw new LectureIllegale(fichier, debut, position);
-		}
-		
-		return octetsDuFichier[position++];
-	}
-	
-	private static class LectureIllegale extends RuntimeException {
-		/** Serial id */
-		private static final long serialVersionUID = 760742337368045553L;
-
-		/**
-		 * Construit une exception de lecture illégale
-		 * @param fichier Nom du fichier
-		 * @param debut Position du premier octet
-		 * @param position Position du curseur
-		 */
-		public LectureIllegale(String fichier, int debut, int position) {
-			super("Lecture illégale dans "
-					+ fichier
-					+ ", segment commençant à "
-					+ Utilitaire.toHex(debut)
-					+ " avec un curseur à "
-					+ Utilitaire.toHex(position));
-		}
-	}
-	
+	// Pseudo constructeurs public
 	
 	/**
 	 * Instancie un lecteur de fichiers octets par octets à partir d'un nom de fichier
@@ -130,9 +85,67 @@ public class Desequenceur {
 		}
 	}
 	
-	// Services proposés
+	/**
+	 * Extrait une sous séquence d'octets partant de la position actuelle et contenant le nombre d'octets demandés
+	 * @param nombreDOctetsPris Le nombre d'octets à gérer avec cette sous séquence
+	 */
+	public Desequenceur sousSequencer(int taille) {
+		return new Desequenceur(this, taille);
+	}
+
+	
+	/* =========================
+	 * LECTURE OCTETS PAR OCTETS
+	 * ========================= */
 	
 	
+	/**
+	 * Donne l'octet suivant
+	 * @return L'octet suivant
+	 */
+	public byte suivant() {
+		if (position >= fin) {
+			throw new LectureIllegale(fichier, debut, position);
+		}
+		
+		return octetsDuFichier[position++];
+	}
+
+	/**
+	 * Extrait les nombreDOctets prochains octets et les restitue dans un tableau
+	 * @param nombreDOctets Le nombre d'octets à extraire
+	 * @return Un tableau représentant les nombreDOctets prochains octets qu'aurait renvoyé suivant()
+	 */
+	public byte[] extrairePortion(int nombreDOctets) {
+		byte[] extrait = Arrays.copyOfRange(octetsDuFichier, position, position + nombreDOctets);
+		position += nombreDOctets;
+		return extrait;
+	}
+
+	/**
+	 * Construit un ByteBuffer à partir des nombreDOctets prochains octets
+	 * @param nombreDOctets Le nombre d'octets à mettre dans le ByteBuffer
+	 * @return Un ByteBuffer contenant les nombreDOctets octets qu'aurait renvoyé suivant()
+	 */
+	public ByteBuffer wrapper(int nombreDOctets) {
+		position += nombreDOctets;
+		return ByteBuffer.wrap(octetsDuFichier, position - nombreDOctets, nombreDOctets);
+	}
+
+
+	/* =======================
+	 * SERVICES DE HAUT NIVEAU
+	 * ======================= */
+	
+	/**
+	 * Lit des octets pour constituer un nombre encodé selon le principe utilisé par BER.
+	 * <br>Plus précisémement, pour chaque octet, les 7 bits de poids faibles correspondent au nombre, et le bit de
+	 * poids le plus fort représente si le prochain octet fait parti du nombre. Le nombre reconstitué est la
+	 * concaténation des 7 bits de poids faibles de chaque octet composant le nombre, chaque octet ayant un 1 comme bit
+	 * de poids fort sauf le dernier qui a un 0.
+	 *  
+	 * @return Le nombre lu
+	 */
 	public int $lireUnNombreBER() {
 		int valeur = 0;
 		int octetLu;
@@ -145,33 +158,48 @@ public class Desequenceur {
 		return valeur;
 	}
 	
+	/**
+	 * Lit les taille prochain octets et les restitue comme étant une chaîne
+	 * @param taille La taille de la chaîne
+	 * @return La chaîne lue
+	 */
 	public String $lireUneChaine(int taille) {
+		// TODO : Gestion des accents
 		char[] caracteres = new char[taille];
 		
 		for (int i = 0; i != taille; i++) {
 			caracteres[i] = (char) suivant();
 		}
 		
-
 		return String.valueOf(caracteres);
 	}
 
+	/* ==============================
+	 * POSITION DE LA TETE DE LECTURE
+	 * ============================== */
+	
+	/**
+	 * Renvoie vrai si il reste des octets à lire
+	 * @return Vrai si il reste des octets à lire
+	 */
 	public boolean nonVide() {
 		return position != fin;
 	}
 
+	/**
+	 * Renvoie le nombre d'octets restants à lire
+	 * @return Le nombre d'octets restants à lire
+	 */
 	public int octetsRestants() {
 		return fin - position;
 	}
 	
+	/**
+	 * Donne le numéro de l'octet actuel
+	 * @return Le numéro de l'octet actuel
+	 */
 	public int getPosition() {
 		return position;
 	}
 
-	public byte[] extrairePortion(int tailleLue) {
-		byte[] extrait = Arrays.copyOfRange(octetsDuFichier, position, position + tailleLue);
-		position += tailleLue;
-		return extrait;
-	}
-	
 }

@@ -3,9 +3,7 @@ package fr.bruju.lcfreader.structure.modele;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -16,7 +14,7 @@ import fr.bruju.lcfreader.structure.structure.Structures;
 import fr.bruju.lcfreader.structure.Donnee;
 
 /**
- * Classe représentant les valeurs liées à une structure de données encodés dans le fichier binaire
+ * Classe représentant les valeurs liées à une structure de données (sous type) encodés dans le fichier binaire
  * 
  * @author Bruju
  *
@@ -25,12 +23,12 @@ public class EnsembleDeDonnees {
 	/* =========================
 	 * OBJET ENSEMBLE DE DONNEES
 	 * ========================= */
-
 	/** Nom de la structure */
-	public final String nomStruct;
+	public final String nomStructure;
 
 	/** Liste des données */
-	private List<Donnee<?>> donnees;
+	private Map<String, Donnee<?>> donnees;
+	
 	/** Tailles connues (données de type "size field") */
 	private Map<String, Integer> tailles;
 
@@ -40,8 +38,8 @@ public class EnsembleDeDonnees {
 	 * @param structure Le nom de la structure
 	 */
 	public EnsembleDeDonnees(Structure structure) {
-		donnees = new ArrayList<>();
-		this.nomStruct = structure.nom;
+		donnees = new HashMap<>();
+		this.nomStructure = structure.nom;
 	}
 	
 	/**
@@ -49,16 +47,20 @@ public class EnsembleDeDonnees {
 	 * 
 	 * @param blocData L'ensemble de données à enregistrer
 	 */
-	public void push(Donnee<?> blocData) {
-		donnees.add(blocData);
-
+	public void ajouter(Donnee<?> blocData) {
+		String nomBloc = blocData.bloc.nom;
+		
 		if (blocData.bloc.estUnChampIndiquantLaTaille()) {
 			if (tailles == null) {
 				tailles = new HashMap<>();
 			}
 			
-			tailles.put(blocData.bloc.nom, (Integer) blocData.value);
+			tailles.put(nomBloc, (Integer) blocData.value);
+			
+			nomBloc = "$" + nomBloc;
 		}
+		
+		donnees.put(nomBloc, blocData);
 	}
 
 	/**
@@ -86,11 +88,12 @@ public class EnsembleDeDonnees {
 	 */
 	public static EnsembleDeDonnees lireFichier(String chemin) {
 		Desequenceur lecteur = Desequenceur.instancier(chemin);
-
+		if (lecteur == null) {
+			return null;
+		}
 
 		// Connaître le type de fichier
-		int taille = lecteur.$lireUnNombreBER();
-		
+		int taille = lecteur.$lireUnNombreBER();		
 		String type = lecteur.$lireUneChaine(taille);
 		
 		String nomStruct;
@@ -102,19 +105,20 @@ public class EnsembleDeDonnees {
 		case "LcfMapTree":
 			nomStruct = "TreeMap";
 			break;
-		case "LcfDataBase": nomStruct = "Database";	break; // Non fonctionnel
-		case "LcfSaveData": nomStruct = "Save"; 	break; // Non fonctionnel
-			
+		case "LcfDataBase":
+			nomStruct = "Database";
+			break;
+		case "LcfSaveData":
+			nomStruct = "Save";
+			break;
 		default: // Type Inconnu
-			System.out.println("Inconnu " + type);
+			System.out.println("Fichier de format inconnu " + type);
 			return null;
 		}
 
 		// Sequencer le reste du fichier
-		
 		Structure structure = Structures.getInstance().get(nomStruct);
 		EnsembleDeDonnees ensemble = structure.extraireDonnee(lecteur, lecteur.octetsRestants());
-		
 		return ensemble;
 	}
 
@@ -122,16 +126,22 @@ public class EnsembleDeDonnees {
 	 * ACCES AUX DONNEES
 	 * ================= */
 	
+	/**
+	 * Permet d'accéder à la donnée contenu par le blog donc le nom est donné. L'objet est casté avec la classe donnée.
+	 * Si l'objet ne possède pas la donnée, la valeur par défaut est retournée.
+	 * @param nomBloc Le nom du bloc
+	 * @param classe La classe permettant de caster l'élément
+	 * @return La donnée voulue
+	 */
 	public <T> T getDonnee(String nomBloc, Class<T> classe) {
-		Bloc<?> bloc = Structures.getInstance().get(nomStruct).getBloc(nomBloc);
+		Donnee<?> donnee = donnees.get(nomBloc);
 		
-		for (Donnee<?> donnee : donnees) {
-			if (donnee.bloc == bloc) {
-				return classe.cast(donnee.value);
-			}
+		if (donnee != null) {
+			return classe.cast(donnee.value);
+		} else {
+			Bloc<?> bloc = Structures.getInstance().get(nomStructure).getBloc(nomBloc);
+			return classe.cast(bloc.valeurParDefaut());
 		}
-		
-		return classe.cast(bloc.valeurParDefaut());
 	}
 	
 	
@@ -145,7 +155,7 @@ public class EnsembleDeDonnees {
 	public void afficherDonnees() {
 		StringBuilder sb = new StringBuilder();
 		
-		donnees.forEach(data -> sb.append(data.bloc.getTypeEnString() + " -> " + data.getString()).append("\n"));
+		donnees.values().forEach(data -> sb.append(data.bloc.getTypeEnString() + " -> " + data.getString()).append("\n"));
 		
 		String chaine = sb.toString();
 
@@ -174,8 +184,8 @@ public class EnsembleDeDonnees {
 	 */
 	public void afficherArchitecture(int niveau) {
 		Utilitaire.tab(niveau);
-		System.out.println(nomStruct);
-		donnees.forEach(data -> {
+		System.out.println(nomStructure);
+		donnees.values().forEach(data -> {
 			Utilitaire.tab(niveau);
 			System.out.print(data.bloc.getTypeEnString());
 
@@ -194,7 +204,7 @@ public class EnsembleDeDonnees {
 	 * @return La représentation en ligne du type NomStructure -> nomChamp1:valeur1 ; nomChamp2:valeur2
 	 */
 	public String getRepresentationEnLigne() {
-		return nomStruct + " -> "
-				+ donnees.stream().map(d -> d.bloc.nom + ":" + d.getString()).collect(Collectors.joining(" ; "));
+		return nomStructure + " -> "
+				+ donnees.values().stream().map(d -> d.bloc.nom + ":" + d.getString()).collect(Collectors.joining(" ; "));
 	}
 }
