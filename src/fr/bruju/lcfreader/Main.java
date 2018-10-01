@@ -19,10 +19,10 @@ public class Main {
 	public static void main(String[] args) {
 		String chemin;
 		
-		int numeroChemin = 0; // 0 = brut, 1 = dev
+		int numeroChemin = 1; // 0 = brut, 1 = dev
 		int typeOperation = 0; // 0 = lecture de fichier, 1 = lecture d'abstractions
 		int typeDeDonnees = 0; // 0 = map, 1 = bdd | 0 = map, 1 = ec
-		int numeroElement = 1;
+		int numeroElement = 2;
 		
 		String chemins[] = {
 				"..\\RMEventReader\\ressources\\FichiersBruts\\",

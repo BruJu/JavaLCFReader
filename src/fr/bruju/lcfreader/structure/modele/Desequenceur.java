@@ -2,6 +2,7 @@ package fr.bruju.lcfreader.structure.modele;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,6 +20,9 @@ public class Desequenceur {
 	/* =========================
 	 * ATTRIBUTS ET CONSTRUCTEUR
 	 * ========================= */
+	
+	/** Encodage utilisé pour coder les chaînes */
+	private static final Charset CHARSET = Charset.forName("ISO-8859-15");
 	
 	/** Nom du fichier lu */
 	private final String fichier;
@@ -164,14 +168,9 @@ public class Desequenceur {
 	 * @return La chaîne lue
 	 */
 	public String $lireUneChaine(int taille) {
-		// TODO : Gestion des accents
-		char[] caracteres = new char[taille];
-		
-		for (int i = 0; i != taille; i++) {
-			caracteres[i] = (char) suivant();
-		}
-		
-		return String.valueOf(caracteres);
+		String chaine = new String(octetsDuFichier, position, taille, CHARSET);
+		position += taille;
+		return chaine;
 	}
 
 	/* ==============================
