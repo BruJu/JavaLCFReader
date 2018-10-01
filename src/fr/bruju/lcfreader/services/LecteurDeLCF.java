@@ -1,7 +1,9 @@
 package fr.bruju.lcfreader.services;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import fr.bruju.lcfreader.rmobjets.RMEvenementCommun;
@@ -20,6 +22,13 @@ import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
  *
  */
 public class LecteurDeLCF implements RMFabrique {
+	/* ==========
+	 * CONSTANTES
+	 * ========== */
+	
+	/** Liste des noms de catégories dont des noms sont extraits */
+	private static final String[] NOMS_A_STOCKER = {"actors", "items", "switches", "variables"};
+	
 	/* ==============
 	 * INITIALISATION
 	 * ============== */
@@ -30,6 +39,8 @@ public class LecteurDeLCF implements RMFabrique {
 	private Map<Integer, LCFCarte> cartesConnues;
 	/** Liste des évènements communs */
 	private Map<Integer, RMEvenementCommun> evenementsCommuns = null;
+	/** Liste des noms stockes */
+	private Map<String, List<String>> nomsStockes = null;
 	
 	/**
 	 * Crée une instance de la classe
@@ -58,6 +69,20 @@ public class LecteurDeLCF implements RMFabrique {
 	public Map<Integer, RMEvenementCommun> evenementsCommuns() {
 		lireFichierLDB();
 		return evenementsCommuns;
+	}
+
+	/* ======================
+	 * Service supplémentaire
+	 * ====================== */
+	
+	/**
+	 * Donne la liste de tous les identifiants d'une catégorie
+	 * @param nomCategorie Une de ces chaînes : "actors", "items", "switches", "variables"
+	 * @return La liste des noms
+	 */
+	public List<String> getListeDeNoms(String nomCategorie) {
+		lireFichierLDB();
+		return nomsStockes.get(nomCategorie);
 	}
 	
 	
@@ -100,6 +125,7 @@ public class LecteurDeLCF implements RMFabrique {
 			return;
 		
 		evenementsCommuns = new HashMap<>();
+		nomsStockes = new HashMap<>();
 		
 		EnsembleDeDonnees donnees = EnsembleDeDonnees.lireFichier(racine + "RPG_RT.ldb");
 		
@@ -109,7 +135,25 @@ public class LecteurDeLCF implements RMFabrique {
 		for (Map.Entry<Integer, EnsembleDeDonnees> entree : evenements.entrySet()) {
 			evenementsCommuns.put(entree.getKey(), new LCFEvenementCommun(entree.getKey(), entree.getValue()));
 		}
+		
+		for (String nomCategorie : NOMS_A_STOCKER) {
+			nomsStockes.put(nomCategorie, extraireListeDeNoms(donnees, nomCategorie));
+		}
 	}
+	
+	private List<String> extraireListeDeNoms(EnsembleDeDonnees donnees, String nomBloc) {
+		@SuppressWarnings("unchecked")
+		Map<Integer, EnsembleDeDonnees> ensembles = donnees.getDonnee(nomBloc, Map.class);
+		
+		List<String> valeurs = new ArrayList<>();
+		
+		for (int i = 1 ; i != ensembles.values().size() ; i++) {
+			valeurs.add(ensembles.get(i).getDonnee("name", String.class));
+		}
+		
+		return valeurs;
+	}
+	
 	
 	/**
 	 * Met dans le StringBuilder le nom de carte dont l'id est donné ainsi que de tous ses pères
