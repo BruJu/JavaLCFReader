@@ -1,68 +1,37 @@
 package fr.bruju.lcfreader.structure.bloc;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import fr.bruju.lcfreader.structure.MiniBloc;
 import fr.bruju.lcfreader.structure.modele.Desequenceur;
-import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
 
-
-public class BlocListe<T> extends Bloc<List<T>> {
-	private final MiniBloc<T> miniBloc;
-
+/**
+ * Un bloc qui construit des listes d'éléments en commenant par liste le nombre d'éléments
+ * 
+ * @author Bruju
+ *
+ * @param <T> Le type des éléments
+ */
+public final class BlocListe<T> extends BlocListeDeTailleConnue<T> {
+	/* =========================
+	 * ATTRIBUTS ET CONSTRUCTEUR
+	 * ========================= */
+	
+	/**
+	 * Construit un bloc demandant la taille de la liste avant de la lire
+	 * @param index ID du champ
+	 * @param nom Nom du champ
+	 * @param type Type du champ indiqué
+	 * @param miniBloc Mini bloc à utiliser pour instancier les éléments
+	 */
 	public BlocListe(int index, String nom, String type, MiniBloc<T> miniBloc) {
-		super(index, nom, "Liste_" + type);
-		this.miniBloc = miniBloc;
+		super(index, nom, "Liste_" + type, miniBloc);
 	}
 
-	@Override
-	protected String getNomType() {
-		return typeComplet;
-	}
+	/* =====================
+	 * CONSTRUIRE UNE VALEUR
+	 * ===================== */
 
 	@Override
-	public List<T> extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		int nombreDElements = desequenceur.$lireUnNombreBER();
-		
-		List<T> liste = new ArrayList<>(nombreDElements);
-		
-		while (nombreDElements != 0) {
-			T element = miniBloc.extraireDonnee(desequenceur, -1);
-			liste.add(element);
-			nombreDElements --;
-		}
-		
-		return liste;
-	}
-
-	@Override
-	public String convertirEnChaineUneValeur(List<T> valeur) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("[");
-		
-		sb.append(valeur.stream()
-			            .map(v -> miniBloc.convertirEnChaineUneValeur(v))
-			            .collect(Collectors.joining(", ")));
-		
-		sb.append("]");
-		
-		return sb.toString();
-	}
-
-	@Override
-	public void afficherSousArchi(int niveau, List<T> value) {
-		if (value.isEmpty())
-			return;
-		
-		T premierElement = value.get(0);
-		
-		if (!(premierElement instanceof EnsembleDeDonnees)) {
-			return;
-		}
-		
-		
-        value.forEach(data -> ((EnsembleDeDonnees) data).afficherArchitecture(niveau));
+	protected int getNombreDElements(Desequenceur desequenceur) {
+		return desequenceur.$lireUnNombreBER();
 	}
 }

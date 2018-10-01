@@ -8,13 +8,13 @@ import fr.bruju.lcfreader.structure.MiniBloc;
 import fr.bruju.lcfreader.structure.modele.Desequenceur;
 
 /**
- * Un bloc qui lit des données jusqu'à expiration des octets à lire
+ * Un bloc qui construit une liste selon une méthode de taille définie dans la classe fille
  * 
  * @author Bruju
  *
  * @param <T> Le type des éléments
  */
-public class BlocVecteur<T> extends Bloc<List<T>> {
+abstract class BlocListeDeTailleConnue<T> extends Bloc<List<T>> {
 	/* =========================
 	 * ATTRIBUTS ET CONSTRUCTEUR
 	 * ========================= */
@@ -23,48 +23,53 @@ public class BlocVecteur<T> extends Bloc<List<T>> {
 	private final MiniBloc<T> miniBloc;
 
 	/**
-	 * Crée un bloc vectuer
+	 * Crée un bloc listeur
 	 * @param index ID du champ
 	 * @param nom Nom du champ
 	 * @param type Type du champ indiqué
 	 * @param miniBloc Mini bloc à utiliser pour instancier les éléments
 	 */
-	public BlocVecteur(int index, String nom, String type, MiniBloc<T> sequenceur) {
-		super(index, nom, "Vecteur_" + type);
-		this.miniBloc = sequenceur;
+	public BlocListeDeTailleConnue(int index, String nom, String type, MiniBloc<T> miniBloc) {
+		super(index, nom, type);
+		this.miniBloc = miniBloc;
 	}
-
+	
 	
 	/* ====================
 	 * PROPRIETES D'UN BLOC
 	 * ==================== */
 
 	@Override
-	protected String getNomType() {
+	protected final String getNomType() {
 		return typeComplet;
 	}
-
+	
 	
 	/* =====================
 	 * CONSTRUIRE UNE VALEUR
 	 * ===================== */
 	
+	/**
+	 * Donne le nombre d'éléments à lire
+	 * @param desequenceur Les octets en cours de lecture
+	 * @return Le nombre d'éléments à lire
+	 */
+	protected abstract int getNombreDElements(Desequenceur desequenceur);
+	
 	@Override
-	public List<T> extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		if (tailleLue < 0) {
-			throw new RuntimeException("Taille Lue = " + tailleLue);
-		}
+	public final List<T> extraireDonnee(Desequenceur desequenceur, int tailleLue) {
+		int nombreDElements = getNombreDElements(desequenceur);
 		
-		List<T> liste = new ArrayList<>();
+		List<T> liste = new ArrayList<>(nombreDElements);
 		
-		while (desequenceur.nonVide()) {
+		while (nombreDElements != 0) {
 			T element = miniBloc.extraireDonnee(desequenceur, -1);
 			liste.add(element);
+			nombreDElements --;
 		}
 		
 		return liste;
 	}
-
 	
 	/* =========
 	 * AFFICHAGE

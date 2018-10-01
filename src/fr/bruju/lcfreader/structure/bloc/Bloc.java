@@ -22,7 +22,7 @@ public abstract class Bloc<T> implements MiniBloc<T>, Sequenceur<Donnee<T>> {
 	public final int index;
 	/** Nom des données représentées par le bloc */
 	public final String nom;
-
+	/** Nom du type complet pour le retrouver dans fields.csv */
 	public final String typeComplet;
 	
 	/**
@@ -34,7 +34,6 @@ public abstract class Bloc<T> implements MiniBloc<T>, Sequenceur<Donnee<T>> {
 		this.nom = nom;
 		this.typeComplet = type;
 	}
-	
 	
 	/* ====================
 	 * PROPRIETES D'UN BLOC
@@ -75,9 +74,7 @@ public abstract class Bloc<T> implements MiniBloc<T>, Sequenceur<Donnee<T>> {
 	/* =========
 	 * AFFICHAGE
 	 * ========= */
-
-
-
+	
 	/**
 	 * Donne une représentation du bloc de la forme "index nom type estUnChampTaille"
 	 * @return Une représentation du bloc de la forme "index nom type estUnChampTaille"
@@ -89,9 +86,6 @@ public abstract class Bloc<T> implements MiniBloc<T>, Sequenceur<Donnee<T>> {
 		  .append(nom)
 		  .append(" ")
 		  .append(typeComplet)
-		  .append(" ")
-		  .append(estUnChampIndiquantLaTaille())
 		  .toString();
 	}
-
 }

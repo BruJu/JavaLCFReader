@@ -1,9 +1,10 @@
 package fr.bruju.lcfreader.structure.structure;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,12 +22,14 @@ import fr.bruju.lcfreader.structure.MiniBloc;
  * 
  * <br>
  * <br>
- * Design pattern utilisé : Variante de singleton
+ * Design pattern utilisé : Singleton
  * 
  * @author Bruju
  *
  */
 public class Structures {
+	private static final String FIELDSCSV = "liblcf/fields.csv";
+	
 	/* =========
 	 * SINGLETON
 	 * ========= */
@@ -36,13 +39,13 @@ public class Structures {
 	 * 
 	 * @param fichier Le chemin vers le fichier contenant la base
 	 */
-	public static void initialiser(String fichier) {
+	public static void initialiser() {
 		if (instance != null) {
 			return;
 		}
 
 		instance = new Structures();
-		instance.remplirStructures(fichier);
+		instance.remplirStructures();
 	}
 
 	/** Instance connue */
@@ -54,7 +57,7 @@ public class Structures {
 
 	/** Donne l'instance de la base de données */
 	public static Structures getInstance() {
-		Structures.initialiser("..\\LectureDeLCF\\ressources\\liblcf\\fields.csv");
+		Structures.initialiser();
 		
 		return instance;
 	}
@@ -77,23 +80,23 @@ public class Structures {
 	}
 
 	/**
-	 * Rempli la structure avec le fichier donné
-	 * 
-	 * @param fichier Le chemin vers le fichier
+	 * Rempli la structure
 	 */
-	private void remplirStructures(String fichier) {
+	private void remplirStructures() {
 		// On lit deux fois le fichier resssource :
 		// - Une première fois pour le nom des structures
 		// - Une seconde fois pour les champs
 		// Cela est fait pour pouvoir référencer des structures qui sont plus loin dans la liste
 		
-		File file = new File(fichier);
+		URL is = getClass().getClassLoader().getResource(FIELDSCSV);
+		
+		//File file = new File(fichier);
 		structures = new HashMap<>();
 
 		try {
 			// Lire les noms de structure
 			
-			List<String[]> donneesLues = lireToutesLesLignes(file);
+			List<String[]> donneesLues = lireToutesLesLignes(is.openStream());
 			
 			donneesLues.forEach(donnees -> {
 				String nomStructure = donnees[1];
@@ -121,10 +124,10 @@ public class Structures {
 	 * @param action L'action à réaliser
 	 * @throws IOException
 	 */
-	private static List<String[]> lireToutesLesLignes(File file) throws IOException {
+	private static List<String[]> lireToutesLesLignes(InputStream is) throws IOException {
 		List<String[]> donneesLues = new ArrayList<>();
 		
-		BufferedReader buffer = new BufferedReader(new FileReader(file));
+		BufferedReader buffer = new BufferedReader(new InputStreamReader(is));
 
 		String ligne;
 

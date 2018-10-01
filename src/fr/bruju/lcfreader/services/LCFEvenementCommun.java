@@ -8,16 +8,26 @@ import fr.bruju.lcfreader.rmobjets.RMInstruction;
 import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
 
 /**
- * Classe extrayant un évènement depuis l'ensemble de données lu dans un fichier RPT_RT.ldb
+ * Classe extrayant un évènement depuis l'ensemble de données lu dans un fichier RPG_RT.ldb
  * @author Bruju
  *
  */
 public class LCFEvenementCommun implements RMEvenementCommun {
+	/* =========
+	 * ATTRIBUTS
+	 * ========= */
+	/** ID de l'évènement commun */
 	private final int id;
+	/** Nom de l'évènement commun */
 	private final String nom;
+	/** Liste des instructions */
 	private final List<RMInstruction> instructions;
 	
-	
+	/**
+	 * Instancie l'évènement commun depuis son id et l'ensemble de données extrait de RPG_RT.ldb
+	 * @param id L'id de l'évènement
+	 * @param ensemble L'ensemble de données représentant l'évènement commun
+	 */
 	@SuppressWarnings("unchecked")
 	public LCFEvenementCommun(Integer id, EnsembleDeDonnees ensemble) {
 		this.id = id;
@@ -25,11 +35,15 @@ public class LCFEvenementCommun implements RMEvenementCommun {
 		
 		List<EnsembleDeDonnees> instructions = ensemble.getDonnee("event_commands", List.class);
 		this.instructions = instructions.stream()
-						   .map(LCFInstruction::instancier)
-						   .filter(e -> e != null)
+						   .map(LCFInstruction::new)
+						   .filter(e -> e.code() != 0)
 						   .collect(Collectors.toList());
 	}
 
+	/* ===================================
+	 * IMPLEMENTATION DE RMEVENEMENTCOMMUN
+	 * =================================== */
+	
 	@Override
 	public int id() {
 		return id;

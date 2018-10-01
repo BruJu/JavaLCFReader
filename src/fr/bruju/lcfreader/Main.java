@@ -25,9 +25,12 @@ import fr.bruju.lcfreader.structure.structure.Structures;
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
 
-		String chemin = "A:\\Dev\\Projet\\";
+		String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
+		//String chemin = "A:\\Dev\\Projet\\";
 		
 		LecteurDeLCF arborescence = new LecteurDeLCF(chemin);
+		
+		afficherRMMap(arborescence.map(1));
 		
 		
 		//String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";

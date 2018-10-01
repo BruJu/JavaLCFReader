@@ -4,7 +4,7 @@ import fr.bruju.lcfreader.structure.modele.Desequenceur;
 
 
 /**
- * Un bloc de données concernant un int32
+ * Un bloc de données contenant la taille d'un autre bloc
  * 
  * @author Bruju
  *
@@ -20,7 +20,7 @@ public class BlocDeTaille extends Bloc<Integer> {
 	/**
 	 * Construit le bloc contenant un entier avec la valeur par défaut donnée
 	 * 
-	 * @param defaut La valeur par défaut. Si de la forme a|b, prend b.
+	 * @param defaut La valeur par défaut
 	 */
 	public BlocDeTaille(int index, String nom, String defaut) {
 		super(index, nom, "Taille");
@@ -28,8 +28,6 @@ public class BlocDeTaille extends Bloc<Integer> {
 			this.defaut = Integer.parseInt(defaut);
 		}
 	}
-
-	
 	
 	/* ====================
 	 * PROPRIETES D'UN BLOC
@@ -39,9 +37,7 @@ public class BlocDeTaille extends Bloc<Integer> {
 	public boolean estUnChampIndiquantLaTaille() {
 		return true;
 	}
-
-
-
+	
 	@Override
 	public String getNomType() {
 		return "Taille(" + defaut + ")";
