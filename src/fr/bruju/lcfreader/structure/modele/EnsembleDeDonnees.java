@@ -88,15 +88,11 @@ public class EnsembleDeDonnees {
 		Desequenceur lecteur = Desequenceur.instancier(chemin);
 
 
-		XMLInsecticide.vider();
 		// Connaître le type de fichier
-		XMLInsecticide.balise("TypeDeFichier");
 		int taille = lecteur.$lireUnNombreBER();
 		
-		XMLInsecticide.xml(" ==== ");
 		String type = lecteur.$lireUneChaine(taille);
 		
-		XMLInsecticide.fermer();
 		String nomStruct;
 
 		switch (type) {
@@ -116,17 +112,8 @@ public class EnsembleDeDonnees {
 
 		// Sequencer le reste du fichier
 		
-		
-		XMLInsecticide.balise("ENSEMBLE_" + nomStruct);
 		Structure structure = Structures.getInstance().get(nomStruct);
 		EnsembleDeDonnees ensemble = structure.extraireDonnee(lecteur, lecteur.octetsRestants());
-		
-		XMLInsecticide.fermer("ENSEMBLE_" + nomStruct);
-
-		//XMLInsecticide.ecrireDebug();
-		
-		XMLInsecticide.vider();
-
 		
 		return ensemble;
 	}

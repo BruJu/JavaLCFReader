@@ -112,10 +112,6 @@ public class Desequenceur {
 					+ Utilitaire.toHex(debut)
 					+ " avec un curseur à "
 					+ Utilitaire.toHex(position));
-			
-				XMLInsecticide.xml("Crash");
-				
-				XMLInsecticide.ecrireDebug();
 		}
 	}
 	
@@ -143,11 +139,8 @@ public class Desequenceur {
 		
 		do {
 			octetLu = Byte.toUnsignedInt(suivant());
-			XMLInsecticide.ajouterXML((byte) octetLu);
 			valeur = (valeur * 0x80) + (octetLu & 0x7F);
 		} while ((octetLu & 0x80) != 0);
-		
-		XMLInsecticide.crocheter(valeur);
 		
 		return valeur;
 	}
@@ -157,10 +150,8 @@ public class Desequenceur {
 		
 		for (int i = 0; i != taille; i++) {
 			caracteres[i] = (char) suivant();
-			XMLInsecticide.ajouterXML((byte) caracteres[i]);
 		}
 		
-		XMLInsecticide.crocheter(String.valueOf(caracteres));
 
 		return String.valueOf(caracteres);
 	}

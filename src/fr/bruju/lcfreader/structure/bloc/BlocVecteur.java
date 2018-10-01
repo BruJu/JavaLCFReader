@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import fr.bruju.lcfreader.structure.MiniBloc;
 import fr.bruju.lcfreader.structure.modele.Desequenceur;
 import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
-import fr.bruju.lcfreader.structure.modele.XMLInsecticide;
+
 
 public class BlocVecteur<T> extends Bloc<List<T>> {
 	private final MiniBloc<T> miniBloc;
@@ -28,16 +28,12 @@ public class BlocVecteur<T> extends Bloc<List<T>> {
 			throw new RuntimeException("Taille Lue = " + tailleLue);
 		}
 		
-		XMLInsecticide.balise(typeComplet);
-		
 		List<T> liste = new ArrayList<>();
 		
 		while (desequenceur.nonVide()) {
 			T element = miniBloc.extraireDonnee(desequenceur, -1);
 			liste.add(element);
 		}
-		
-		XMLInsecticide.fermer();
 		
 		return liste;
 	}

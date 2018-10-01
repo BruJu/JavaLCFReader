@@ -2,7 +2,7 @@ package fr.bruju.lcfreader.structure.bloc;
 
 import fr.bruju.lcfreader.structure.MiniBloc;
 import fr.bruju.lcfreader.structure.modele.Desequenceur;
-import fr.bruju.lcfreader.structure.modele.XMLInsecticide;
+
 
 public class BlocSimple<T> extends Bloc<T> {
 	private final MiniBloc<T> sequenceur;
@@ -21,10 +21,7 @@ public class BlocSimple<T> extends Bloc<T> {
 
 	@Override
 	public T extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		XMLInsecticide.balise(typeComplet);
-		T objet = sequenceur.extraireDonnee(desequenceur, tailleLue);
-		XMLInsecticide.fermer();
-		return objet;
+		return sequenceur.extraireDonnee(desequenceur, tailleLue);
 	}
 
 	@Override

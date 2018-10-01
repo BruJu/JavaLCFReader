@@ -1,13 +1,10 @@
 package fr.bruju.lcfreader.services;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.rmobjets.RMEvenement;
 import fr.bruju.lcfreader.rmobjets.RMMap;
-import fr.bruju.lcfreader.services.Ensembles.$Evenement;
 import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
 
 public class Carte implements RMMap {
@@ -36,7 +33,7 @@ public class Carte implements RMMap {
 			
 			
 			evenements = new HashMap<>();
-			events.entrySet().forEach(entree -> evenements.put(entree.getKey(), new $Evenement(entree)));
+			events.entrySet().forEach(entree -> evenements.put(entree.getKey(), new LCFEvenement(entree)));
 		}
 	}
 

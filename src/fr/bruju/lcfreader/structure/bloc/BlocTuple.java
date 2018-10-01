@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import fr.bruju.lcfreader.structure.MiniBloc;
 import fr.bruju.lcfreader.structure.modele.Desequenceur;
 import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
-import fr.bruju.lcfreader.structure.modele.XMLInsecticide;
+
 
 public class BlocTuple<T> extends Bloc<List<T>> {
 	private final MiniBloc<T> miniBloc;
@@ -26,8 +26,6 @@ public class BlocTuple<T> extends Bloc<List<T>> {
 
 	@Override
 	public List<T> extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		XMLInsecticide.balise(typeComplet);
-		
 		int nombreDElements = this.nombreDElements;
 		
 		List<T> liste = new ArrayList<>(nombreDElements);
@@ -37,8 +35,6 @@ public class BlocTuple<T> extends Bloc<List<T>> {
 			liste.add(element);
 			nombreDElements --;
 		}
-		
-		XMLInsecticide.fermer();
 		
 		return liste;
 	}

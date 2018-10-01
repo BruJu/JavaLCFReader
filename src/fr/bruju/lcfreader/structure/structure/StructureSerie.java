@@ -7,7 +7,7 @@ import fr.bruju.lcfreader.structure.bloc.Bloc;
 import fr.bruju.lcfreader.structure.bloc.InstancieurDeBlocs;
 import fr.bruju.lcfreader.structure.modele.Desequenceur;
 import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
-import fr.bruju.lcfreader.structure.modele.XMLInsecticide;
+
 
 /**
  * L'ensemble des associations index - champs pour un type de données
@@ -26,17 +26,12 @@ public class StructureSerie extends Structure {
 
 	@Override
 	public EnsembleDeDonnees extraireDonnee(Desequenceur desequenceur, int parametre) {
-		XMLInsecticide.balise("dataDisc");
-
 		EnsembleDeDonnees ensemble = new EnsembleDeDonnees(this);
 
 		for (Bloc<?> bloc : getSerie()) {
-			XMLInsecticide.balise("bloc");
 			ensemble.push(bloc.lireOctet(desequenceur, ensemble.getTaille(bloc)));
-			XMLInsecticide.fermer();
 		}
 
-		XMLInsecticide.fermer();
 
 		return ensemble;
 	}

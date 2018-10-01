@@ -1,6 +1,5 @@
 package fr.bruju.lcfreader.services;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +9,6 @@ import fr.bruju.lcfreader.Main;
 import fr.bruju.lcfreader.rmobjets.RMEvenementCommun;
 import fr.bruju.lcfreader.rmobjets.RMFabrique;
 import fr.bruju.lcfreader.rmobjets.RMMap;
-import fr.bruju.lcfreader.services.Ensembles.$EC;
 import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
 
 public class Arborescence implements RMFabrique {
@@ -177,7 +175,7 @@ public class Arborescence implements RMFabrique {
 		Map<Integer, EnsembleDeDonnees> evenements = donnees.getDonnee("commonevents", Map.class);
 		
 		for (Map.Entry<Integer, EnsembleDeDonnees> entree : evenements.entrySet()) {
-			evenementsCommuns.put(entree.getKey(), new $EC(entree.getKey(), entree.getValue()));
+			evenementsCommuns.put(entree.getKey(), new LCFEvenementCommun(entree.getKey(), entree.getValue()));
 		}
 	}
 

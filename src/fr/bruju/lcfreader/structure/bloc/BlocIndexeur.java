@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import fr.bruju.lcfreader.structure.MiniBloc;
 import fr.bruju.lcfreader.structure.modele.Desequenceur;
 import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
-import fr.bruju.lcfreader.structure.modele.XMLInsecticide;
+
 
 public class BlocIndexeur<T> extends Bloc<Map<Integer, T>> {
 	private final MiniBloc<T> sequenceur;
@@ -24,34 +24,19 @@ public class BlocIndexeur<T> extends Bloc<Map<Integer, T>> {
 
 	@Override
 	public Map<Integer, T> extraireDonnee(Desequenceur desequenceur, int tailleLue) {
-		XMLInsecticide.balise(typeComplet);
-		
-		XMLInsecticide.balise("NombreElements");
 		int nombreElements = desequenceur.$lireUnNombreBER();
-		XMLInsecticide.fermer();
 		
 		Map<Integer, T> carte = new LinkedHashMap<>();
 		int id;
 		T donnee;
 		
 		while (nombreElements != 0) {
-			{
-				XMLInsecticide.balise("Element");
-				{
-					XMLInsecticide.balise("id");
-					id = desequenceur.$lireUnNombreBER();
-					XMLInsecticide.fermer();
-				} {
-					donnee = sequenceur.extraireDonnee(desequenceur, -1);
-				}
-				XMLInsecticide.fermer();
-			}
+			id = desequenceur.$lireUnNombreBER();
+			donnee = sequenceur.extraireDonnee(desequenceur, -1);
 			
 			carte.put(id, donnee);
 			nombreElements--;
 		}
-		
-		XMLInsecticide.fermer();
 		
 		return carte;
 	}
