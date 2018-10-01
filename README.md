@@ -86,7 +86,7 @@ public boolean afficheLama(RMInstruction instruction) {
 
 ## Crédits
 
-* ** Développement du projet par Julian Bruyat** : J'ai réalisé ce projet durant le mois de Septembre 2018 afin de
+* **Développement du projet par Julian Bruyat** : J'ai réalisé ce projet durant le mois de Septembre 2018 afin de
 permettre à mon projet [RMEventReader](https://github.com/BruJu/RMEventMonsterReader) de manipuler directement les
 fichiers créés par RPG Maker, sans intermédiaire.
 
