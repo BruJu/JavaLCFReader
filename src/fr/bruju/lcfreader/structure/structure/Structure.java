@@ -1,8 +1,8 @@
 package fr.bruju.lcfreader.structure.structure;
 
-import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
+import fr.bruju.lcfreader.structure.MiniBloc;
 import fr.bruju.lcfreader.structure.bloc.Bloc;
-import fr.bruju.lcfreader.structure.blocs.mini.MiniBloc;
+import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
 
 public abstract class Structure implements MiniBloc<EnsembleDeDonnees> {
 	

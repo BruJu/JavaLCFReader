@@ -1,4 +1,4 @@
-package fr.bruju.lcfreader.modele;
+package fr.bruju.lcfreader.structure.modele;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -123,7 +123,9 @@ public class EnsembleDeDonnees {
 		
 		XMLInsecticide.fermer("ENSEMBLE_" + nomStruct);
 
-		XMLInsecticide.ecrireDebug();
+		//XMLInsecticide.ecrireDebug();
+		
+		XMLInsecticide.vider();
 
 		
 		return ensemble;
@@ -159,7 +161,8 @@ public class EnsembleDeDonnees {
 		donnees.forEach(data -> sb.append(data.bloc.getTypeEnString() + " -> " + data.getString()).append("\n"));
 		
 		String chaine = sb.toString();
-		
+
+		System.out.println(chaine);
 
 		PrintWriter pWriter;
 		try {

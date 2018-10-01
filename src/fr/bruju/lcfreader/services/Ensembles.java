@@ -1,4 +1,4 @@
-package fr.bruju.lcfreader.modele;
+package fr.bruju.lcfreader.services;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +11,7 @@ import fr.bruju.lcfreader.rmobjets.RMEvenementCommun;
 import fr.bruju.lcfreader.rmobjets.RMInstruction;
 import fr.bruju.lcfreader.rmobjets.RMMap;
 import fr.bruju.lcfreader.rmobjets.RMPage;
+import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
 
 public class Ensembles {
 	private static Map<Integer, RMMap> cartes = new HashMap<>();
@@ -85,46 +86,18 @@ public class Ensembles {
 			if (!map.nomStruct.equals("Map"))
 				return null;
 			
-			cartes.put(idCarte, new $Map(map, idCarte));
+			cartes.put(idCarte, new LCFMap(map, idCarte));
 		}
 		
 		return cartes.get(idCarte);
 	}
 
 	
-	private static class $Map implements RMMap {
-		private EnsembleDeDonnees map;
-		private int idCarte;
-
-		public $Map(EnsembleDeDonnees map, int idCarte) {
-			this.map = map;
-			this.idCarte = idCarte;
-		}
-
-		@Override
-		public int id() {
-			return idCarte;
-		}
-
-		@Override
-		public String nom() {
-			return "Map" + String.format("%04d", idCarte);
-		}
-
-		@Override
-		public List<RMEvenement> evenements() {
-			@SuppressWarnings("unchecked")
-			Map<Integer, EnsembleDeDonnees> events = map.getDonnee("events", Map.class);
-			
-			return events.entrySet().stream().map($Evenement::new).collect(Collectors.toList());
-		}
-	}
-	
-	private static class $Evenement implements RMEvenement {
+	public static class $Evenement implements RMEvenement {
 		private EnsembleDeDonnees ensemble;
 		private int id;
 
-		private $Evenement(Map.Entry<Integer,EnsembleDeDonnees> paire) {
+		public $Evenement(Map.Entry<Integer,EnsembleDeDonnees> paire) {
 			this.id = paire.getKey();
 			this.ensemble = paire.getValue();
 		}

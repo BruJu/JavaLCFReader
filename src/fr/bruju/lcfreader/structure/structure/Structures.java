@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fr.bruju.lcfreader.structure.blocs.mini.MiniBloc;
+import fr.bruju.lcfreader.structure.MiniBloc;
 
 /**
  * Il s'agit de la classe indiquant à quoi correspondent les différents codes rencontrés dans l'encodage BER. <br>

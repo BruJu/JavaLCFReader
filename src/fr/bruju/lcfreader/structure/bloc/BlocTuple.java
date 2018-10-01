@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import fr.bruju.lcfreader.modele.Desequenceur;
-import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
-import fr.bruju.lcfreader.modele.XMLInsecticide;
-import fr.bruju.lcfreader.structure.blocs.mini.MiniBloc;
+import fr.bruju.lcfreader.structure.MiniBloc;
+import fr.bruju.lcfreader.structure.modele.Desequenceur;
+import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
+import fr.bruju.lcfreader.structure.modele.XMLInsecticide;
 
 public class BlocTuple<T> extends Bloc<List<T>> {
 	private final MiniBloc<T> miniBloc;

@@ -1,6 +1,6 @@
-package fr.bruju.lcfreader.structure.blocs.mini;
+package fr.bruju.lcfreader.structure;
 
-import fr.bruju.lcfreader.modele.Desequenceur;
+import fr.bruju.lcfreader.structure.modele.Desequenceur;
 
 public interface MiniBloc<T> {
 

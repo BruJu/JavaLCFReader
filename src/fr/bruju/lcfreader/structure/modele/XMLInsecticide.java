@@ -1,4 +1,4 @@
-package fr.bruju.lcfreader.modele;
+package fr.bruju.lcfreader.structure.modele;
 
 import java.io.FileWriter;
 import java.io.IOException;

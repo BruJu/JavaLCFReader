@@ -1,7 +1,7 @@
 package fr.bruju.lcfreader.structure.bloc;
 
-import fr.bruju.lcfreader.modele.Desequenceur;
-import fr.bruju.lcfreader.modele.XMLInsecticide;
+import fr.bruju.lcfreader.structure.modele.Desequenceur;
+import fr.bruju.lcfreader.structure.modele.XMLInsecticide;
 
 /**
  * Un bloc de données concernant un int32

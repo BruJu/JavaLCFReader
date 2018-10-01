@@ -49,5 +49,22 @@ public class Utilitaire {
 		
 		return tableau;
 	}
+
+	public static String bytesToString(byte[] valeurs) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+		
+		if (valeurs.length != 0) {
+			sb.append(Utilitaire.toHex(valeurs[0]));
+			
+			for (int i = 1 ; i != valeurs.length ; i++) {
+				sb.append(" ").append(Utilitaire.toHex(valeurs[i]));
+			}
+		}
+		
+		sb.append("]");
+		
+		return sb.toString();
+	}
 	
 }

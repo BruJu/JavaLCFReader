@@ -1,9 +1,11 @@
-package fr.bruju.lcfreader.modele;
+package fr.bruju.lcfreader.structure.modele;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 import fr.bruju.lcfreader.Utilitaire;
 
@@ -30,6 +32,12 @@ public class Desequenceur {
 	public final int debut;
 	/** Fin */
 	public final int fin;
+	
+	
+	public ByteBuffer wrapper(int nombreDOctets) {
+		position += nombreDOctets;
+		return ByteBuffer.wrap(octetsDuFichier, position - nombreDOctets, nombreDOctets);
+	}
 	
 	/**
 	 * Crée un lecteur de fichiers qui utilse un flux
@@ -167,6 +175,12 @@ public class Desequenceur {
 	
 	public int getPosition() {
 		return position;
+	}
+
+	public byte[] extrairePortion(int tailleLue) {
+		byte[] extrait = Arrays.copyOfRange(octetsDuFichier, position, position + tailleLue);
+		position += tailleLue;
+		return extrait;
 	}
 	
 }

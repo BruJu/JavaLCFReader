@@ -1,9 +1,9 @@
 package fr.bruju.lcfreader.structure.bloc;
 
-import fr.bruju.lcfreader.modele.Desequenceur;
 import fr.bruju.lcfreader.structure.Donnee;
+import fr.bruju.lcfreader.structure.MiniBloc;
 import fr.bruju.lcfreader.structure.Sequenceur;
-import fr.bruju.lcfreader.structure.blocs.mini.MiniBloc;
+import fr.bruju.lcfreader.structure.modele.Desequenceur;
 
 /**
  * Un bloc est une manière de représenter un type de données à savoir comment l'afficher, comment le décrypter,

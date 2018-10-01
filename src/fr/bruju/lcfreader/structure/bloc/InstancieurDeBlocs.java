@@ -3,10 +3,10 @@ package fr.bruju.lcfreader.structure.bloc;
 import java.util.HashMap;
 import java.util.Map;
 
-import fr.bruju.lcfreader.structure.blocs.mini.MiniBloc;
-import fr.bruju.lcfreader.structure.blocs.mini.MiniInconnu;
-import fr.bruju.lcfreader.structure.blocs.mini.MiniString;
+import fr.bruju.lcfreader.structure.MiniBloc;
 import fr.bruju.lcfreader.structure.structure.Structures;
+import fr.bruju.lcfreader.structure.types.MiniInconnu;
+import fr.bruju.lcfreader.structure.types.MiniString;
 import fr.bruju.lcfreader.structure.types.PrimitifCpp;
 import fr.bruju.lcfreader.structure.types.SequenceurIntATailleFixe;
 

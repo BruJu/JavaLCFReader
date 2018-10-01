@@ -1,12 +1,10 @@
 package fr.bruju.lcfreader.structure.types;
 
-import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Map;
 
-import fr.bruju.lcfreader.modele.Desequenceur;
-import fr.bruju.lcfreader.modele.XMLInsecticide;
-import fr.bruju.lcfreader.structure.blocs.mini.MiniBloc;
+import fr.bruju.lcfreader.structure.MiniBloc;
+import fr.bruju.lcfreader.structure.modele.Desequenceur;
 
 public interface PrimitifCpp extends MiniBloc<Integer> {
 
@@ -27,15 +25,7 @@ public interface PrimitifCpp extends MiniBloc<Integer> {
 
 		@Override
 		public Integer extraireDonnee(Desequenceur desequenceur, int parametre) {
-			byte octet1 = desequenceur.suivant();
-			byte octet2 = desequenceur.suivant();
-			int valeur = Byte.toUnsignedInt(octet1) + Byte.toUnsignedInt(octet2) * 0x100;
-			
-			XMLInsecticide.ajouterXML(octet1);
-			XMLInsecticide.ajouterXML(octet2);
-			XMLInsecticide.crocheter(valeur);
-			
-			return valeur;
+			return (int) desequenceur.wrapper(2).order(ByteOrder.LITTLE_ENDIAN).getShort();
 		}
 
 		@Override
@@ -54,21 +44,7 @@ public interface PrimitifCpp extends MiniBloc<Integer> {
 
 		@Override
 		public Integer extraireDonnee(Desequenceur desequenceur, int parametre) {
-			byte[] octets = {
-					desequenceur.suivant(), desequenceur.suivant(), desequenceur.suivant(), desequenceur.suivant()
-			};
-			
-			int valeur = 0;
-			
-			valeur = ByteBuffer.wrap(octets).order(ByteOrder.LITTLE_ENDIAN).getInt();
-			
-			for (int i = 0 ; i != 4 ; i++) {
-				XMLInsecticide.ajouterXML(octets[i]);
-			}
-			
-			XMLInsecticide.crocheter(valeur);
-			
-			return valeur;
+			return desequenceur.wrapper(4).order(ByteOrder.LITTLE_ENDIAN).getInt();
 		}
 
 		@Override

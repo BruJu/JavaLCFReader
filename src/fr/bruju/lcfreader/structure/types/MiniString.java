@@ -1,6 +1,7 @@
-package fr.bruju.lcfreader.structure.blocs.mini;
+package fr.bruju.lcfreader.structure.types;
 
-import fr.bruju.lcfreader.modele.Desequenceur;
+import fr.bruju.lcfreader.structure.MiniBloc;
+import fr.bruju.lcfreader.structure.modele.Desequenceur;
 
 public class MiniString implements MiniBloc<String> {
 

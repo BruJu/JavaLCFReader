@@ -4,11 +4,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import fr.bruju.lcfreader.Utilitaire;
-import fr.bruju.lcfreader.modele.Desequenceur;
-import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
-import fr.bruju.lcfreader.modele.XMLInsecticide;
 import fr.bruju.lcfreader.structure.bloc.Bloc;
 import fr.bruju.lcfreader.structure.bloc.InstancieurDeBlocs;
+import fr.bruju.lcfreader.structure.modele.Desequenceur;
+import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
+import fr.bruju.lcfreader.structure.modele.XMLInsecticide;
 
 public class StructureDiscontinue extends Structure {
 

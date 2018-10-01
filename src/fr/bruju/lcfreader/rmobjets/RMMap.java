@@ -1,6 +1,7 @@
 package fr.bruju.lcfreader.rmobjets;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Représente une carte RPG Maker
@@ -25,5 +26,5 @@ public interface RMMap {
 	 * Donne la liste des évènements composant la carte
 	 * @return La liste des évènements
 	 */
-	public List<RMEvenement> evenements();
+	public Map<Integer, RMEvenement> evenements();
 }

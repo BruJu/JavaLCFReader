@@ -13,22 +13,26 @@ import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 
-import fr.bruju.lcfreader.modele.Desequenceur;
-import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
-import fr.bruju.lcfreader.modele.FabriqueLCF;
 import fr.bruju.lcfreader.rmobjets.RMEvenementCommun;
 import fr.bruju.lcfreader.rmobjets.RMInstruction;
 import fr.bruju.lcfreader.rmobjets.RMMap;
+import fr.bruju.lcfreader.services.Arborescence;
+import fr.bruju.lcfreader.structure.modele.Desequenceur;
+import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
 import fr.bruju.lcfreader.structure.structure.Structures;
 
 @SuppressWarnings("unused")
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
 
-		//String chemin = "A:\\Dev\\Projet\\";
+		String chemin = "A:\\Dev\\Projet\\";
+		
+		Arborescence arborescence = new Arborescence(chemin);
+		arborescence.charger(3);
+		arborescence.afficher();
 		
 		
-		String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
+		//String chemin = "..\\RMEventReader\\ressources\\FichiersBruts\\";
 		
 		/*
 		int idEv = 610;
@@ -47,7 +51,7 @@ public class Main {
 		//int numeroDeMap = 2;
 		
 	
-		testerLecture(chemin, "Save01.lsd");
+		//testerLecture(chemin, "RPG_RT.lmt");
 
 		
 		//testerLecture(chemin, construireNomDeMap(numeroDeMap));
@@ -56,16 +60,16 @@ public class Main {
 	}
 	
 	private static void testMap(String chemin, int numeroDeMap) {
-		RMMap carte = new FabriqueLCF(chemin).map(numeroDeMap);
+		RMMap carte = new Arborescence(chemin).map(numeroDeMap);
 		afficherRMMap(carte);
 	}
 
-	private static void afficherRMMap(RMMap carte) {
+	public static void afficherRMMap(RMMap carte) {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("• Carte " +carte.id() + " / " + carte.nom()).append("\n");
 		
-		carte.evenements().stream().forEach(evenement -> {
+		carte.evenements().values().stream().forEach(evenement -> {
 			sb.append("•• Evenement " + evenement.id() + " [" + evenement.x() + ", " + evenement.y() + "]").append("\n");
 			evenement.pages().forEach(page -> {
 				sb.append("••• Page " + page.id()).append("\n");
@@ -82,7 +86,6 @@ public class Main {
 		});
 		
 		System.out.println(sb.toString());
-		
 	}
 
 	private static void testerLecture(String chemin, String nomDeFichier) {

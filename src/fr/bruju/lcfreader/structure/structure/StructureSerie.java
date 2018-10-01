@@ -3,11 +3,11 @@ package fr.bruju.lcfreader.structure.structure;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.bruju.lcfreader.modele.Desequenceur;
-import fr.bruju.lcfreader.modele.EnsembleDeDonnees;
-import fr.bruju.lcfreader.modele.XMLInsecticide;
 import fr.bruju.lcfreader.structure.bloc.Bloc;
 import fr.bruju.lcfreader.structure.bloc.InstancieurDeBlocs;
+import fr.bruju.lcfreader.structure.modele.Desequenceur;
+import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
+import fr.bruju.lcfreader.structure.modele.XMLInsecticide;
 
 /**
  * L'ensemble des associations index - champs pour un type de données
