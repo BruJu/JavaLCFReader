@@ -1,10 +1,12 @@
 package fr.bruju.lcfreader.services;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import fr.bruju.lcfreader.rmobjets.RMEvenementCommun;
 import fr.bruju.lcfreader.rmobjets.RMFabrique;
+import fr.bruju.lcfreader.rmobjets.RMMap;
 import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
 
 /**
@@ -43,8 +45,8 @@ public class LecteurDeLCF implements RMFabrique {
 	 * ====================== */
 	
 	@Override
-	public Map<Integer, LCFCarte> maps() {
-		return cartesConnues;
+	public Map<Integer, RMMap> maps() {
+		return Collections.unmodifiableMap(cartesConnues);
 	}
 	
 	@Override

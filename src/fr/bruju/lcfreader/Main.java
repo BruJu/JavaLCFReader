@@ -11,7 +11,7 @@ import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
  * @author Bruju
  *
  */
-public class Main {
+public class Main {	
 	/**
 	 * Fonction principale
 	 * @param args Arguments du programme
