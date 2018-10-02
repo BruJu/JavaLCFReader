@@ -36,7 +36,7 @@ public class LCFSauvegarde implements RMSauvegarde {
 
 	@Override
 	public boolean getInterrupteur(int numero) {
-		return interrupteurs.get(numero - 1) == 0;
+		return interrupteurs.get(numero - 1) == 1;
 	}
 
 	@Override

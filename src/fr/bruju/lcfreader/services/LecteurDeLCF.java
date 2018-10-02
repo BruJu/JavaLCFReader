@@ -9,7 +9,6 @@ import java.util.Map;
 import fr.bruju.lcfreader.rmobjets.RMEvenementCommun;
 import fr.bruju.lcfreader.rmobjets.RMFabrique;
 import fr.bruju.lcfreader.rmobjets.RMMap;
-import fr.bruju.lcfreader.rmobjets.RMSauvegarde;
 import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
 
 /**
@@ -38,7 +37,7 @@ public class LecteurDeLCF implements RMFabrique {
 	/** Répertoire projet sur le disque */
 	public final String racine;
 	/** Liste des cartes connues */
-	private Map<Integer, LCFCarte> cartesConnues;
+	private Map<Integer, LCFCarte> cartesConnues = null;
 	/** Liste des évènements communs */
 	private Map<Integer, RMEvenementCommun> evenementsCommuns = null;
 	/** Liste des noms stockes */
@@ -52,7 +51,6 @@ public class LecteurDeLCF implements RMFabrique {
 	 */
 	public LecteurDeLCF(String racine) {
 		this.racine = racine;
-		lireFichierLMT();
 	}
 	
 	/* ======================
@@ -61,11 +59,13 @@ public class LecteurDeLCF implements RMFabrique {
 	
 	@Override
 	public Map<Integer, RMMap> maps() {
+		lireFichierLMT();
 		return Collections.unmodifiableMap(cartesConnues);
 	}
 	
 	@Override
 	public LCFCarte map(int idCarte) {
+		lireFichierLMT();
 		return cartesConnues.get(idCarte);
 	}
 
@@ -76,10 +76,19 @@ public class LecteurDeLCF implements RMFabrique {
 	}
 
 	@Override
-	public RMSauvegarde lireSauvegarde(int numero) {
+	public LCFSauvegarde lireSauvegarde(int numero) {
 		chargerSauvegarde(numero);
 		
 		return sauvegardes.get(numero);
+	}
+	
+	/**
+	 * Lit une sauvegarde (sans la mettre en cache) dont le nom est donné
+	 * @param nom Le nom de la sauvegarde
+	 * @return La sauvegarde
+	 */
+	public static LCFSauvegarde lireSauvegarde(String chemin) {
+		return new LCFSauvegarde(EnsembleDeDonnees.lireFichier(chemin));
 	}
 	
 	/* ======================
@@ -106,6 +115,10 @@ public class LecteurDeLCF implements RMFabrique {
 	 */
 	@SuppressWarnings("unchecked")
 	private void lireFichierLMT() {
+		if (cartesConnues != null) {
+			return;
+		}
+		
 		EnsembleDeDonnees donnees = EnsembleDeDonnees.lireFichier(racine + "RPG_RT.lmt");
 		
 		cartesConnues = new HashMap<>();
@@ -181,7 +194,7 @@ public class LecteurDeLCF implements RMFabrique {
 		}
 		
 		if (!sauvegardes.containsKey(numero)) {
-			String nomFichier = racine + "Save" + String.format("%02", numero)+ ".lsd";
+			String nomFichier = racine + "Save" + String.format("%02d", numero) + ".lsd";
 			EnsembleDeDonnees ensembleLSD = EnsembleDeDonnees.lireFichier(nomFichier);
 			sauvegardes.put(numero, new LCFSauvegarde(ensembleLSD));
 		}
