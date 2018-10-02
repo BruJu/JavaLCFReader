@@ -59,4 +59,14 @@ public interface RMFabrique {
 	 * @return La table d'assocciation id - évènement communs
 	 */
 	public Map<Integer, ? extends RMEvenementCommun> evenementsCommuns();
+	
+	
+	/**
+	 * Permet d'accéder à un fichier de sauvegardes
+	 * @param numero Numéro du fichier de sauvegardes
+	 * @return Une représentation d'un fichier de sauvegarde
+	 */
+	public default RMSauvegarde lireSauvegarde(int numero) {
+		throw new UnsupportedOperationException("Lecture de sauvegarde non implémentée");
+	}
 }

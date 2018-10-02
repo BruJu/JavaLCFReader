@@ -9,6 +9,7 @@ import java.util.Map;
 import fr.bruju.lcfreader.rmobjets.RMEvenementCommun;
 import fr.bruju.lcfreader.rmobjets.RMFabrique;
 import fr.bruju.lcfreader.rmobjets.RMMap;
+import fr.bruju.lcfreader.rmobjets.RMSauvegarde;
 import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
 
 /**
@@ -33,6 +34,7 @@ public class LecteurDeLCF implements RMFabrique {
 	 * INITIALISATION
 	 * ============== */
 	
+
 	/** Répertoire projet sur le disque */
 	public final String racine;
 	/** Liste des cartes connues */
@@ -41,6 +43,8 @@ public class LecteurDeLCF implements RMFabrique {
 	private Map<Integer, RMEvenementCommun> evenementsCommuns = null;
 	/** Liste des noms stockes */
 	private Map<String, List<String>> nomsStockes = null;
+	/** Liste des sauvegardes */
+	private Map<Integer, LCFSauvegarde> sauvegardes;
 	
 	/**
 	 * Crée une instance de la classe
@@ -71,6 +75,13 @@ public class LecteurDeLCF implements RMFabrique {
 		return evenementsCommuns;
 	}
 
+	@Override
+	public RMSauvegarde lireSauvegarde(int numero) {
+		chargerSauvegarde(numero);
+		
+		return sauvegardes.get(numero);
+	}
+	
 	/* ======================
 	 * Service supplémentaire
 	 * ====================== */
@@ -141,6 +152,12 @@ public class LecteurDeLCF implements RMFabrique {
 		}
 	}
 	
+	/**
+	 * Extrait la liste des "name" pour le bloc demandé
+	 * @param donnees L'ensemble de données contenant la donné à parcourir 
+	 * @param nomBloc Le nom du bloc à parcourir (ce bloc doit être un tableau indexé d'ensembles)
+	 * @return La liste tous les champs name
+	 */
 	private List<String> extraireListeDeNoms(EnsembleDeDonnees donnees, String nomBloc) {
 		@SuppressWarnings("unchecked")
 		Map<Integer, EnsembleDeDonnees> ensembles = donnees.getDonnee(nomBloc, Map.class);
@@ -154,6 +171,22 @@ public class LecteurDeLCF implements RMFabrique {
 		return valeurs;
 	}
 	
+	/**
+	 * Charge dans la mémoire la sauvegarde demandée
+	 * @param numero Le numéro de la sauvegarde
+	 */
+	private void chargerSauvegarde(int numero) {
+		if (sauvegardes == null) {
+			sauvegardes = new HashMap<>();
+		}
+		
+		if (!sauvegardes.containsKey(numero)) {
+			String nomFichier = racine + "Save" + String.format("%02", numero)+ ".lsd";
+			EnsembleDeDonnees ensembleLSD = EnsembleDeDonnees.lireFichier(nomFichier);
+			sauvegardes.put(numero, new LCFSauvegarde(ensembleLSD));
+		}
+	}
+
 	
 	/**
 	 * Met dans le StringBuilder le nom de carte dont l'id est donné ainsi que de tous ses pères

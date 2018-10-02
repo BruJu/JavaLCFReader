@@ -1,5 +1,8 @@
 package fr.bruju.lcfreader;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.rmobjets.RMEvenementCommun;
@@ -17,14 +20,15 @@ public class Main {
 	/**
 	 * Fonction principale
 	 * @param args Arguments du programme
+	 * @throws FileNotFoundException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		String chemin;
 		
-		int numeroChemin = 0; // 0 = brut, 1 = dev
-		int typeOperation = 2; // 0 = lecture de fichier, 1 = lecture d'abstractions
-		int typeDeDonnees = 0; // 0 = map, 1 = bdd | 0 = map, 1 = ec
-		int numeroElement = 2;
+		int numeroChemin = 1; // 0 = brut, 1 = dev
+		int typeOperation = 0; // 0 = lecture de fichier, 1 = lecture d'abstractions, 2 = liste des noms
+		int typeDeDonnees = 3; // 0 = map, 1 = bdd | 0 = map, 1 = ec
+		int numeroElement = 1;
 		
 		String chemins[] = {
 				"..\\RMEventReader\\ressources\\FichiersBruts\\",
@@ -43,9 +47,11 @@ public class Main {
 			} else if (typeDeDonnees == 2) {
 				nomFichier += "RPG_RT.lmt";
 			} else if (typeDeDonnees == 3) {
-				nomFichier += "Save0" + numeroElement + ".lmt";
+				nomFichier += "Save0" + numeroElement + ".lsd";
 			}
 			EnsembleDeDonnees map = EnsembleDeDonnees.lireFichier(nomFichier);
+			
+			System.setOut(new PrintStream(new File("../structure.txt")));
 			
 			System.out.println("}}-- " + nomFichier + " --{{");
 			System.out.println(map.afficherDonnees());
