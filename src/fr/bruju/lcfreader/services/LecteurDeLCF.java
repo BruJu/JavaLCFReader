@@ -162,10 +162,10 @@ public class LecteurDeLCF implements RMFabrique {
 	 * @return void. sb est modifiée pour se voir ajouter de la chaîne "Père 1-Père 2-Père 3-"
 	 */
 	void construireNom(StringBuilder sb, int id) {
-		while (id != 0) {
+		if (id != 0) {
 			LCFCarte carte = cartesConnues.get(id);
+			construireNom(sb, carte.idDuPere);
 			sb.append(carte.nomDeLaMap).append("-");
-			id = carte.idDuPere;
 		}
 	}
 }
