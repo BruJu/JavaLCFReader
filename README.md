@@ -1,6 +1,6 @@
 # JavaLCFReader
 
-Il s'agit d'une bibliothèque permettant de lire des fichiers générés par RPG Maker 2003, en particuleir d'en lire les
+Il s'agit d'une bibliothèque permettant de lire des fichiers générés par RPG Maker 2003, en particulier d'en lire les
 instructions.
 
 
@@ -91,7 +91,9 @@ permettre à mon projet [RMEventReader](https://github.com/BruJu/RMEventMonsterR
 fichiers créés par RPG Maker, sans intermédiaire.
 
 
-* **Utilisation d'une ressource produite par l'équipe LibLCF** : Le fichier fields.csv (fichier ressource pour connaître
-les associations entre tags et données) provient du [projet liblcf](https://github.com/EasyRPG/liblcf), disponible sous
-licence MIT et modifié par mes soins. 
+* **Utilisation d'une ressource produite par l'équipe LibLCF** : Le fichier fields.csv original (fichier ressource pour
+connaître les associations entre tags et données) provient du [projet liblcf](https://github.com/EasyRPG/liblcf),
+disponible sous licence MIT. Ce fichier a été modifié pour mieux correspondre aux besoin de ce projet. 
+
+
 
