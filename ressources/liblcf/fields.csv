@@ -332,9 +332,9 @@
 331,Terrain,special_lateral_party,Int32,,0x2B,10,Integer - RPG2003
 332,Terrain,special_lateral_enemies,Int32,,0x2C,5,Integer - RPG2003
 333,Terrain,grid_location,Int32,,0x2D,0,Integer - RPG2003
-334,Terrain,grid_a,Int32,,0x2E,0,Integer - RPG2003
-335,Terrain,grid_b,Int32,,0x2F,0,Integer - RPG2003
-336,Terrain,grid_c,Int32,,0x30,0,Integer - RPG2003
+334,Terrain,grid_a,Int32,,0x2E,120,Integer - RPG2003
+335,Terrain,grid_b,Int32,,0x2F,392,Integer - RPG2003
+336,Terrain,grid_c,Int32,,0x30,16000,Integer - RPG2003
 337,State,name,String,,0x01,'',String
 338,State,type,Int32,,0x02,0,Integer
 339,State,color,Int32,,0x03,6,Integer
@@ -567,8 +567,8 @@
 566,System,battletest_terrain,Int32,,0x5E,0,Integer
 567,System,battletest_formation,Int32,,0x5F,0,Integer
 568,System,battletest_condition,Int32,,0x60,0,Integer
-569,System,unknown_61,Int32,,0x61,-1,?
-569bis,System,unknown_61,Int32,,0x62,-1,?
+569,System,equipment_setting,Int32,,0x61,0,Integer RPG2003 - Whether equipment usage is by Actor or by Class. This is a global setting in RM2k3!
+569bis,System,battletest_alt_terrain,Int32,,0x62,0,Integer RPG2003 (EDITOR ONLY) - Double click on Terrain in Troops changes this setting and 0x54. Affects only the RM2k3 editor.
 570,System,show_frame,Boolean,,0x63,False,Flag - RPG2003
 571,System,frame_name,String,,0x64,'',String - RPG2003
 572,System,invert_animations,Boolean,,0x65,False,Flag - RPG2003
@@ -1012,7 +1012,7 @@
 1010,SaveEventData,keyinput_right,Boolean,,0x25,False,
 1011,SaveEventData,keyinput_up,Boolean,,0x26,False,
 1012,SaveEventData,keyinput_timed,Boolean,,0x29,False,
-1013,SaveEventData,unknown_2a_time_left,Int32,,0x2a,0,number of frames have to wait until the event continues. FIXME difference with 0x1F?
+1013,SaveEventData,unknown_2a_time_left,Int32,,0x2A,0,number of frames have to wait until the event continues. FIXME difference with 0x1F?
 1014,SaveMapEvent,active,Boolean,,0x01,True,Flag
 1015,SaveMapEvent,map_id,Int32,,0x0B,-1,?
 1016,SaveMapEvent,position_x,Int32,,0x0C,-1,?
