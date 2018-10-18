@@ -27,7 +27,7 @@ public class StructureSerie extends Structure {
 	}
 
 	/** Liste des blocs pour un décodage en série */
-	protected List<Bloc<?>> serie = new ArrayList<>();
+	private List<Bloc<?>> serie = new ArrayList<>();
 
 	@Override
 	public EnsembleDeDonnees extraireDonnee(Desequenceur desequenceur, int parametre) {

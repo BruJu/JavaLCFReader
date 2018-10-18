@@ -11,7 +11,7 @@ public class Affichage {
 	public static String toString(RMMap carte) {
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("• Carte " +carte.id() + " / " + carte.nom()).append("\n");
+		sb.append("• Carte ").append(carte.id()).append(" / ").append(carte.nom()).append("\n");
 		
 		carte.evenements().values().stream().forEach(evenement -> {
 			sb.append("•• Evenement " + evenement.id() + " [" + evenement.x() + ", " + evenement.y() + "]").append("\n");

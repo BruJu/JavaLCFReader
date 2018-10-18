@@ -1,8 +1,6 @@
 package fr.bruju.lcfreader;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 import java.util.stream.Collectors;
 
 import fr.bruju.lcfreader.rmobjets.RMEvenementCommun;
@@ -24,7 +22,7 @@ public class Main {
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
 		String chemin;
-		
+
 		int numeroChemin = 1; // 0 = brut, 1 = dev
 		int typeOperation = 0; // 0 = lecture de fichier, 1 = lecture d'abstractions, 2 = liste des noms
 		int typeDeDonnees = 3; // 0 = map, 1 = bdd | 0 = map, 1 = ec
@@ -51,7 +49,7 @@ public class Main {
 			}
 			EnsembleDeDonnees map = EnsembleDeDonnees.lireFichier(nomFichier);
 			
-			System.setOut(new PrintStream(new File("../structure.txt")));
+			//System.setOut(new PrintStream(new File("../structure.txt")));
 			
 			System.out.println("}}-- " + nomFichier + " --{{");
 			System.out.println(map.afficherDonnees());

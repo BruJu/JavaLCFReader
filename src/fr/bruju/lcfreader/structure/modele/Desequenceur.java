@@ -41,8 +41,8 @@ public class Desequenceur {
 	/**
 	 * Crée un lecteur de fichiers qui utilse un flux
 	 * 
-	 * @param stream Le flux
-	 * @throws IOException 
+	 * @param chemin Le chemin vers le fichier à lire
+	 * @throws IOException Erreur à la lecture du fichier
 	 */
 	private Desequenceur(String chemin) throws IOException {
 		Path fichier = Paths.get(chemin);
@@ -91,7 +91,7 @@ public class Desequenceur {
 	
 	/**
 	 * Extrait une sous séquence d'octets partant de la position actuelle et contenant le nombre d'octets demandés
-	 * @param nombreDOctetsPris Le nombre d'octets à gérer avec cette sous séquence
+	 * @param taille Le nombre d'octets à gérer avec cette sous séquence
 	 */
 	public Desequenceur sousSequencer(int taille) {
 		return new Desequenceur(this, taille);

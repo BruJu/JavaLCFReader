@@ -30,7 +30,7 @@ public class LCFEvenement implements RMEvenement {
 	
 	/**
 	 * Crée un évènement
-	 * @param Entrée associant l'id de l'évènement et l'ensemble de données le représentant
+	 * @param entree associant l'id de l'évènement et l'ensemble de données le représentant
 	 */
 	public LCFEvenement(Map.Entry<Integer,EnsembleDeDonnees> entree) {
 		EnsembleDeDonnees ensemble = entree.getValue();

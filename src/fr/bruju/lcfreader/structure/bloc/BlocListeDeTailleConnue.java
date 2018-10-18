@@ -80,7 +80,7 @@ abstract class BlocListeDeTailleConnue<T> extends Bloc<List<T>> {
 		return new StringBuilder()
 				  .append("[")
 				  .append(valeur.stream()
-				            	.map(v -> miniBloc.convertirEnChaineUneValeur(v))
+				            	.map(miniBloc::convertirEnChaineUneValeur)
 					            .collect(Collectors.joining(", ")))
 				  .append("]")
 				  .toString();

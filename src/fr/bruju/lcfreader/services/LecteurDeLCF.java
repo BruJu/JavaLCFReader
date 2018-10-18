@@ -84,7 +84,7 @@ public class LecteurDeLCF implements RMFabrique {
 	
 	/**
 	 * Lit une sauvegarde (sans la mettre en cache) dont le nom est donné
-	 * @param nom Le nom de la sauvegarde
+	 * @param chemin Le chemin vers le fichier de la sauvegarde
 	 * @return La sauvegarde
 	 */
 	public static LCFSauvegarde lireSauvegarde(String chemin) {

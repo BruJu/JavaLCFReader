@@ -72,7 +72,7 @@ public class InstancieurDeBlocs {
 	 * @param map La carte à remplir
 	 * @param primitifCpps Un tableau avec tous les primitifs à insérer
 	 */
-	public static void remplirHashMap(Map<String, MiniBloc<?>> map, PrimitifCpp[] primitifCpps) {
+	private static void remplirHashMap(Map<String, MiniBloc<?>> map, PrimitifCpp[] primitifCpps) {
 		for (PrimitifCpp primitif : primitifCpps) {
 			map.put(primitif.getNom(), primitif);
 		}

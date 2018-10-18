@@ -26,7 +26,6 @@ public abstract class Bloc<T> implements MiniBloc<T> {
 	
 	/**
 	 * Construit le bloc
-	 * @param champ Les données du bloc
 	 */
 	public Bloc(int index, String nom, String type) {
 		this.index = index;

@@ -155,7 +155,7 @@ public class EnsembleDeDonnees {
 	public String afficherDonnees() {
 		StringBuilder sb = new StringBuilder();
 		donnees.values().forEach(data ->
-				sb.append(data.bloc.getTypeEnString() + " -> " + data.getString()).append("\n"));
+				sb.append(data.bloc.getTypeEnString()).append(" -> ").append(data.getString()).append("\n"));
 		return sb.toString();
 	}
 

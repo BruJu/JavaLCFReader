@@ -34,25 +34,52 @@ public class Structures {
 	 * SINGLETON
 	 * ========= */
 
-	/**
-	 * Initialise la base de données avec le fichier donné si cela n'a pas été fait
-	 * 
-	 * @param fichier Le chemin vers le fichier contenant la base
-	 */
-	public static void initialiser() {
+	/** Initialise la base de données avec le fichier donné si cela n'a pas été fait */
+	private static void initialiser() {
 		if (instance != null) {
 			return;
 		}
 
 		instance = new Structures();
-		instance.remplirStructures();
 	}
 
 	/** Instance connue */
 	private static Structures instance;
 
-	/** Constructeur privé */
+	/** Constructeur privé se reposant sur la lecture du fichier fields.csv */
 	private Structures() {
+		// On parcours deux fois les données du fichier resssource :
+		// - Une première fois pour le nom des structures
+		// - Une seconde fois pour les champs
+		// Cela est fait pour pouvoir référencer des structures qui sont plus loin dans la liste
+
+		URL is = getClass().getClassLoader().getResource(FIELDSCSV);
+
+		//File file = new File(fichier);
+		structures = new HashMap<>();
+
+		try {
+			// Lire les noms de structure
+
+			List<String[]> donneesLues = lireToutesLesLignes(is.openStream());
+
+			donneesLues.forEach(donnees -> {
+				String nomStructure = donnees[1];
+
+				if (!structures.containsKey(nomStructure)) {
+					Structure structure = (donnees[5].equals("")) ?
+							new StructureSerie(nomStructure) : new StructureDiscontinue(nomStructure);
+
+					structures.put(nomStructure, structure);
+				}
+			});
+
+			donneesLues.forEach(donnees -> structures.get(donnees[1]).ajouterChamp(donnees));
+
+			donneesLues.clear();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/** Donne l'instance de la base de données */
@@ -67,7 +94,7 @@ public class Structures {
 	 * =============== */
 
 	/** Association nom de la structure - codes qu'elle contient */
-	public Map<String, Structure> structures;
+	private Map<String, Structure> structures;
 
 	/**
 	 * Donne la structure contenant les codes pour la structure demandée
@@ -80,48 +107,9 @@ public class Structures {
 	}
 
 	/**
-	 * Rempli la structure
-	 */
-	private void remplirStructures() {
-		// On parcours deux fois les données du fichier resssource :
-		// - Une première fois pour le nom des structures
-		// - Une seconde fois pour les champs
-		// Cela est fait pour pouvoir référencer des structures qui sont plus loin dans la liste
-		
-		URL is = getClass().getClassLoader().getResource(FIELDSCSV);
-		
-		//File file = new File(fichier);
-		structures = new HashMap<>();
-
-		try {
-			// Lire les noms de structure
-			
-			List<String[]> donneesLues = lireToutesLesLignes(is.openStream());
-			
-			donneesLues.forEach(donnees -> {
-				String nomStructure = donnees[1];
-				
-				if (!structures.containsKey(nomStructure)) {
-					Structure structure = (donnees[5].equals("")) ?
-							new StructureSerie(nomStructure) : new StructureDiscontinue(nomStructure);
-					
-					structures.put(nomStructure, structure);
-				}
-			});
-
-			donneesLues.forEach(donnees -> structures.get(donnees[1]).ajouterChamp(donnees));
-			
-			donneesLues.clear();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
 	 * Lis toutes les lignes du fichier en appliquant action
 	 * 
-	 * @param file Le fichier à lire
-	 * @param action L'action à réaliser
+	 * @param is Le flux de lecture des données du fichier fields.csv
 	 * @throws IOException
 	 */
 	private static List<String[]> lireToutesLesLignes(InputStream is) throws IOException {

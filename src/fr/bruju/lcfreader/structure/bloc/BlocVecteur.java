@@ -29,9 +29,9 @@ public class BlocVecteur<T> extends Bloc<List<T>> {
 	 * @param type Type du champ indiqué
 	 * @param miniBloc Mini bloc à utiliser pour instancier les éléments
 	 */
-	public BlocVecteur(int index, String nom, String type, MiniBloc<T> sequenceur) {
+	public BlocVecteur(int index, String nom, String type, MiniBloc<T> miniBloc) {
 		super(index, nom, "Vecteur_" + type);
-		this.miniBloc = sequenceur;
+		this.miniBloc = miniBloc;
 	}
 
 	
@@ -75,7 +75,7 @@ public class BlocVecteur<T> extends Bloc<List<T>> {
 		return new StringBuilder()
 				  .append("[")
 				  .append(valeur.stream()
-				            	.map(v -> miniBloc.convertirEnChaineUneValeur(v))
+				            	.map(miniBloc::convertirEnChaineUneValeur)
 					            .collect(Collectors.joining(", ")))
 				  .append("]")
 				  .toString();
