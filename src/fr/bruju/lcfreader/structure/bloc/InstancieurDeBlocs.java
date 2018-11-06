@@ -57,6 +57,12 @@ public class InstancieurDeBlocs {
 		remplirHashMap(miniBlocsConnus, new PrimitifCpp[] {
 					new PrimitifCpp.Int16(),
 					new PrimitifCpp.Int32(),
+				    new PrimitifCpp.Int32() {
+						@Override
+						public String getNom() {
+							return "EventPageCondition_Flags";
+						}
+					},
 					new PrimitifCpp.Int32LittleEndian(),
 					new SequenceurIntATailleFixe.UInt8(),
 					new SequenceurIntATailleFixe.UInt16(),

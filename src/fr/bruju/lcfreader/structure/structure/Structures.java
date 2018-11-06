@@ -41,13 +41,20 @@ public class Structures {
 		}
 
 		instance = new Structures();
+		instance.remplirStructures(); // Remplir après l'assignation permet de ne pas initialiser à l'infini
 	}
 
 	/** Instance connue */
 	private static Structures instance;
 
-	/** Constructeur privé se reposant sur la lecture du fichier fields.csv */
+	/** Constructeur privé */
 	private Structures() {
+	}
+
+	/**
+	 * Rempli la liste des structures avec le fichier FIELDSCSV.
+	 */
+	private void remplirStructures() {
 		// On parcours deux fois les données du fichier resssource :
 		// - Une première fois pour le nom des structures
 		// - Une seconde fois pour les champs
