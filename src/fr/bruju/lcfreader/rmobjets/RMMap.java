@@ -1,6 +1,8 @@
 package fr.bruju.lcfreader.rmobjets;
 
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * Représente une carte RPG Maker
@@ -41,6 +43,25 @@ public interface RMMap {
 			sb.append("•• Evenement " + evenement.id() + " [" + evenement.x() + ", " + evenement.y() + "]").append("\n");
 			evenement.pages().forEach(page -> {
 				sb.append("••• Page " + page.id()).append("\n");
+
+				try {
+					mettreConditionDansStringBuilder(sb, page.conditionInterrupteur1(), "switch_a");
+					mettreConditionDansStringBuilder(sb, page.conditionInterrupteur2(), "switch_b");
+
+					ConditionSurVariable cv = page.conditionVariable();
+					if (cv != null) {
+						sb.append("•••• Condition Variable ").append(cv.idVariable).append(" ")
+								.append(cv.symbole).append(" ").append(cv.valeur).append("\n");
+					}
+
+					mettreConditionDansStringBuilder(sb, page.conditionHeros(), "heros");
+					mettreConditionDansStringBuilder(sb, page.conditionObjet(), "objet");
+					mettreConditionDansStringBuilder(sb, page.conditionChrono1(), "chrono_a");
+					mettreConditionDansStringBuilder(sb, page.conditionChrono2(), "chrono_b");
+				} catch (UnsupportedOperationException e) {
+					sb.append("•••• Conditions non implémentées\n");
+				}
+
 				page.instructions().forEach(instruction -> {
 					sb.append("•••• Instruction " + instruction.code() + " '" + instruction.argument() + "' ");
 					
@@ -54,5 +75,11 @@ public interface RMMap {
 		});
 		
 		return sb.toString();
+	}
+
+	public static void mettreConditionDansStringBuilder(StringBuilder sb, int v, String chaine) {
+		if (v != -1) {
+			sb.append("•••• Condition ").append(chaine).append(" ").append(v).append("\n");
+		}
 	}
 }

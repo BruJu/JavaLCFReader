@@ -61,7 +61,7 @@ public class LCFPage implements RMPage {
 	}
 
 	private void remplirConditions(EnsembleDeDonnees condition, int flags, int position, int decalage, String nom) {
-		if ((flags | decalage) == decalage) {
+		if ((flags & decalage) == decalage) {
 			conditionsSurPage[position] = condition.getDonnee(nom, Integer.class);
 		} else {
 			conditionsSurPage[position] = -1;
@@ -99,7 +99,7 @@ public class LCFPage implements RMPage {
 
 	@Override
 	public ConditionSurVariable conditionVariable() {
-		if (conditionsSurPage[2] == 0) {
+		if (conditionsSurPage[2] == -1) {
 			return null;
 		}
 
