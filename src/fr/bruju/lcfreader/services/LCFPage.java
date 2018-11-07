@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import fr.bruju.lcfreader.rmobjets.ConditionSurVariable;
 import fr.bruju.lcfreader.rmobjets.RMInstruction;
 import fr.bruju.lcfreader.rmobjets.RMPage;
 import fr.bruju.lcfreader.structure.modele.EnsembleDeDonnees;
@@ -86,64 +87,43 @@ public class LCFPage implements RMPage {
 	 * FONCTIONNALITES SUPPLEMENTAIRES
 	 * =============================== */
 
-	/**
-	 * Donne le numéro du premier interrupteur conditionnant l'utilisation de la page.
-	 * @return Le numéro du premier interrupteur conditionnant l'utilisation de la page, ou -1 si désactivé
-	 */
+	@Override
 	public int conditionInterrupteur1() {
 		return conditionsSurPage[0];
 	}
 
-	/**
-	 * Donne le numéro du second interrupteur conditionnant l'utilisation de la page.
-	 * @return Le numéro du second interrupteur conditionnant l'utilisation de la page, ou -1 si désactivé
-	 */
+	@Override
 	public int conditionInterrupteur2() {
 		return conditionsSurPage[1];
 	}
 
-	/**
-	 * Donne la condition sur une variable conditionnant l'utilisation de la page, null si il n'y en a pas.
-	 * @return La condition sur une variable conditionnant l'utilisation de la page, null si il n'y en a pas.
-	 */
+	@Override
 	public ConditionSurVariable conditionVariable() {
 		if (conditionsSurPage[2] == 0) {
 			return null;
 		}
 
 		return new ConditionSurVariable(conditionsSurPage[2],
-				Signe.values()[conditionsSurPage[4]] , conditionsSurPage[3]);
+				ConditionSurVariable.Signe.values()[conditionsSurPage[4]] , conditionsSurPage[3]);
 	}
 
+	@Override
 	public int conditionObjet() {
 		return conditionsSurPage[5];
 	}
 
+	@Override
 	public int conditionHeros() {
 		return conditionsSurPage[6];
 	}
 
+	@Override
 	public int conditionChrono1() {
 		return conditionsSurPage[7];
 	}
 
+	@Override
 	public int conditionChrono2() {
 		return conditionsSurPage[8];
-	}
-
-	public static final class ConditionSurVariable {
-		public final int idVariable;
-		public final Signe symbole;
-		public final int valeur;
-
-		public ConditionSurVariable(int idVariable, Signe symbole, int valeur) {
-			this.idVariable = idVariable;
-			this.symbole = symbole;
-			this.valeur = valeur;
-		}
-	}
-
-	public enum Signe {
-		EGAL, SUPEGAL, INFEGAL, SUP, INF, DIFFERENT
 	}
 }
