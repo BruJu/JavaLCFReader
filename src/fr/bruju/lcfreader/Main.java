@@ -24,9 +24,9 @@ public class Main {
 		String chemin;
 
 		int numeroChemin = 1; // 0 = brut, 1 = dev
-		int typeOperation = 1; // 0 = lecture de fichier, 1 = lecture d'abstractions, 2 = liste des noms
-		int typeDeDonnees = 0; // 0 = map, 1 = bdd | 0 = map, 1 = ec
-		int numeroElement = 2;
+		int typeOperation = 0; // 0 = lecture de fichier, 1 = lecture d'abstractions, 2 = liste des noms
+		int typeDeDonnees = 3; // 0 = map, 1 = bdd | 0 = map, 1 = ec
+		int numeroElement = 1;
 		
 		String chemins[] = {
 				"..\\RMEventReader\\ressources\\FichiersBruts\\",
