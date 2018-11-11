@@ -28,7 +28,7 @@ import fr.bruju.lcfreader.structure.MiniBloc;
  *
  */
 public class Structures {
-	private static final String FIELDSCSV = "liblcf/fields.csv";
+	private static final String FIELDSCSV = "fr/bruju/lcfreader/ressource/fields.csv";
 	
 	/* =========
 	 * SINGLETON
@@ -62,12 +62,10 @@ public class Structures {
 
 		URL is = getClass().getClassLoader().getResource(FIELDSCSV);
 
-		//File file = new File(fichier);
 		structures = new HashMap<>();
 
 		try {
 			// Lire les noms de structure
-
 			List<String[]> donneesLues = lireToutesLesLignes(is.openStream());
 
 			donneesLues.forEach(donnees -> {
