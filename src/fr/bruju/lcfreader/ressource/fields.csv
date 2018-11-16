@@ -1,4 +1,4 @@
-#line,Structure,Field,Type,Disposition,Index,Default Value,Comment
+#Ligne,Structure,Field,Type,Disposition,Index,Default Value,Comment
 1,Learning,level,Int32,,0x01,1,Integer
 2,Learning,skill_id,Int32,,0x02,1,Integer
 3,Actor,name,String,,0x01,'',String
@@ -34,18 +34,18 @@
 33,Actor,attribute_ranks,SizeField,,0x49,,Integer
 34,Actor,attribute_ranks,UInt8,Vector,0x4A,,Array - Short
 35,Actor,battle_commands,UInt32,Tuple_7,0x50,,Array - RPG::BattleCommand - RPG2003
-36,Sound,name,String,,0x01,'(OFF)',String
+36,Sound,name,String,,0x01,"(OFF)",String
 37,Sound,volume,Int32,,0x03,100,Integer
 38,Sound,tempo,Int32,,0x04,100,Integer
 39,Sound,balance,Int32,,0x05,50,Integer
 40,AnimationTiming,frame,Int32,,0x01,0,Integer
-41,AnimationTiming,se,Sound,,0x02,0,RPG::Sound
+41,AnimationTiming,se,Sound,,0x02,,RPG::Sound
 42,AnimationTiming,flash_scope,Int32,,0x03,0,Integer
 43,AnimationTiming,flash_red,Int32,,0x04,31,Integer
 44,AnimationTiming,flash_green,Int32,,0x05,31,Integer
 45,AnimationTiming,flash_blue,Int32,,0x06,31,Integer
 46,AnimationTiming,flash_power,Int32,,0x07,31,Integer
-47,AnimationTiming,screen_shake,Int32,,0x08,0,Integer - RPG2003 - TODO: Get chunk ID
+47,AnimationTiming,screen_shake,Int32,,0x08,0,Integer - This field RPG2003 only but commonly found in some 2k LDB's. We disable the is2k3 field on purpose because if its defaulted in 2k it won't be written anyway.
 48,AnimationCellData,valid,Int32,,0x01,1,Bool
 49,AnimationCellData,cell_id,Int32,,0x02,0,Integer
 50,AnimationCellData,x,Int32,,0x03,0,Integer
@@ -99,7 +99,7 @@
 98,BattlerAnimation,weapon_data,BattlerAnimationExtension,Array,0x0B,,Array - RPG::BattlerAnimationExtension
 99,BattlerAnimationData,move,Int32,,0x05,0,Integer
 100,BattlerAnimationData,after_image,Int32,,0x06,0,Integer
-101,BattlerAnimationData,pose,Int32,,0x0E,0,Integer
+101,BattlerAnimationData,pose,Int32,,0x0E,-1,Integer
 102,Chipset,name,String,,0x01,'',String
 103,Chipset,chipset_name,String,,0x02,'',String
 104,Chipset,terrain_data,Int16,Vector,0x03,[1]*162,Array - Short x 162
@@ -136,7 +136,7 @@
 135,Skill,failure_message,Int32,,0x07,0,Integer - RPG2000
 136,Skill,type,Int32,,0x08,0,Integer
 137,Skill,sp_type,Int32,,0x09,0,Integer - RPG2003
-138,Skill,sp_percent,Int32,,0x0A,1,Integer - RPG2003
+138,Skill,sp_percent,Int32,,0x0A,0,Integer - RPG2003
 139,Skill,sp_cost,Int32,,0x0B,0,Integer
 140,Skill,scope,Int32,,0x0C,0,Integer
 141,Skill,switch_id,Int32,,0x0D,1,Integer
@@ -163,7 +163,7 @@
 162,Skill,attribute_effects,SizeField,,0x2B,,Integer
 163,Skill,attribute_effects,Boolean,Vector,0x2C,,Array - Flag
 164,Skill,affect_attr_defence,Boolean,,0x2D,False,Flag
-165,Skill,battler_animation,Int32,,0x31,1,Integer - RPG2003
+165,Skill,battler_animation,Int32,,0x31,-1,Integer - RPG2003
 166,Skill,battler_animation_data,Int32,Array,0x32,,? - RPG2003
 167,ItemAnimation,type,Int32,,0x03,0,
 168,ItemAnimation,weapon_anim,Int32,,0x04,0,
@@ -211,7 +211,7 @@
 210,Item,spi_points2,Int32,,0x2D,0,Integer
 211,Item,agi_points2,Int32,,0x2E,0,Integer
 212,Item,using_message,Int32,,0x33,0,Integer
-213,Item,skill_id,Int32,,0x35,1,Integer - RPG2003
+213,Item,skill_id,Int32,,0x35,1,Integer
 214,Item,switch_id,Int32,,0x37,1,Integer
 215,Item,occasion_field2,Boolean,,0x39,True,Flag
 216,Item,occasion_battle,Boolean,,0x3A,False,Flag
@@ -223,7 +223,7 @@
 222,Item,attribute_set,Boolean,Vector,0x42,,Array - Flag
 223,Item,state_chance,Int32,,0x43,0,Integer
 224,Item,state_effect,Boolean,,0x44,False,Flag
-225,Item,weapon_animation,Int32,,0x45,1,Integer - RPG2003
+225,Item,weapon_animation,Int32,,0x45,-1,Integer - RPG2003
 226,Item,animation_data,Int32,Array,0x46,,Array - RPG2003
 227,Item,use_skill,Boolean,,0x47,False,Flag - RPG2003
 228,Item,class_set,SizeField,,0x48,,Integer - RPG2003
@@ -504,7 +504,7 @@
 503,Terms,exit_game_message,String,,0x97,'',String
 504,Terms,yes,String,,0x98,'',String
 505,Terms,no,String,,0x99,'',String
-506,Music,name,String,,0x01,'(OFF)',String
+506,Music,name,String,,0x01,"(OFF)",String
 507,Music,fadein,Int32,,0x02,0,Integer
 508,Music,volume,Int32,,0x03,100,Integer
 509,Music,tempo,Int32,,0x04,100,Integer
@@ -568,551 +568,551 @@
 567,System,battletest_formation,Int32,,0x5F,0,Integer
 568,System,battletest_condition,Int32,,0x60,0,Integer
 569,System,equipment_setting,Int32,,0x61,0,Integer RPG2003 - Whether equipment usage is by Actor or by Class. This is a global setting in RM2k3!
-569bis,System,battletest_alt_terrain,Int32,,0x62,0,Integer RPG2003 (EDITOR ONLY) - Double click on Terrain in Troops changes this setting and 0x54. Affects only the RM2k3 editor.
-570,System,show_frame,Boolean,,0x63,False,Flag - RPG2003
-571,System,frame_name,String,,0x64,'',String - RPG2003
-572,System,invert_animations,Boolean,,0x65,False,Flag - RPG2003
-573,System,show_title,Boolean,,0x6F,True,When false the title is skipped and the game starts directly. In TestPlay mode skips directly to the Load scene. Added in RPG Maker 2003 v1.11
-574,Switch,name,String,,0x01,'',String
-575,Variable,name,String,,0x01,'',String
-576,Database,actors,Actor,Array,0x0B,,RPG::Actor
-577,Database,skills,Skill,Array,0x0C,,RPG::Skill
-578,Database,items,Item,Array,0x0D,,RPG::Item
-579,Database,enemies,Enemy,Array,0x0E,,RPG::Enemy
-580,Database,troops,Troop,Array,0x0F,,RPG::Troop
-581,Database,terrains,Terrain,Array,0x10,,RPG::Terrain
-582,Database,attributes,Attribute,Array,0x11,,RPG::Attribute
-583,Database,states,State,Array,0x12,,RPG::State
-584,Database,animations,Animation,Array,0x13,,RPG::Animation
-585,Database,chipsets,Chipset,Array,0x14,,RPG::Chipset
-586,Database,terms,Terms,,0x15,,RPG::Terms
-587,Database,system,System,,0x16,,RPG::System
-588,Database,switches,Switch,Array,0x17,,RPG::Switchs
-589,Database,variables,Variable,Array,0x18,,RPG::Variables
-590,Database,commonevents,CommonEvent,Array,0x19,,RPG::CommonEvent
-591,Database,version,Int32,,0x1A,0,Indicates version of database. When 1 the database was converted to RPG Maker 2000 v1.61
-592,Database,commoneventD2,,,0x1B,,Duplicated? - Not used - RPG2003
-593,Database,commoneventD3,,,0x1C,,Duplicated? - Not used - RPG2003
-594,Database,battlecommands,BattleCommands,,0x1D,,RPG::BattleCommand - RPG2003
-595,Database,classes,Class,Array,0x1E,,RPG::Class - RPG2003
-596,Database,classD1,,,0x1F,,Duplicated? - Not used - RPG2003
-597,Database,battleranimations,BattlerAnimation,Array,0x20,,RPG::BattlerAnimation - RPG2003
-598,Encounter,troop_id,Int32,,0x01,0,Integer
-599,MapInfo,name,String,,0x01,'',String. Note: Map ID 0 used to be game title but it should be ignored (TreeCtrl dummy editor dumped data); always use RPG_RT.ini GameTitle instead
-600,MapInfo,parent_map,Int32,,0x02,0,Integer. Used to inherit parent map properties
-601,MapInfo,indentation,Int32,,0x03,0,Integer. Dummy editor dumped data. Branch indentation level in TreeCtrl
-602,MapInfo,type,Int32,,0x04,-1,Integer
-603,MapInfo,scrollbar_x,Int32,,0x05,0,Integer. Editor only
-604,MapInfo,scrollbar_y,Int32,,0x06,0,Integer. Editor only
-605,MapInfo,expanded_node,Boolean,,0x07,False,Flag. Editor only
-606,MapInfo,music_type,Int32,,0x0B,0,Integer. 0=inherit; 1=from event; 2=specified in 0x0C
-607,MapInfo,music,Music,,0x0C,,Array - RPG::Music
-608,MapInfo,background_type,Int32,,0x15,0,Integer. 0=inherit; 1=from terrain ldb data; 2=specified in 0x16
-609,MapInfo,background_name,String,,0x16,'',String
-610,MapInfo,teleport,Int32,,0x1F,0,Flag. 0=inherit; 1=allow; 2=disallow
-611,MapInfo,escape,Int32,,0x20,0,Flag. 0=inherit; 1=allow; 2=disallow
-612,MapInfo,save,Int32,,0x21,0,Flag. 0=inherit; 1=allow; 2=disallow
-613,MapInfo,encounters,Encounter,Array,0x29,,Array - RPG::Encounter
-614,MapInfo,encounter_steps,Int32,,0x2C,25,0=Encounters Disabled; 1=Encounter Rate for the map
-615,MapInfo,area_rect,Rect,,0x33,,Uint32 x 4 (Left; Top; Right; Bottom). Normal map (non-area) is 0; 0; 0; 0
-616,Start,party_map_id,Int32,,0x01,0,Integer
-617,Start,party_x,Int32,,0x02,0,Integer
-618,Start,party_y,Int32,,0x03,0,Integer
-619,Start,boat_map_id,Int32,,0x0B,0,Integer
-620,Start,boat_x,Int32,,0x0C,0,Integer
-621,Start,boat_y,Int32,,0x0D,0,Integer
-622,Start,ship_map_id,Int32,,0x15,0,Integer
-623,Start,ship_x,Int32,,0x16,0,Integer
-624,Start,ship_y,Int32,,0x17,0,Integer
-625,Start,airship_map_id,Int32,,0x1F,0,Integer
-626,Start,airship_x,Int32,,0x20,0,Integer
-627,Start,airship_y,Int32,,0x21,0,Integer
-628,EventPageCondition,flags,EventPageCondition_Flags,,0x01,,Bitflag
-629,EventPageCondition,switch_a_id,Int32,,0x02,1,Integer
-630,EventPageCondition,switch_b_id,Int32,,0x03,1,Integer
-631,EventPageCondition,variable_id,Int32,,0x04,1,Integer
-632,EventPageCondition,variable_value,Int32,,0x05,0,Integer
-633,EventPageCondition,item_id,Int32,,0x06,1,Integer
-634,EventPageCondition,actor_id,Int32,,0x07,1,Integer
-635,EventPageCondition,timer_sec,Int32,,0x08,0,IntegerMap,save_count
-636,EventPageCondition,timer2_sec,Int32,,0x09,0,Integer - RPG2003
-637,EventPageCondition,compare_operator,Int32,,0x0A,1,Integer - RPG2003
-638,MoveRoute,move_commands,SizeField,,0x0B,,Integer
-639,MoveRoute,move_commands,MoveCommand,,0x0C,,Array - RPG::MoveCommand
-640,MoveRoute,repeat,Boolean,,0x15,True,Flag
-641,MoveRoute,skippable,Boolean,,0x16,False,Flag
-642,EventPage,condition,EventPageCondition,,0x02,,RPG::EventPageCondition
-643,EventPage,character_name,String,,0x15,'',String
-644,EventPage,character_index,Int32,,0x16,0,Integer
-645,EventPage,character_direction,Int32,,0x17,2,Integer
-646,EventPage,character_pattern,Int32,,0x18,1,Integer
-647,EventPage,translucent,Boolean,,0x19,False,Integer
-648,EventPage,move_type,Int32,,0x1F,1,Integer
-649,EventPage,move_frequency,Int32,,0x20,3,Integer
-650,EventPage,trigger,Int32,,0x21,0,Integer
-651,EventPage,layer,Int32,,0x22,0,Integer
-652,EventPage,overlap_forbidden,Boolean,,0x23,False,Flag
-653,EventPage,animation_type,Int32,,0x24,0,Integer
-654,EventPage,move_speed,Int32,,0x25,3,Integer
-655,EventPage,move_route,MoveRoute,,0x29,,RPG::MoveRoute
-656,EventPage,event_commands,SizeField,,0x33,,Integer
-657,EventPage,event_commands,EventCommand,Vector,0x34,,Array - RPG::EventCommand
-658,Event,name,String,,0x01,'',String
-659,Event,x,Int32,,0x02,0,Integer
-660,Event,y,Int32,,0x03,0,Integer
-661,Event,pages,EventPage,Array,0x05,,Array - RPG::EventPage
-662,Map,chipset_id,Int32,,0x01,1,Integer
-663,Map,width,Int32,,0x02,20,Integer
-664,Map,height,Int32,,0x03,15,Integer
-665,Map,scroll_type,Int32,,0x0B,0,Integer
-666,Map,parallax_flag,Boolean,,0x1F,False,Flag
-667,Map,parallax_name,String,,0x20,'',String
-668,Map,parallax_loop_x,Boolean,,0x21,False,Flag
-669,Map,parallax_loop_y,Boolean,,0x22,False,Flag
-670,Map,parallax_auto_loop_x,Boolean,,0x23,False,Flag
-671,Map,parallax_sx,Int32,,0x24,0,Integer
-672,Map,parallax_auto_loop_y,Boolean,,0x25,False,Flag
-673,Map,parallax_sy,Int32,,0x26,0,Integer
-674,Map,generator_flag,Boolean,,0x28,False,Flag
-675,Map,generator_mode,Int32,,0x29,0,Integer
-676,Map,top_level,Boolean,,0x2A,False,Bool
-677,Map,generator_tiles,Int32,,0x30,0,Integer
-678,Map,generator_width,Int32,,0x31,4,Integer
-679,Map,generator_height,Int32,,0x32,1,Integer
-680,Map,generator_surround,Boolean,,0x33,True,Flag
-681,Map,generator_upper_wall,Boolean,,0x34,True,Flag
-682,Map,generator_floor_b,Boolean,,0x35,True,Flag
-683,Map,generator_floor_c,Boolean,,0x36,True,Flag
-684,Map,generator_extra_b,Boolean,,0x37,True,Flag
-685,Map,generator_extra_c,Boolean,,0x38,True,Flag
-686,Map,generator_x,UInt32,Vector,0x3C,,Uint32 x 9
-687,Map,generator_y,UInt32,Vector,0x3D,,Uint32 x 9
-688,Map,generator_tile_ids,Int16,Vector,0x3E,,Array - Short
-689,Map,lower_layer,Int16,Vector,0x47,,Array - Short
-690,Map,upper_layer,Int16,Vector,0x48,,Array - Short
-691,Map,events,Event,Array,0x51,,Array - RPG::Event
-692bis,Map,save_count,Int32,,0x5A,0,Integer - Used by steam version of rm2k3 instead of 0x5B.
-692,Map,save_count,Int32,,0x5B,0,Integer
-693,SaveTitle,timestamp,Double,,0x01,0,double - timestamp in Delphi's TDateTime format
-694,SaveTitle,hero_name,String,,0x0B,,char[]: hero name
-695,SaveTitle,hero_level,Int32,,0x0C,0,int: hero level
-696,SaveTitle,hero_hp,Int32,,0x0D,0,int: hero HP
-697,SaveTitle,face1_name,String,,0x15,,char[]: face filename
-698,SaveTitle,face1_id,Int32,,0x16,0,int: face id
-699,SaveTitle,face2_name,String,,0x17,,char[]: face filename
-700,SaveTitle,face2_id,Int32,,0x18,0,int: face id
-701,SaveTitle,face3_name,String,,0x19,,char[]: face filename
-702,SaveTitle,face3_id,Int32,,0x1A,0,int: face id
-703,SaveTitle,face4_name,String,,0x1B,,char[]: face filename
-704,SaveTitle,face4_id,Int32,,0x1C,0,int: face id
-705,SaveSystem,screen,Int32,,0x01,1,The current Scene for RPG_RT. Legacy field only used by RPG_RT and not by EasyRPG Player. Savegames always have a scene of 5 (filemenu).
-706,SaveSystem,frame_count,Int32,,0x0B,0,
-707,SaveSystem,graphics_name,String,,0x15,'',string
-708,SaveSystem,message_stretch,Int32,,0x16,-1,Integer
-709,SaveSystem,font_id,Int32,,0x17,0,Integer
-710,SaveSystem,switches_size,Int32,,0x1F,0,
-711,SaveSystem,switches,Boolean,Vector,0x20,,
-712,SaveSystem,variables_size,Int32,,0x21,0,
-713,SaveSystem,variables,Int32LittleEndian,Vector,0x22,,
-714,SaveSystem,message_transparent,Int32,,0x29,0,
-715,SaveSystem,message_position,Int32,,0x2A,2,
-716,SaveSystem,message_prevent_overlap,Int32,,0x2B,1,
-717,SaveSystem,message_continue_events,Int32,,0x2C,0,
-718,SaveSystem,face_name,String,,0x33,'',
-719,SaveSystem,face_id,Int32,,0x34,0,
-720,SaveSystem,face_right,Boolean,,0x35,False,bool
-721,SaveSystem,face_flip,Boolean,,0x36,False,bool
-722,SaveSystem,transparent,Boolean,,0x37,False,
-723,SaveSystem,music_stopping,Boolean,,0x3D,False,Music is being faded out or had been stopped (Play music with the same music as currently playing will restart the music when this flag is set)
-724,SaveSystem,title_music,Music,,0x47,,
-725,SaveSystem,battle_music,Music,,0x48,,
-726,SaveSystem,battle_end_music,Music,,0x49,,
-727,SaveSystem,inn_music,Music,,0x4A,,
-728,SaveSystem,current_music,Music,,0x4B,,
-729,SaveSystem,before_vehicle_music,Music,,0x4C,,
-730,SaveSystem,before_battle_music,Music,,0x4D,,
-731,SaveSystem,stored_music,Music,,0x4E,,
-732,SaveSystem,boat_music,Music,,0x4F,,
-733,SaveSystem,ship_music,Music,,0x50,,
-734,SaveSystem,airship_music,Music,,0x51,,
-735,SaveSystem,gameover_music,Music,,0x52,,
-736,SaveSystem,cursor_se,Sound,,0x5B,,
-737,SaveSystem,decision_se,Sound,,0x5C,,
-738,SaveSystem,cancel_se,Sound,,0x5D,,
-739,SaveSystem,buzzer_se,Sound,,0x5E,,
-740,SaveSystem,battle_se,Sound,,0x5F,,
-741,SaveSystem,escape_se,Sound,,0x60,,
-742,SaveSystem,enemy_attack_se,Sound,,0x61,,
-743,SaveSystem,enemy_damaged_se,Sound,,0x62,,
-744,SaveSystem,actor_damaged_se,Sound,,0x63,,
-745,SaveSystem,dodge_se,Sound,,0x64,,
-746,SaveSystem,enemy_death_se,Sound,,0x65,,
-747,SaveSystem,item_se,Sound,,0x66,,
-748,SaveSystem,transition_out,Int8,,0x6F,1,
-749,SaveSystem,transition_in,Int8,,0x70,1,
-750,SaveSystem,battle_start_fadeout,Int8,,0x71,1,
-751,SaveSystem,battle_start_fadein,Int8,,0x72,1,
-752,SaveSystem,battle_end_fadeout,Int8,,0x73,1,
-753,SaveSystem,battle_end_fadein,Int8,,0x74,1,
-754,SaveSystem,teleport_allowed,Boolean,,0x79,True,
-755,SaveSystem,escape_allowed,Boolean,,0x7A,True,
-756,SaveSystem,save_allowed,Boolean,,0x7B,True,
-757,SaveSystem,menu_allowed,Boolean,,0x7C,True,
-758,SaveSystem,background,String,,0x7D,,string
-759,SaveSystem,save_count,Int32,,0x83,0,
-760,SaveSystem,save_slot,Int32,,0x84,1,
-761,SaveSystem,atb_mode,Int32,,0x8C,0,ATB mode of RPG 2003 battle system.
-762,SaveScreen,tint_finish_red,Int32,,0x01,100,int
-763,SaveScreen,tint_finish_green,Int32,,0x02,100,int
-764,SaveScreen,tint_finish_blue,Int32,,0x03,100,int
-765,SaveScreen,tint_finish_sat,Int32,,0x04,100,int
-766,SaveScreen,tint_current_red,Double,,0x0B,100.0,double
-767,SaveScreen,tint_current_green,Double,,0x0C,100.0,double
-768,SaveScreen,tint_current_blue,Double,,0x0D,100.0,double
-769,SaveScreen,tint_current_sat,Double,,0x0E,100.0,double
-770,SaveScreen,tint_time_left,Int32,,0x0F,0,int
-771,SaveScreen,flash_continuous,Boolean,,0x14,False,int
-772,SaveScreen,flash_red,Int32,,0x15,0,int
-773,SaveScreen,flash_green,Int32,,0x16,0,int
-774,SaveScreen,flash_blue,Int32,,0x17,0,int
-775,SaveScreen,flash_current_level,Double,,0x18,0.0,double
-776,SaveScreen,flash_time_left,Int32,,0x19,0,int
-777,SaveScreen,shake_continuous,Boolean,,0x1E,False,int
-778,SaveScreen,shake_strength,Int32,,0x1F,0,int
-779,SaveScreen,shake_speed,Int32,,0x20,0,int
-780,SaveScreen,shake_position,Int32,,0x21,0,int
-781,SaveScreen,shake_position_y,Int32,,0x22,0,int - unused
-782,SaveScreen,shake_time_left,Int32,,0x23,0,int
-783,SaveScreen,pan_x,Int32,,0x29,0,int
-784,SaveScreen,pan_y,Int32,,0x2A,0,int
-785,SaveScreen,battleanim_id,Int32,,0x2B,0,int - battle animation ID
-786,SaveScreen,battleanim_target,Int32,,0x2C,0,int - battle animation target
-787,SaveScreen,battleanim_frame,Int32,,0x2D,0,int - frame count - Ref<Animation>? FIXME
-788,SaveScreen,battleanim_active,Boolean,,0x2E,False,There is currently a battle animation playing
-789,SaveScreen,battleanim_global,Boolean,,0x2F,False,int - battle animation global scope
-790,SaveScreen,weather,Int32,,0x30,0,int
-791,SaveScreen,weather_strength,Int32,,0x31,0,int
-792,SavePicture,name,String,,0x01,'',string
-793,SavePicture,start_x,Double,,0x02,0.0,double
-794,SavePicture,start_y,Double,,0x03,0.0,double
-795,SavePicture,current_x,Double,,0x04,0.0,double
-796,SavePicture,current_y,Double,,0x05,0.0,double
-797,SavePicture,fixed_to_map,Boolean,,0x06,False,bool
-798,SavePicture,current_magnify,Double,,0x07,-1.0,double
-799,SavePicture,current_top_trans,Double,,0x08,0.0,double
-800,SavePicture,transparency,Boolean,,0x09,False,bool
-801,SavePicture,current_red,Double,,0x0B,-1.0,double
-802,SavePicture,current_green,Double,,0x0C,-1.0,double
-803,SavePicture,current_blue,Double,,0x0D,-1.0,double
-804,SavePicture,current_sat,Double,,0x0E,-1.0,double
-805,SavePicture,effect_mode,Int32,,0x0F,0,int
-806,SavePicture,current_effect,Double,,0x10,0.0,double
-807,SavePicture,current_bot_trans,Double,,0x12,0.0,double
-808,SavePicture,spritesheet_cols,Int32,,0x13,1,Spritesheet columns
-809,SavePicture,spritesheet_rows,Int32,,0x14,1,Spritesheet rows
-810,SavePicture,spritesheet_frame,Int32,,0x15,0,Current spritesheet frame
-811,SavePicture,spritesheet_speed,Int32,,0x16,0,Spritesheet speed (X frames per second)
-812,SavePicture,frames,Int32,,0x17,0,Frames since ShowPicture
-813,SavePicture,spritesheet_play_once,Boolean,,0x18,False,True: Play once and destroy; False: Loop spritesheet
-814,SavePicture,map_layer,Int32,,0x19,7,Layer to show picture on at the map
-815,SavePicture,battle_layer,Int32,,0x1A,0,Layer to show picture on in battle
-816,SavePicture,flags,SavePicture_Flags,,0x1B,97,Bitflag. Persists Map/Battle change/end; Affected by Shake/Flash/Tint
-817,SavePicture,finish_x,Double,,0x1F,0.0,double
-818,SavePicture,finish_y,Double,,0x20,0.0,double
-819,SavePicture,finish_magnify,Int32,,0x21,100,int
-820,SavePicture,finish_top_trans,Int32,,0x22,0,int
-821,SavePicture,finish_bot_trans,Int32,,0x23,0,int
-822,SavePicture,finish_red,Int32,,0x29,100,int
-823,SavePicture,finish_green,Int32,,0x2A,100,int
-824,SavePicture,finish_blue,Int32,,0x2B,100,int
-825,SavePicture,finish_sat,Int32,,0x2C,100,int
-826,SavePicture,finish_effect,Int32,,0x2E,0,int
-827,SavePicture,time_left,Int32,,0x33,0,int
-828,SavePicture,current_rotation,Double,,0x34,0.0,double
-829,SavePicture,current_waver,Int32,,0x35,0,int
-830,SavePartyLocation,active,Boolean,,0x01,True,Flag
-831,SavePartyLocation,map_id,Int32,,0x0B,-1,?
-832,SavePartyLocation,position_x,Int32,,0x0C,-1,?
-833,SavePartyLocation,position_y,Int32,,0x0D,-1,?
-834,SavePartyLocation,direction,Int32,,0x15,2,Facing direction
-835,SavePartyLocation,sprite_direction,Int32,,0x16,2,Sprite direction
-836,SavePartyLocation,anim_frame,Int32,,0x17,1,?
-837,SavePartyLocation,transparency,Int32,,0x18,0,0 or 3 - Transparency level of the main party member
-838,SavePartyLocation,remaining_step,Int32,,0x1F,0,From 0 to 255 - Remaining distance of the current move
-839,SavePartyLocation,move_frequency,Int32,,0x20,2,?
-840,SavePartyLocation,layer,Int32,,0x21,1,?
-841,SavePartyLocation,overlap_forbidden,Boolean,,0x22,False,Flag
-842,SavePartyLocation,animation_type,Int32,,0x23,1,Integer
-843,SavePartyLocation,lock_facing,Boolean,,0x24,False,facing locked
-844,SavePartyLocation,move_speed,Int32,,0x25,4,
-845,SavePartyLocation,move_route,MoveRoute,,0x29,,chunks: RPG::MoveRoute
-846,SavePartyLocation,move_route_overwrite,Boolean,,0x2A,False,Use custom move route
-847,SavePartyLocation,move_route_index,Int32,,0x2B,0,Index of MoveEvent command route
-848,SavePartyLocation,move_route_repeated,Boolean,,0x2C,False,Boolean - Repeating move route has been completed at least once
-849,SavePartyLocation,sprite_transparent,Boolean,,0x2E,False,bool
-850,SavePartyLocation,route_through,Boolean,,0x2F,False,Whether the move route (MoveEvent or defined route) activated through mode. Almost the same as 0x33 (through). 0x2F represents that by MoveEvent the through mode has been activated; but 0x33 is what's actually checked for collisions. In several cases; 0x33 will be changed to indicate a condition in which an event or the hero is in through mode through other means than a MoveEvent; which can be: an event with an empty page being activated; player pressing Ctrl in test play; hero entering or exiting a vehicle (only very briefly)
-851,SavePartyLocation,anim_paused,Int32,,0x30,0,?
-852,SavePartyLocation,through,Boolean,,0x33,False,Can go through anything
-853,SavePartyLocation,stop_count,Int32,,0x34,0,?
-854,SavePartyLocation,anim_count,Int32,,0x35,0,?
-855,SavePartyLocation,max_stop_count,Int32,,0x36,0,2^move_frequency - Once stop_count reaches it; the next move command is executed
-856,SavePartyLocation,jumping,Boolean,,0x3D,False,?
-857,SavePartyLocation,begin_jump_x,Int32,,0x3E,0,?
-858,SavePartyLocation,begin_jump_y,Int32,,0x3F,0,?
-859,SavePartyLocation,pause,Boolean,,0x47,False,Indicates paused movement for an event; set while the player is talking to the event so that it won't run away (not relevant for hero themselves)
-860,SavePartyLocation,flying,Boolean,,0x48,False,Flag
-861,SavePartyLocation,sprite_name,String,,0x49,'',?
-862,SavePartyLocation,sprite_id,Int32,,0x4A,0,?
-863,SavePartyLocation,processed,Boolean,,0x4B,False,Flag whether an event (the hero is also an event) in the current frame processed their movement actions (may also be none). This is required because events are asked every frame to initiate their next movement step if required; but not necessarily in order; because checking passability for an event trying to move onto another tile will trigger any event's movement initiation which is on the target tile (because this way the target event may move away; allowing the other event to move to that tile). This flag ensures that every event processes their possible movements only once per frame even if it was already asked to do so out of order as part of another event's movement initiation.
-864,SavePartyLocation,flash_red,Int32,,0x51,100,int
-865,SavePartyLocation,flash_green,Int32,,0x52,100,int
-866,SavePartyLocation,flash_blue,Int32,,0x53,100,int
-867,SavePartyLocation,flash_current_level,Double,,0x54,0.0,double
-868,SavePartyLocation,flash_time_left,Int32,,0x55,0,int
-869,SavePartyLocation,boarding,Boolean,,0x65,False,
-870,SavePartyLocation,aboard,Boolean,,0x66,False,
-871,SavePartyLocation,vehicle,Int32,,0x67,0,Vehicle in use
-872,SavePartyLocation,unboarding,Boolean,,0x68,False,
-873,SavePartyLocation,preboard_move_speed,Int32,,0x69,4,Move speed before the party boarded the vehicle
-874,SavePartyLocation,menu_calling,Boolean,,0x6C,False,Flag which briefly is true if the player presses ESC. At the right place in handling each frame's activities for the player; the code checks whether this flag is set and calls the menu; however there are several conditions which would cancel this flag and instead process another higher-priority action; such as when an encounter takes place during the same frame.
-875,SavePartyLocation,pan_state,Int32,,0x6F,1,
-876,SavePartyLocation,pan_current_x,Int32,,0x70,2304,Number of 1/16 pixels to the left of player
-877,SavePartyLocation,pan_current_y,Int32,,0x71,1792,Number of 1/16 pixels above the player
-878,SavePartyLocation,pan_finish_x,Int32,,0x72,2304,Number of 1/16 pixels to the left of player when current scroll finishes
-879,SavePartyLocation,pan_finish_y,Int32,,0x73,1792,Number of 1/16 pixels above the player when current scroll finishes.
-880,SavePartyLocation,pan_speed,Int32,,0x79,16,speed in the scrolls of the screen - shown in sixteenth pixels.
-881,SavePartyLocation,encounter_steps,Int32,,0x7C,0,int: sum of terrain.encounter_rate for each step
-882,SavePartyLocation,encounter_calling,Boolean,,0x7D,False,Similar to 0x6C - is used to signal a different piece of code that an encounter is to be triggered; which may be cancelled by other conditions such as the player starting to interact with an event during the same frame.
-883,SavePartyLocation,map_save_count,Int32,,0x83,0,Mirrors save_count of current map. On mismatch events are not continued after load.
-884,SavePartyLocation,database_save_count,Int32,,0x84,0,?
-885,SaveVehicleLocation,active,Boolean,,0x01,True,Flag
-886,SaveVehicleLocation,map_id,Int32,,0x0B,-1,?
-887,SaveVehicleLocation,position_x,Int32,,0x0C,-1,?
-888,SaveVehicleLocation,position_y,Int32,,0x0D,-1,?
-889,SaveVehicleLocation,direction,Int32,,0x15,2,Facing direction
-890,SaveVehicleLocation,sprite_direction,Int32,,0x16,2,Sprite direction
-891,SaveVehicleLocation,anim_frame,Int32,,0x17,1,?
-892,SaveVehicleLocation,transparency,Int32,,0x18,0,always 0
-893,SaveVehicleLocation,remaining_step,Int32,,0x1F,0,From 0 to 255 - Remaining distance of the current move
-894,SaveVehicleLocation,move_frequency,Int32,,0x20,2,?
-895,SaveVehicleLocation,layer,Int32,,0x21,1,?
-896,SaveVehicleLocation,overlap_forbidden,Boolean,,0x22,False,Flag
-897,SaveVehicleLocation,animation_type,Int32,,0x23,1,
-898,SaveVehicleLocation,lock_facing,Boolean,,0x24,False,facing locked
-899,SaveVehicleLocation,move_speed,Int32,,0x25,-1,
-900,SaveVehicleLocation,move_route,MoveRoute,,0x29,,chunks: RPG::MoveRoute
-901,SaveVehicleLocation,move_route_overwrite,Boolean,,0x2A,False,Use custom move route
-902,SaveVehicleLocation,move_route_index,Int32,,0x2B,0,Index of MoveEvent command route
-903,SaveVehicleLocation,move_route_repeated,Boolean,,0x2C,False,Boolean - Repeating move route has been completed at least once
-904,SaveVehicleLocation,anim_paused,Int32,,0x30,0,?
-905,SaveVehicleLocation,through,Boolean,,0x33,False,Can go through anything
-906,SaveVehicleLocation,stop_count,Int32,,0x34,0,?
-907,SaveVehicleLocation,anim_count,Int32,,0x35,0,?
-908,SaveVehicleLocation,max_stop_count,Int32,,0x36,0,2^move_frequency - Once stop_count reaches it; the next move command is executed
-909,SaveVehicleLocation,jumping,Boolean,,0x3D,False,?
-910,SaveVehicleLocation,begin_jump_x,Int32,,0x3E,0,?
-911,SaveVehicleLocation,begin_jump_y,Int32,,0x3F,0,?
-912,SaveVehicleLocation,pause,Boolean,,0x47,False,Indicates paused movement for an event; set while the player is talking to the event so that it won't run away (not relevant for vehicles themselves)
-913,SaveVehicleLocation,flying,Boolean,,0x48,False,Flag
-914,SaveVehicleLocation,sprite_name,String,,0x49,'',?
-915,SaveVehicleLocation,sprite_id,Int32,,0x4A,0,?
-916,SaveVehicleLocation,processed,Boolean,,0x4B,False,Flag whether an event (the hero is also an event) in the current frame processed their movement actions (may also be none). This is required because events are asked every frame to initiate their next movement step if required; but not necessarily in order; because checking passability for an event trying to move onto another tile will trigger any event's movement initiation which is on the target tile (because this way the target event may move away; allowing the other event to move to that tile). This flag ensures that every event processes their possible movements only once per frame even if it was already asked to do so out of order as part of another event's movement initiation.
-917,SaveVehicleLocation,flash_red,Int32,,0x51,100,int
-918,SaveVehicleLocation,flash_green,Int32,,0x52,100,int
-919,SaveVehicleLocation,flash_blue,Int32,,0x53,100,int
-920,SaveVehicleLocation,flash_current_level,Double,,0x54,0.0,double
-921,SaveVehicleLocation,flash_time_left,Int32,,0x55,0,int
-922,SaveVehicleLocation,vehicle,Int32,,0x65,0,Ship ID: 1 = boat; 2 = Ship; 3 = Airship - Maybe the same as Enum<SavePartyLocation_VehicleType>? FIXME
-923,SaveVehicleLocation,original_move_route_index,Int32,,0x66,0,Index of custom move route
-924,SaveVehicleLocation,remaining_ascent,Int32,,0x6A,0,From 0 to 255 - In flying vehicles; remaining distance to ascend
-925,SaveVehicleLocation,remaining_descent,Int32,,0x6B,0,From 0 to 255 - In flying vehicles; remaining distance to descend
-926,SaveVehicleLocation,sprite2_name,String,,0x6F,'',string
-927,SaveVehicleLocation,sprite2_id,Int32,,0x70,0,int
-928,SaveActor,name,String,,0x01,'',string; ''\x01'' for default!?!?
-929,SaveActor,title,String,,0x02,'',string; ''\x01'' for default!?!?
-930,SaveActor,sprite_name,String,,0x0B,'',string
-931,SaveActor,sprite_id,Int32,,0x0C,0,int
-932,SaveActor,sprite_flags,Int32,,0x0D,0,int
-933,SaveActor,face_name,String,,0x15,'',string
-934,SaveActor,face_id,Int32,,0x16,0,int
-935,SaveActor,level,Int32,,0x1F,-1,int
-936,SaveActor,exp,Int32,,0x20,-1,int
-937,SaveActor,hp_mod,Int32,,0x21,-1,?
-938,SaveActor,sp_mod,Int32,,0x22,-1,?
-939,SaveActor,attack_mod,Int32,,0x29,0,int
-940,SaveActor,defense_mod,Int32,,0x2A,0,int
-941,SaveActor,spirit_mod,Int32,,0x2B,0,int
-942,SaveActor,agility_mod,Int32,,0x2C,0,int
-943,SaveActor,skills_size,Int32,,0x33,-1,?
-944,SaveActor,skills,Int16,Vector,0x34,,short[]
-945,SaveActor,equipped,Int16,Vector,0x3D,,short[5]
-946,SaveActor,current_hp,Int32,,0x47,-1,int
-947,SaveActor,current_sp,Int32,,0x48,-1,int
-948,SaveActor,battle_commands,UInt32,Tuple_7,0x50,,array of (uncompressed) int32
-949,SaveActor,status,SizeField,,0x51,0,?
-950,SaveActor,status,Int16,Vector,0x52,,array of short
-951,SaveActor,changed_battle_commands,Boolean,,0x53,False,bool
-952,SaveActor,class_id,Int32,,0x5A,-1,int class-id
-953,SaveActor,row,Int32,,0x5B,0,RPG2003 Battle row (-1 Back; 1 Front)
-954,SaveActor,two_weapon,Boolean,,0x5C,False,bool
-955,SaveActor,lock_equipment,Boolean,,0x5D,False,bool
-956,SaveActor,auto_battle,Boolean,,0x5E,False,bool
-957,SaveActor,super_guard,Boolean,,0x5F,False,bool
-958,SaveActor,battler_animation,Int32,,0x60,0,Integer - RPG2003
-959,SaveInventory,party_size,Int32,,0x01,-1,?
-960,SaveInventory,party,Int16,Vector,0x02,,?
-961,SaveInventory,items_size,Int32,,0x0B,-1,?
-962,SaveInventory,item_ids,Int16,Vector,0x0C,,short[]: item list
-963,SaveInventory,item_counts,UInt8,Vector,0x0D,,?
-964,SaveInventory,item_usage,UInt8,Vector,0x0E,,?
-965,SaveInventory,gold,Int32,,0x15,0,int
-966,SaveInventory,timer1_secs,Int32,,0x17,0,int
-967,SaveInventory,timer1_active,Boolean,,0x18,False,bool
-968,SaveInventory,timer1_visible,Boolean,,0x19,False,bool
-969,SaveInventory,timer1_battle,Boolean,,0x1A,False,bool
-970,SaveInventory,timer2_secs,Int32,,0x1B,0,int
-971,SaveInventory,timer2_active,Boolean,,0x1C,False,bool
-972,SaveInventory,timer2_visible,Boolean,,0x1D,False,bool
-973,SaveInventory,timer2_battle,Boolean,,0x1E,False,bool
-974,SaveInventory,battles,Int32,,0x20,0,?
-975,SaveInventory,defeats,Int32,,0x21,0,?
-976,SaveInventory,escapes,Int32,,0x22,0,?
-977,SaveInventory,victories,Int32,,0x23,0,?
-978,SaveInventory,turns,Int32,,0x29,0,Number of turns passed in the latest battle fought. RPG2000: 'turn' passes after every character (enemies and heroes both) performed an action each. RPG2003: every time a hero or enemy performs an action that is considered a 'turn'.
-979,SaveInventory,steps,Int32,,0x2A,0,Number of steps taken in the field.
-980,SaveTarget,map_id,Int32,,0x01,0,int
-981,SaveTarget,map_x,Int32,,0x02,0,int
-982,SaveTarget,map_y,Int32,,0x03,0,int
-983,SaveTarget,switch_on,Boolean,,0x04,False,bool
-984,SaveTarget,switch_id,Int32,,0x05,0,int
-985,SaveEventCommands,commands_size,Int32,,0x01,0,int
-986,SaveEventCommands,commands,EventCommand,Vector,0x02,,event command list
-987,SaveEventCommands,current_command,Int32,,0x0B,0,int
-988,SaveEventCommands,event_id,Int32,,0x0C,0,0 if it's common event or in other map
-989,SaveEventCommands,actioned,Boolean,,0x0D,False,Event was triggered by the Action Key
-990,SaveEventCommands,subcommand_path,SizeField,,0x15,-1,size of the 0x16 vector
-991,SaveEventCommands,subcommand_path,UInt8,Vector,0x16,,byte For each indention level in the script; an ID is stored there which corresponds to the branch to take in case a command allows multiple branches. For example; the Show Choice command would write the result of the choice (for example 2 for the third item) into the current indention level's entry in this array; and the script processor would later look for the Case subcommand with the corresponding ID; if any; and jump to that one (if none found; it would jump to the End Case subcommand). Once the jump is executed; the ID is set to 255 (probably a protection mechanism even though there should normally not be multiple subcommands with the same ID).
-992,SaveEventData,commands,SaveEventCommands,Array,0x01,,array
-993,SaveEventData,show_message,Boolean,,0x04,False,Show Message command has been executed in the current move route
-994,SaveEventData,abort_on_escape,Boolean,,0x0B,False,Flag which is set before a fight if the EnemyEncounter event command had battle_escape_mode set to 1 (abort event on escape). After the fight; the interpreter checks if the battle result was an escape and this flag was set and abort the event in that case.
-995,SaveEventData,wait_movement,Boolean,,0x0D,False,Whether Wait for all movement is in effect
-996,SaveEventData,keyinput_wait,Boolean,,0x15,False,
-997,SaveEventData,keyinput_variable,UInt8,,0x16,0,
-998,SaveEventData,keyinput_all_directions,Boolean,,0x17,False,
-999,SaveEventData,keyinput_decision,Boolean,,0x18,False,
-1000,SaveEventData,keyinput_cancel,Boolean,,0x19,False,
-1001,SaveEventData,keyinput_numbers,Boolean,,0x1A,False,In RM2k Value this is keyinput_shift
-1002,SaveEventData,keyinput_operators,Boolean,,0x1B,False,In Value keyinput_down
-1003,SaveEventData,keyinput_shift,Boolean,,0x1C,False,In Value keyinput_left
-1004,SaveEventData,keyinput_value_right,Boolean,,0x1D,False,Only in Value
-1005,SaveEventData,keyinput_value_up,Boolean,,0x1E,False,Only in Value
-1006,SaveEventData,wait_time,Int32,,0x1F,0,int
-1007,SaveEventData,keyinput_time_variable,Int32,,0x20,-1,
-1008,SaveEventData,keyinput_down,Boolean,,0x23,False,
-1009,SaveEventData,keyinput_left,Boolean,,0x24,False,
-1010,SaveEventData,keyinput_right,Boolean,,0x25,False,
-1011,SaveEventData,keyinput_up,Boolean,,0x26,False,
-1012,SaveEventData,keyinput_timed,Boolean,,0x29,False,
-1013,SaveEventData,unused_wait_for_key_or_enter,Boolean,,0x2A,False,If enabled; an event waits for either the confirmation key to be pressed or one of the keys defined by KeyInputProc before continuing. This flag seems to be unused though since it is never written to (keyinput_wait is used instead).
-1014,SaveMapEvent,active,Boolean,,0x01,True,Flag
-1015,SaveMapEvent,map_id,Int32,,0x0B,-1,?
-1016,SaveMapEvent,position_x,Int32,,0x0C,-1,?
-1017,SaveMapEvent,position_y,Int32,,0x0D,-1,?
-1018,SaveMapEvent,direction,Int32,,0x15,2,Facing direction
-1019,SaveMapEvent,sprite_direction,Int32,,0x16,2,Sprite direction
-1020,SaveMapEvent,anim_frame,Int32,,0x17,1,?
-1021,SaveMapEvent,transparency,Int32,,0x18,0,0 or 3 - Transparency level of the current event page
-1022,SaveMapEvent,remaining_step,Int32,,0x1F,0,From 0 to 255 - Remaining distance of the current move
-1023,SaveMapEvent,move_frequency,Int32,,0x20,2,?
-1024,SaveMapEvent,layer,Int32,,0x21,1,?
-1025,SaveMapEvent,overlap_forbidden,Boolean,,0x22,False,Flag
-1026,SaveMapEvent,animation_type,Int32,,0x23,1,
-1027,SaveMapEvent,lock_facing,Boolean,,0x24,False,facing locked
-1028,SaveMapEvent,move_speed,Int32,,0x25,-1,
-1029,SaveMapEvent,move_route,MoveRoute,,0x29,,chunks: RPG::MoveRoute
-1030,SaveMapEvent,move_route_overwrite,Boolean,,0x2A,False,Use custom move route
-1031,SaveMapEvent,move_route_index,Int32,,0x2B,0,Index of MoveEvent command route
-1032,SaveMapEvent,move_route_repeated,Boolean,,0x2C,False,Boolean - Repeating move route has been completed at least once
-1033,SaveMapEvent,route_through,Boolean,,0x2F,False,Whether the move route (MoveEvent or defined route) activated through mode. Almost the same as 0x33 (through). 0x2F represents that by MoveEvent the through mode has been activated; but 0x33 is what's actually checked for collisions. In several cases; 0x33 will be changed to indicate a condition in which an event or the hero is in through mode through other means than a MoveEvent; which can be: an event with an empty page being activated; player pressing Ctrl in test play; hero entering or exiting a vehicle (only very briefly)
-1034,SaveMapEvent,anim_paused,Int32,,0x30,0,?
-1035,SaveMapEvent,through,Boolean,,0x33,False,Can go through anything
-1036,SaveMapEvent,stop_count,Int32,,0x34,0,?
-1037,SaveMapEvent,anim_count,Int32,,0x35,0,?
-1038,SaveMapEvent,max_stop_count,Int32,,0x36,0,2^move_frequency unless it's a random move route - Once stop_count reaches it; the next move command is executed
-1039,SaveMapEvent,jumping,Boolean,,0x3D,False,?
-1040,SaveMapEvent,begin_jump_x,Int32,,0x3E,0,?
-1041,SaveMapEvent,begin_jump_y,Int32,,0x3F,0,?
-1042,SaveMapEvent,pause,Boolean,,0x47,False,Indicates paused movement for an event; set while the player is talking to the event so that it won't run away (not relevant for vehicles themselves)
-1043,SaveMapEvent,flying,Boolean,,0x48,False,Flag
-1044,SaveMapEvent,sprite_name,String,,0x49,'',?
-1045,SaveMapEvent,sprite_id,Int32,,0x4A,-1,?
-1046,SaveMapEvent,processed,Boolean,,0x4B,False,Flag whether an event (the hero is also an event) in the current frame processed their movement actions (may also be none). This is required because events are asked every frame to initiate their next movement step if required; but not necessarily in order; because checking passability for an event trying to move onto another tile will trigger any event's movement initiation which is on the target tile (because this way the target event may move away; allowing the other event to move to that tile). This flag ensures that every event processes their possible movements only once per frame even if it was already asked to do so out of order as part of another event's movement initiation.
-1047,SaveMapEvent,flash_red,Int32,,0x51,100,int
-1048,SaveMapEvent,flash_green,Int32,,0x52,100,int
-1049,SaveMapEvent,flash_blue,Int32,,0x53,100,int
-1050,SaveMapEvent,flash_current_level,Double,,0x54,0.0,double
-1051,SaveMapEvent,flash_time_left,Int32,,0x55,0,int
-1052,SaveMapEvent,running,Boolean,,0x65,False,?
-1053,SaveMapEvent,original_move_route_index,Int32,,0x66,0,Index of custom move route
-1054,SaveMapEvent,pending,Boolean,,0x67,False,If true; this event will run after the current running event stops running. FIXME: See issue #174
-1055,SaveMapEvent,event_data,SaveEventData,,0x6C,,chunks
-1056,SaveMapInfo,position_x,Int32,,0x01,0,int
-1057,SaveMapInfo,position_y,Int32,,0x02,0,int
-1058,SaveMapInfo,encounter_rate,Int32,,0x03,-1,int
-1059,SaveMapInfo,chipset_id,Int32,,0x05,-1,int
-1060,SaveMapInfo,events,SaveMapEvent,Array,0x0B,,? array
-1061,SaveMapInfo,lower_tiles,UInt8,Vector,0x15,,? [00 01 02 ... 8E 8F]
-1062,SaveMapInfo,upper_tiles,UInt8,Vector,0x16,,
-1063,SaveMapInfo,parallax_name,String,,0x20,'',string
-1064,SaveMapInfo,parallax_horz,Boolean,,0x21,False,bool
-1065,SaveMapInfo,parallax_vert,Boolean,,0x22,False,bool
-1066,SaveMapInfo,parallax_horz_auto,Boolean,,0x23,False,bool
-1067,SaveMapInfo,parallax_horz_speed,Int32,,0x24,0,int
-1068,SaveMapInfo,parallax_vert_auto,Boolean,,0x25,False,bool
-1069,SaveMapInfo,parallax_vert_speed,Int32,,0x26,0,int
-1070,SaveCommonEvent,event_data,SaveEventData,,0x01,,chunks
-1070bis,SavePanorama,pan_x,Int32,,0x01,,Panorama X position
-1070ter,SavePanorama,pan_y,Int32,,0x02,,Panorama Y position
-1071,Save,title,SaveTitle,,0x64,,RPG::SaveTitle
-1072,Save,system,SaveSystem,,0x65,,RPG::SaveSystem
-1073,Save,screen,SaveScreen,,0x66,,RPG::SaveScreen
-1074,Save,pictures,SavePicture,Array,0x67,,array of RPG::SavePicture
-1075,Save,party_location,SavePartyLocation,,0x68,,RPG::SavePartyLocation
-1076,Save,boat_location,SaveVehicleLocation,,0x69,,RPG::SaveVehicleLocation
-1077,Save,ship_location,SaveVehicleLocation,,0x6A,,RPG::SaveVehicleLocation
-1078,Save,airship_location,SaveVehicleLocation,,0x6B,,RPG::SaveVehicleLocation
-1079,Save,actors,SaveActor,Array,0x6C,,array of RPG::SaveActor
-1080,Save,inventory,SaveInventory,,0x6D,,RPG::SaveInventory
-1081,Save,targets,SaveTarget,Array,0x6E,,array of RPG::SaveTarget
-1082,Save,map_info,SaveMapInfo,,0x6F,,RPG::SaveMapInfo
-1083,Save,panorama,SavePanorama,,0x70,,Used to store panorama position data. Used by RPG_RT 2k3 1.12 in other versions an empty object.
-1084,Save,events,SaveEventData,,0x71,,RPG::SaveEventData
-1085,Save,common_events,SaveCommonEvent,Array,0x72,,array of RPG::SaveCommonEvent
-1086,Equipment,weapon_id,Int16,,,0,
-1087,Equipment,shield_id,Int16,,,0,
-1088,Equipment,armor_id,Int16,,,0,
-1089,Equipment,helmet_id,Int16,,,0,
-1090,Equipment,accessory_id,Int16,,,0,
-1091,EventCommand,code,Int32,,,0,
-1092,EventCommand,indent,Int32,,,0,
-1093,EventCommand,string,String,,,'',
-1094,EventCommand,parameters,Int32,List,,,
-#1095,MoveCommand,command_id,Int32,,,0,
-#1096,MoveCommand,parameter_string,String,,,'',
-#1097,MoveCommand,parameter_a,Int32,,,0,
-#1098,MoveCommand,parameter_b,Int32,,,0,
-#1099,MoveCommand,parameter_c,Int32,,,0,
-1100,Parameters,maxhp,Int16,Tuple_99,,,
-1101,Parameters,maxsp,Int16,Tuple_99,,,
-1102,Parameters,attack,Int16,Tuple_99,,,
-1103,Parameters,defense,Int16,Tuple_99,,,
-1104,Parameters,spirit,Int16,Tuple_99,,,
-1105,Parameters,agility,Int16,Tuple_99,,,
-1106,Rect,l,UInt32,,,0,
-1107,Rect,t,UInt32,,,0,
-1108,Rect,r,UInt32,,,0,
-1109,Rect,b,UInt32,,,0,
-1110,TreeMap,maps,MapInfo,Array,,,
-1111,TreeMap,tree_order,Int32,List,,,
-1112,TreeMap,active_node,Int32,,,0,
-1113,TreeMap,start,Start,,,,
+570,System,battletest_alt_terrain,Int32,,0x62,-1,Integer RPG2003 (EDITOR ONLY) - Double click on Terrain in Troops changes this setting and 0x54. Affects only the RM2k3 editor.
+571,System,show_frame,Boolean,,0x63,False,Flag - RPG2003
+572,System,frame_name,String,,0x64,'',String - RPG2003
+573,System,invert_animations,Boolean,,0x65,False,Flag - RPG2003
+574,System,show_title,Boolean,,0x6F,True,When false the title is skipped and the game starts directly. In TestPlay mode skips directly to the Load scene. Added in RPG Maker 2003 v1.11
+575,Switch,name,String,,0x01,'',String
+576,Variable,name,String,,0x01,'',String
+577,Database,actors,Actor,Array,0x0B,,RPG::Actor
+578,Database,skills,Skill,Array,0x0C,,RPG::Skill
+579,Database,items,Item,Array,0x0D,,RPG::Item
+580,Database,enemies,Enemy,Array,0x0E,,RPG::Enemy
+581,Database,troops,Troop,Array,0x0F,,RPG::Troop
+582,Database,terrains,Terrain,Array,0x10,,RPG::Terrain
+583,Database,attributes,Attribute,Array,0x11,,RPG::Attribute
+584,Database,states,State,Array,0x12,,RPG::State
+585,Database,animations,Animation,Array,0x13,,RPG::Animation
+586,Database,chipsets,Chipset,Array,0x14,,RPG::Chipset
+587,Database,terms,Terms,,0x15,,RPG::Terms
+588,Database,system,System,,0x16,,RPG::System
+589,Database,switches,Switch,Array,0x17,,RPG::Switchs
+590,Database,variables,Variable,Array,0x18,,RPG::Variables
+591,Database,commonevents,CommonEvent,Array,0x19,,RPG::CommonEvent
+592,Database,version,Int32,,0x1A,0,Indicates version of database. When 1 the database was converted to RPG Maker 2000 v1.61
+593,Database,commoneventD2,,,0x1B,,Duplicated? - Not used - RPG2003
+594,Database,commoneventD3,,,0x1C,,Duplicated? - Not used - RPG2003
+595,Database,battlecommands,BattleCommands,,0x1D,,RPG::BattleCommand - RPG2003
+596,Database,classes,Class,Array,0x1E,,RPG::Class - RPG2003
+597,Database,classD1,,,0x1F,,Duplicated? - Not used - RPG2003
+598,Database,battleranimations,BattlerAnimation,Array,0x20,,RPG::BattlerAnimation - RPG2003
+599,Encounter,troop_id,Int32,,0x01,0,Integer
+600,MapInfo,name,String,,0x01,'',String. Note: Map ID 0 used to be game title but it should be ignored (TreeCtrl dummy editor dumped data); always use RPG_RT.ini GameTitle instead
+601,MapInfo,parent_map,Int32,,0x02,0,Integer. Used to inherit parent map properties
+602,MapInfo,indentation,Int32,,0x03,0,Integer. Dummy editor dumped data. Branch indentation level in TreeCtrl
+603,MapInfo,type,Int32,,0x04,-1,Integer
+604,MapInfo,scrollbar_x,Int32,,0x05,0,Integer. Editor only
+605,MapInfo,scrollbar_y,Int32,,0x06,0,Integer. Editor only
+606,MapInfo,expanded_node,Boolean,,0x07,False,Flag. Editor only
+607,MapInfo,music_type,Int32,,0x0B,0,Integer. 0=inherit; 1=from event; 2=specified in 0x0C
+608,MapInfo,music,Music,,0x0C,,Array - RPG::Music
+609,MapInfo,background_type,Int32,,0x15,0,Integer. 0=inherit; 1=from terrain ldb data; 2=specified in 0x16
+610,MapInfo,background_name,String,,0x16,'',String
+611,MapInfo,teleport,Int32,,0x1F,0,Flag. 0=inherit; 1=allow; 2=disallow
+612,MapInfo,escape,Int32,,0x20,0,Flag. 0=inherit; 1=allow; 2=disallow
+613,MapInfo,save,Int32,,0x21,0,Flag. 0=inherit; 1=allow; 2=disallow
+614,MapInfo,encounters,Encounter,Array,0x29,,Array - RPG::Encounter
+615,MapInfo,encounter_steps,Int32,,0x2C,25,0=Encounters Disabled; 1=Encounter Rate for the map
+616,MapInfo,area_rect,Rect,,0x33,,Uint32 x 4 (Left; Top; Right; Bottom). Normal map (non-area) is 0; 0; 0; 0
+617,Start,party_map_id,Int32,,0x01,0,Integer
+618,Start,party_x,Int32,,0x02,0,Integer
+619,Start,party_y,Int32,,0x03,0,Integer
+620,Start,boat_map_id,Int32,,0x0B,0,Integer
+621,Start,boat_x,Int32,,0x0C,0,Integer
+622,Start,boat_y,Int32,,0x0D,0,Integer
+623,Start,ship_map_id,Int32,,0x15,0,Integer
+624,Start,ship_x,Int32,,0x16,0,Integer
+625,Start,ship_y,Int32,,0x17,0,Integer
+626,Start,airship_map_id,Int32,,0x1F,0,Integer
+627,Start,airship_x,Int32,,0x20,0,Integer
+628,Start,airship_y,Int32,,0x21,0,Integer
+629,EventPageCondition,flags,EventPageCondition_Flags,,0x01,,Bitflag
+630,EventPageCondition,switch_a_id,Int32,,0x02,1,Integer
+631,EventPageCondition,switch_b_id,Int32,,0x03,1,Integer
+632,EventPageCondition,variable_id,Int32,,0x04,1,Integer
+633,EventPageCondition,variable_value,Int32,,0x05,0,Integer
+634,EventPageCondition,item_id,Int32,,0x06,1,Integer
+635,EventPageCondition,actor_id,Int32,,0x07,1,Integer
+636,EventPageCondition,timer_sec,Int32,,0x08,0,Integer
+637,EventPageCondition,timer2_sec,Int32,,0x09,0,Integer - RPG2003
+638,EventPageCondition,compare_operator,Int32,,0x0A,1,Integer - RPG2003
+639,MoveRoute,move_commands,SizeField,,0x0B,,Integer
+640,MoveRoute,move_commands,MoveCommandSpecial,,0x0C,,Array - RPG::MoveCommand
+641,MoveRoute,repeat,Boolean,,0x15,True,Flag
+642,MoveRoute,skippable,Boolean,,0x16,False,Flag
+643,EventPage,condition,EventPageCondition,,0x02,,RPG::EventPageCondition
+644,EventPage,character_name,String,,0x15,'',String
+645,EventPage,character_index,Int32,,0x16,0,Integer
+646,EventPage,character_direction,Int32,,0x17,2,Integer
+647,EventPage,character_pattern,Int32,,0x18,1,Integer
+648,EventPage,translucent,Boolean,,0x19,False,Integer
+649,EventPage,move_type,Int32,,0x1F,1,Integer
+650,EventPage,move_frequency,Int32,,0x20,3,Integer
+651,EventPage,trigger,Int32,,0x21,0,Integer
+652,EventPage,layer,Int32,,0x22,0,Integer
+653,EventPage,overlap_forbidden,Boolean,,0x23,False,Flag
+654,EventPage,animation_type,Int32,,0x24,0,Integer
+655,EventPage,move_speed,Int32,,0x25,3,Integer
+656,EventPage,move_route,MoveRoute,,0x29,,RPG::MoveRoute
+657,EventPage,event_commands,SizeField,,0x33,,Integer
+658,EventPage,event_commands,EventCommand,Vector,0x34,,Array - RPG::EventCommand
+659,Event,name,String,,0x01,'',String
+660,Event,x,Int32,,0x02,0,Integer
+661,Event,y,Int32,,0x03,0,Integer
+662,Event,pages,EventPage,Array,0x05,,Array - RPG::EventPage
+663,Map,chipset_id,Int32,,0x01,1,Integer
+664,Map,width,Int32,,0x02,20,Integer
+665,Map,height,Int32,,0x03,15,Integer
+666,Map,scroll_type,Int32,,0x0B,0,Integer
+667,Map,parallax_flag,Boolean,,0x1F,False,Flag
+668,Map,parallax_name,String,,0x20,'',String
+669,Map,parallax_loop_x,Boolean,,0x21,False,Flag
+670,Map,parallax_loop_y,Boolean,,0x22,False,Flag
+671,Map,parallax_auto_loop_x,Boolean,,0x23,False,Flag
+672,Map,parallax_sx,Int32,,0x24,0,Integer
+673,Map,parallax_auto_loop_y,Boolean,,0x25,False,Flag
+674,Map,parallax_sy,Int32,,0x26,0,Integer
+675,Map,generator_flag,Boolean,,0x28,False,Flag
+676,Map,generator_mode,Int32,,0x29,0,Integer
+677,Map,top_level,Boolean,,0x2A,False,Bool
+678,Map,generator_tiles,Int32,,0x30,0,Integer
+679,Map,generator_width,Int32,,0x31,4,Integer
+680,Map,generator_height,Int32,,0x32,1,Integer
+681,Map,generator_surround,Boolean,,0x33,True,Flag
+682,Map,generator_upper_wall,Boolean,,0x34,True,Flag
+683,Map,generator_floor_b,Boolean,,0x35,True,Flag
+684,Map,generator_floor_c,Boolean,,0x36,True,Flag
+685,Map,generator_extra_b,Boolean,,0x37,True,Flag
+686,Map,generator_extra_c,Boolean,,0x38,True,Flag
+687,Map,generator_x,UInt32,Vector,0x3C,,Uint32 x 9 RPG2003
+688,Map,generator_y,UInt32,Vector,0x3D,,Uint32 x 9 RPG2003
+689,Map,generator_tile_ids,Int16,Vector,0x3E,,Array - Short RPG2003
+690,Map,lower_layer,Int16,Vector,0x47,,Array - Short
+691,Map,upper_layer,Int16,Vector,0x48,,Array - Short
+692,Map,events,Event,Array,0x51,,Array - RPG::Event
+693,Map,save_count_2k3e,Int32,,0x5A,0,Integer - Used by steam version of rm2k3 instead of 0x5B.
+694,Map,save_count,Int32,,0x5B,0,Integer
+695,SaveTitle,timestamp,Double,,0x01,0.0,double - timestamp in Delphi's TDateTime format
+696,SaveTitle,hero_name,String,,0x0B,,char[]: hero name
+697,SaveTitle,hero_level,Int32,,0x0C,0,int: hero level
+698,SaveTitle,hero_hp,Int32,,0x0D,0,int: hero HP
+699,SaveTitle,face1_name,String,,0x15,,char[]: face filename
+700,SaveTitle,face1_id,Int32,,0x16,0,int: face id
+701,SaveTitle,face2_name,String,,0x17,,char[]: face filename
+702,SaveTitle,face2_id,Int32,,0x18,0,int: face id
+703,SaveTitle,face3_name,String,,0x19,,char[]: face filename
+704,SaveTitle,face3_id,Int32,,0x1A,0,int: face id
+705,SaveTitle,face4_name,String,,0x1B,,char[]: face filename
+706,SaveTitle,face4_id,Int32,,0x1C,0,int: face id
+707,SaveSystem,scene,Int32,,0x01,0,The current Scene for RPG_RT. Legacy field only used by RPG_RT and not by EasyRPG Player. Savegames always have a scene of 5 (filemenu).
+708,SaveSystem,frame_count,Int32,,0x0B,0,
+709,SaveSystem,graphics_name,String,,0x15,'',string
+710,SaveSystem,message_stretch,Int32,,0x16,-1,Integer
+711,SaveSystem,font_id,Int32,,0x17,0,Integer
+712,SaveSystem,switches,SizeField,,0x1F,0,
+713,SaveSystem,switches,Boolean,Vector,0x20,,
+714,SaveSystem,variables,SizeField,,0x21,0,
+715,SaveSystem,variables,Int32LittleEndian,Vector,0x22,,
+716,SaveSystem,message_transparent,Int32,,0x29,0,
+717,SaveSystem,message_position,Int32,,0x2A,2,
+718,SaveSystem,message_prevent_overlap,Int32,,0x2B,1,
+719,SaveSystem,message_continue_events,Int32,,0x2C,0,
+720,SaveSystem,face_name,String,,0x33,'',
+721,SaveSystem,face_id,Int32,,0x34,0,
+722,SaveSystem,face_right,Boolean,,0x35,False,bool
+723,SaveSystem,face_flip,Boolean,,0x36,False,bool
+724,SaveSystem,transparent,Boolean,,0x37,False,
+725,SaveSystem,music_stopping,Boolean,,0x3D,False,Music is being faded out or had been stopped (Play music with the same music as currently playing will restart the music when this flag is set)
+726,SaveSystem,title_music,Music,,0x47,,
+727,SaveSystem,battle_music,Music,,0x48,,
+728,SaveSystem,battle_end_music,Music,,0x49,,
+729,SaveSystem,inn_music,Music,,0x4A,,
+730,SaveSystem,current_music,Music,,0x4B,,
+731,SaveSystem,before_vehicle_music,Music,,0x4C,,
+732,SaveSystem,before_battle_music,Music,,0x4D,,
+733,SaveSystem,stored_music,Music,,0x4E,,
+734,SaveSystem,boat_music,Music,,0x4F,,
+735,SaveSystem,ship_music,Music,,0x50,,
+736,SaveSystem,airship_music,Music,,0x51,,
+737,SaveSystem,gameover_music,Music,,0x52,,
+738,SaveSystem,cursor_se,Sound,,0x5B,,
+739,SaveSystem,decision_se,Sound,,0x5C,,
+740,SaveSystem,cancel_se,Sound,,0x5D,,
+741,SaveSystem,buzzer_se,Sound,,0x5E,,
+742,SaveSystem,battle_se,Sound,,0x5F,,
+743,SaveSystem,escape_se,Sound,,0x60,,
+744,SaveSystem,enemy_attack_se,Sound,,0x61,,
+745,SaveSystem,enemy_damaged_se,Sound,,0x62,,
+746,SaveSystem,actor_damaged_se,Sound,,0x63,,
+747,SaveSystem,dodge_se,Sound,,0x64,,
+748,SaveSystem,enemy_death_se,Sound,,0x65,,
+749,SaveSystem,item_se,Sound,,0x66,,
+750,SaveSystem,transition_out,Int8,,0x6F,1,
+751,SaveSystem,transition_in,Int8,,0x70,1,
+752,SaveSystem,battle_start_fadeout,Int8,,0x71,1,
+753,SaveSystem,battle_start_fadein,Int8,,0x72,1,
+754,SaveSystem,battle_end_fadeout,Int8,,0x73,1,
+755,SaveSystem,battle_end_fadein,Int8,,0x74,1,
+756,SaveSystem,teleport_allowed,Boolean,,0x79,True,
+757,SaveSystem,escape_allowed,Boolean,,0x7A,True,
+758,SaveSystem,save_allowed,Boolean,,0x7B,True,
+759,SaveSystem,menu_allowed,Boolean,,0x7C,True,
+760,SaveSystem,background,String,,0x7D,,string
+761,SaveSystem,save_count,Int32,,0x83,0,
+762,SaveSystem,save_slot,Int32,,0x84,1,
+763,SaveSystem,atb_mode,Int32,,0x8C,0,ATB mode of RPG 2003 battle system.
+764,SaveScreen,tint_finish_red,Int32,,0x01,100,int
+765,SaveScreen,tint_finish_green,Int32,,0x02,100,int
+766,SaveScreen,tint_finish_blue,Int32,,0x03,100,int
+767,SaveScreen,tint_finish_sat,Int32,,0x04,100,int
+768,SaveScreen,tint_current_red,Double,,0x0B,100.0,double
+769,SaveScreen,tint_current_green,Double,,0x0C,100.0,double
+770,SaveScreen,tint_current_blue,Double,,0x0D,100.0,double
+771,SaveScreen,tint_current_sat,Double,,0x0E,100.0,double
+772,SaveScreen,tint_time_left,Int32,,0x0F,0,int
+773,SaveScreen,flash_continuous,Boolean,,0x14,False,int
+774,SaveScreen,flash_red,Int32,,0x15,0,int
+775,SaveScreen,flash_green,Int32,,0x16,0,int
+776,SaveScreen,flash_blue,Int32,,0x17,0,int
+777,SaveScreen,flash_current_level,Double,,0x18,0.0,double
+778,SaveScreen,flash_time_left,Int32,,0x19,0,int
+779,SaveScreen,shake_continuous,Boolean,,0x1E,False,int
+780,SaveScreen,shake_strength,Int32,,0x1F,0,int
+781,SaveScreen,shake_speed,Int32,,0x20,0,int
+782,SaveScreen,shake_position,Int32,,0x21,0,int
+783,SaveScreen,shake_position_y,Int32,,0x22,0,int - unused
+784,SaveScreen,shake_time_left,Int32,,0x23,0,int
+785,SaveScreen,pan_x,Int32,,0x29,0,int
+786,SaveScreen,pan_y,Int32,,0x2A,0,int
+787,SaveScreen,battleanim_id,Int32,,0x2B,0,int - battle animation ID
+788,SaveScreen,battleanim_target,Int32,,0x2C,0,int - battle animation target
+789,SaveScreen,battleanim_frame,Int32,,0x2D,0,int - frame count - Ref<Animation>? FIXME
+790,SaveScreen,battleanim_active,Boolean,,0x2E,False,There is currently a battle animation playing
+791,SaveScreen,battleanim_global,Boolean,,0x2F,False,int - battle animation global scope
+792,SaveScreen,weather,Int32,,0x30,0,int
+793,SaveScreen,weather_strength,Int32,,0x31,0,int
+794,SavePicture,name,String,,0x01,'',string
+795,SavePicture,start_x,Double,,0x02,0.0,double
+796,SavePicture,start_y,Double,,0x03,0.0,double
+797,SavePicture,current_x,Double,,0x04,0.0,double
+798,SavePicture,current_y,Double,,0x05,0.0,double
+799,SavePicture,fixed_to_map,Boolean,,0x06,False,bool
+800,SavePicture,current_magnify,Double,,0x07,-1.0,double
+801,SavePicture,current_top_trans,Double,,0x08,0.0,double
+802,SavePicture,transparency,Boolean,,0x09,False,bool
+803,SavePicture,current_red,Double,,0x0B,-1.0,double
+804,SavePicture,current_green,Double,,0x0C,-1.0,double
+805,SavePicture,current_blue,Double,,0x0D,-1.0,double
+806,SavePicture,current_sat,Double,,0x0E,-1.0,double
+807,SavePicture,effect_mode,Int32,,0x0F,0,int
+808,SavePicture,current_effect,Double,,0x10,0.0,double
+809,SavePicture,current_bot_trans,Double,,0x12,0.0,double
+810,SavePicture,spritesheet_cols,Int32,,0x13,1,Spritesheet columns
+811,SavePicture,spritesheet_rows,Int32,,0x14,1,Spritesheet rows
+812,SavePicture,spritesheet_frame,Int32,,0x15,0,Current spritesheet frame
+813,SavePicture,spritesheet_speed,Int32,,0x16,0,Spritesheet speed (X frames per second)
+814,SavePicture,frames,Int32,,0x17,0,Frames since ShowPicture
+815,SavePicture,spritesheet_play_once,Boolean,,0x18,False,True: Play once and destroy; False: Loop spritesheet
+816,SavePicture,map_layer,Int32,,0x19,7,Layer to show picture on at the map
+817,SavePicture,battle_layer,Int32,,0x1A,0,Layer to show picture on in battle
+818,SavePicture,flags,SavePicture_Flags,,0x1B,97,Bitflag. Persists Map/Battle change/end; Affected by Shake/Flash/Tint
+819,SavePicture,finish_x,Double,,0x1F,0.0,double
+820,SavePicture,finish_y,Double,,0x20,0.0,double
+821,SavePicture,finish_magnify,Int32,,0x21,100,int
+822,SavePicture,finish_top_trans,Int32,,0x22,0,int
+823,SavePicture,finish_bot_trans,Int32,,0x23,0,int
+824,SavePicture,finish_red,Int32,,0x29,100,int
+825,SavePicture,finish_green,Int32,,0x2A,100,int
+826,SavePicture,finish_blue,Int32,,0x2B,100,int
+827,SavePicture,finish_sat,Int32,,0x2C,100,int
+828,SavePicture,finish_effect,Int32,,0x2E,0,int
+829,SavePicture,time_left,Int32,,0x33,0,int
+830,SavePicture,current_rotation,Double,,0x34,0.0,double
+831,SavePicture,current_waver,Int32,,0x35,0,int
+832,SavePartyLocation,active,Boolean,,0x01,True,Flag
+833,SavePartyLocation,map_id,Int32,,0x0B,-1,?
+834,SavePartyLocation,position_x,Int32,,0x0C,-1,?
+835,SavePartyLocation,position_y,Int32,,0x0D,-1,?
+836,SavePartyLocation,direction,Int32,,0x15,2,Facing direction
+837,SavePartyLocation,sprite_direction,Int32,,0x16,2,Sprite direction
+838,SavePartyLocation,anim_frame,Int32,,0x17,1,?
+839,SavePartyLocation,transparency,Int32,,0x18,0,0 or 3 - Transparency level of the main party member
+840,SavePartyLocation,remaining_step,Int32,,0x1F,0,From 0 to 255 - Remaining distance of the current move
+841,SavePartyLocation,move_frequency,Int32,,0x20,2,?
+842,SavePartyLocation,layer,Int32,,0x21,1,?
+843,SavePartyLocation,overlap_forbidden,Boolean,,0x22,False,Flag
+844,SavePartyLocation,animation_type,Int32,,0x23,1,Integer
+845,SavePartyLocation,lock_facing,Boolean,,0x24,False,facing locked
+846,SavePartyLocation,move_speed,Int32,,0x25,4,
+847,SavePartyLocation,move_route,MoveRoute,,0x29,,chunks: RPG::MoveRoute
+848,SavePartyLocation,move_route_overwrite,Boolean,,0x2A,False,Use custom move route
+849,SavePartyLocation,move_route_index,Int32,,0x2B,0,Index of MoveEvent command route
+850,SavePartyLocation,move_route_repeated,Boolean,,0x2C,False,Boolean - Repeating move route has been completed at least once
+851,SavePartyLocation,sprite_transparent,Boolean,,0x2E,False,bool
+852,SavePartyLocation,route_through,Boolean,,0x2F,False,Whether the move route (MoveEvent or defined route) activated through mode. Almost the same as 0x33 (through). 0x2F represents that by MoveEvent the through mode has been activated; but 0x33 is what's actually checked for collisions. In several cases; 0x33 will be changed to indicate a condition in which an event or the hero is in through mode through other means than a MoveEvent; which can be: an event with an empty page being activated; player pressing Ctrl in test play; hero entering or exiting a vehicle (only very briefly)
+853,SavePartyLocation,anim_paused,Int32,,0x30,0,?
+854,SavePartyLocation,through,Boolean,,0x33,False,Can go through anything
+855,SavePartyLocation,stop_count,Int32,,0x34,0,?
+856,SavePartyLocation,anim_count,Int32,,0x35,0,?
+857,SavePartyLocation,max_stop_count,Int32,,0x36,0,2^move_frequency - Once stop_count reaches it; the next move command is executed
+858,SavePartyLocation,jumping,Boolean,,0x3D,False,?
+859,SavePartyLocation,begin_jump_x,Int32,,0x3E,0,?
+860,SavePartyLocation,begin_jump_y,Int32,,0x3F,0,?
+861,SavePartyLocation,pause,Boolean,,0x47,False,Indicates paused movement for an event; set while the player is talking to the event so that it won't run away (not relevant for hero themselves)
+862,SavePartyLocation,flying,Boolean,,0x48,False,Flag
+863,SavePartyLocation,sprite_name,String,,0x49,'',?
+864,SavePartyLocation,sprite_id,Int32,,0x4A,0,?
+865,SavePartyLocation,processed,Boolean,,0x4B,False,Flag whether an event (the hero is also an event) in the current frame processed their movement actions (may also be none). This is required because events are asked every frame to initiate their next movement step if required; but not necessarily in order; because checking passability for an event trying to move onto another tile will trigger any event's movement initiation which is on the target tile (because this way the target event may move away; allowing the other event to move to that tile). This flag ensures that every event processes their possible movements only once per frame even if it was already asked to do so out of order as part of another event's movement initiation.
+866,SavePartyLocation,flash_red,Int32,,0x51,100,int
+867,SavePartyLocation,flash_green,Int32,,0x52,100,int
+868,SavePartyLocation,flash_blue,Int32,,0x53,100,int
+869,SavePartyLocation,flash_current_level,Double,,0x54,0.0,double
+870,SavePartyLocation,flash_time_left,Int32,,0x55,0,int
+871,SavePartyLocation,boarding,Boolean,,0x65,False,
+872,SavePartyLocation,aboard,Boolean,,0x66,False,
+873,SavePartyLocation,vehicle,Int32,,0x67,0,Vehicle in use
+874,SavePartyLocation,unboarding,Boolean,,0x68,False,
+875,SavePartyLocation,preboard_move_speed,Int32,,0x69,4,Move speed before the party boarded the vehicle
+876,SavePartyLocation,menu_calling,Boolean,,0x6C,False,Flag which briefly is true if the player presses ESC. At the right place in handling each frame's activities for the player; the code checks whether this flag is set and calls the menu; however there are several conditions which would cancel this flag and instead process another higher-priority action; such as when an encounter takes place during the same frame.
+877,SavePartyLocation,pan_state,Int32,,0x6f,1,0: screen is fixed; 1: screen moves with player.
+878,SavePartyLocation,pan_current_x,Int32,,0x70,2304,Number of 1/16 pixels to the left of player
+879,SavePartyLocation,pan_current_y,Int32,,0x71,1792,Number of 1/16 pixels above the player
+880,SavePartyLocation,pan_finish_x,Int32,,0x72,2304,Number of 1/16 pixels to the left of player when current scroll finishes
+881,SavePartyLocation,pan_finish_y,Int32,,0x73,1792,Number of 1/16 pixels above the player when current scroll finishes.
+882,SavePartyLocation,pan_speed,Int32,,0x79,16,speed in the scrolls of the screen - shown in sixteenth pixels.
+883,SavePartyLocation,encounter_steps,Int32,,0x7C,0,int: sum of terrain.encounter_rate for each step
+884,SavePartyLocation,encounter_calling,Boolean,,0x7D,False,Similar to 0x6C - is used to signal a different piece of code that an encounter is to be triggered; which may be cancelled by other conditions such as the player starting to interact with an event during the same frame.
+885,SavePartyLocation,map_save_count,Int32,,0x83,0,Mirrors save_count of current map. On mismatch events are not continued after load.
+886,SavePartyLocation,database_save_count,Int32,,0x84,0,?
+887,SaveVehicleLocation,active,Boolean,,0x01,True,Flag
+888,SaveVehicleLocation,map_id,Int32,,0x0B,-1,?
+889,SaveVehicleLocation,position_x,Int32,,0x0C,-1,?
+890,SaveVehicleLocation,position_y,Int32,,0x0D,-1,?
+891,SaveVehicleLocation,direction,Int32,,0x15,2,Facing direction
+892,SaveVehicleLocation,sprite_direction,Int32,,0x16,2,Sprite direction
+893,SaveVehicleLocation,anim_frame,Int32,,0x17,1,?
+894,SaveVehicleLocation,transparency,Int32,,0x18,0,always 0
+895,SaveVehicleLocation,remaining_step,Int32,,0x1F,0,From 0 to 255 - Remaining distance of the current move
+896,SaveVehicleLocation,move_frequency,Int32,,0x20,2,?
+897,SaveVehicleLocation,layer,Int32,,0x21,1,?
+898,SaveVehicleLocation,overlap_forbidden,Boolean,,0x22,False,Flag
+899,SaveVehicleLocation,animation_type,Int32,,0x23,1,
+900,SaveVehicleLocation,lock_facing,Boolean,,0x24,False,facing locked
+901,SaveVehicleLocation,move_speed,Int32,,0x25,-1,
+902,SaveVehicleLocation,move_route,MoveRoute,,0x29,,chunks: RPG::MoveRoute
+903,SaveVehicleLocation,move_route_overwrite,Boolean,,0x2A,False,Use custom move route
+904,SaveVehicleLocation,move_route_index,Int32,,0x2B,0,Index of MoveEvent command route
+905,SaveVehicleLocation,move_route_repeated,Boolean,,0x2C,False,Boolean - Repeating move route has been completed at least once
+906,SaveVehicleLocation,anim_paused,Int32,,0x30,0,?
+907,SaveVehicleLocation,through,Boolean,,0x33,False,Can go through anything
+908,SaveVehicleLocation,stop_count,Int32,,0x34,0,?
+909,SaveVehicleLocation,anim_count,Int32,,0x35,0,?
+910,SaveVehicleLocation,max_stop_count,Int32,,0x36,0,2^move_frequency - Once stop_count reaches it; the next move command is executed
+911,SaveVehicleLocation,jumping,Boolean,,0x3D,False,?
+912,SaveVehicleLocation,begin_jump_x,Int32,,0x3E,0,?
+913,SaveVehicleLocation,begin_jump_y,Int32,,0x3F,0,?
+914,SaveVehicleLocation,pause,Boolean,,0x47,False,Indicates paused movement for an event; set while the player is talking to the event so that it won't run away (not relevant for vehicles themselves)
+915,SaveVehicleLocation,flying,Boolean,,0x48,False,Flag
+916,SaveVehicleLocation,sprite_name,String,,0x49,'',?
+917,SaveVehicleLocation,sprite_id,Int32,,0x4A,0,?
+918,SaveVehicleLocation,processed,Boolean,,0x4B,False,Flag whether an event (the hero is also an event) in the current frame processed their movement actions (may also be none). This is required because events are asked every frame to initiate their next movement step if required; but not necessarily in order; because checking passability for an event trying to move onto another tile will trigger any event's movement initiation which is on the target tile (because this way the target event may move away; allowing the other event to move to that tile). This flag ensures that every event processes their possible movements only once per frame even if it was already asked to do so out of order as part of another event's movement initiation.
+919,SaveVehicleLocation,flash_red,Int32,,0x51,100,int
+920,SaveVehicleLocation,flash_green,Int32,,0x52,100,int
+921,SaveVehicleLocation,flash_blue,Int32,,0x53,100,int
+922,SaveVehicleLocation,flash_current_level,Double,,0x54,0.0,double
+923,SaveVehicleLocation,flash_time_left,Int32,,0x55,0,int
+924,SaveVehicleLocation,vehicle,Int32,,0x65,0,Which vehicle
+925,SaveVehicleLocation,original_move_route_index,Int32,,0x66,0,Index of custom move route
+926,SaveVehicleLocation,remaining_ascent,Int32,,0x6A,0,From 0 to 255 - In flying vehicles; remaining distance to ascend
+927,SaveVehicleLocation,remaining_descent,Int32,,0x6B,0,From 0 to 255 - In flying vehicles; remaining distance to descend
+928,SaveVehicleLocation,sprite2_name,String,,0x6F,'',string
+929,SaveVehicleLocation,sprite2_id,Int32,,0x70,0,int
+930,SaveActor,name,String,,0x01,'',string
+931,SaveActor,title,String,,0x02,'',string
+932,SaveActor,sprite_name,String,,0x0B,'',string
+933,SaveActor,sprite_id,Int32,,0x0C,0,int
+934,SaveActor,sprite_flags,Int32,,0x0D,0,int
+935,SaveActor,face_name,String,,0x15,'',string
+936,SaveActor,face_id,Int32,,0x16,0,int
+937,SaveActor,level,Int32,,0x1F,-1,int
+938,SaveActor,exp,Int32,,0x20,-1,int
+939,SaveActor,hp_mod,Int32,,0x21,-1,?
+940,SaveActor,sp_mod,Int32,,0x22,-1,?
+941,SaveActor,attack_mod,Int32,,0x29,0,int
+942,SaveActor,defense_mod,Int32,,0x2A,0,int
+943,SaveActor,spirit_mod,Int32,,0x2B,0,int
+944,SaveActor,agility_mod,Int32,,0x2C,0,int
+945,SaveActor,skills_size,Int32,,0x33,-1,?
+946,SaveActor,skills,Int16,Vector,0x34,,short[]
+947,SaveActor,equipped,Int16,Vector,0x3D,,short[5]
+948,SaveActor,current_hp,Int32,,0x47,-1,int
+949,SaveActor,current_sp,Int32,,0x48,-1,int
+950,SaveActor,battle_commands,UInt32,Tuple_7,0x50,,array of (uncompressed) int32
+951,SaveActor,status,SizeField,,0x51,0,?
+952,SaveActor,status,Int16,Vector,0x52,,array of short
+953,SaveActor,changed_battle_commands,Boolean,,0x53,False,bool
+954,SaveActor,class_id,Int32,,0x5A,-1,int class-id
+955,SaveActor,row,Int32,,0x5B,0,RPG2003 Battle row (-1 Back; 1 Front)
+956,SaveActor,two_weapon,Boolean,,0x5C,False,bool
+957,SaveActor,lock_equipment,Boolean,,0x5D,False,bool
+958,SaveActor,auto_battle,Boolean,,0x5E,False,bool
+959,SaveActor,super_guard,Boolean,,0x5F,False,bool
+960,SaveActor,battler_animation,Int32,,0x60,0,Integer - RPG2003
+961,SaveInventory,party_size,Int32,,0x01,-1,?
+962,SaveInventory,party,Int16,Vector,0x02,,?
+963,SaveInventory,items_size,Int32,,0x0B,-1,?
+964,SaveInventory,item_ids,Int16,Vector,0x0C,,short[]: item list
+965,SaveInventory,item_counts,UInt8,Vector,0x0D,,?
+966,SaveInventory,item_usage,UInt8,Vector,0x0E,,?
+967,SaveInventory,gold,Int32,,0x15,0,int
+968,SaveInventory,timer1_secs,Int32,,0x17,0,int
+969,SaveInventory,timer1_active,Boolean,,0x18,False,bool
+970,SaveInventory,timer1_visible,Boolean,,0x19,False,bool
+971,SaveInventory,timer1_battle,Boolean,,0x1A,False,bool
+972,SaveInventory,timer2_secs,Int32,,0x1B,0,int
+973,SaveInventory,timer2_active,Boolean,,0x1C,False,bool
+974,SaveInventory,timer2_visible,Boolean,,0x1D,False,bool
+975,SaveInventory,timer2_battle,Boolean,,0x1E,False,bool
+976,SaveInventory,battles,Int32,,0x20,0,?
+977,SaveInventory,defeats,Int32,,0x21,0,?
+978,SaveInventory,escapes,Int32,,0x22,0,?
+979,SaveInventory,victories,Int32,,0x23,0,?
+980,SaveInventory,turns,Int32,,0x29,0,Number of turns passed in the latest battle fought. RPG2000: 'turn' passes after every character (enemies and heroes both) performed an action each. RPG2003: every time a hero or enemy performs an action that is considered a 'turn'.
+981,SaveInventory,steps,Int32,,0x2A,0,Number of steps taken in the field.
+982,SaveTarget,map_id,Int32,,0x01,0,int
+983,SaveTarget,map_x,Int32,,0x02,0,int
+984,SaveTarget,map_y,Int32,,0x03,0,int
+985,SaveTarget,switch_on,Boolean,,0x04,False,bool
+986,SaveTarget,switch_id,Int32,,0x05,0,int
+987,SaveEventCommands,commands_size,Int32,,0x01,0,int
+988,SaveEventCommands,commands,EventCommand,Vector,0x02,,event command list
+989,SaveEventCommands,current_command,Int32,,0x0B,0,int
+990,SaveEventCommands,event_id,Int32,,0x0C,0,0 if it's common event or in other map
+991,SaveEventCommands,actioned,Boolean,,0x0D,False,Event was triggered by the Action Key
+992,SaveEventCommands,subcommand_path,SizeField,,0x15,0,size of the 0x16 vector - indention level
+993,SaveEventCommands,subcommand_path,UInt8,Vector,0x16,,byte For each indention level in the script; an ID is stored there which corresponds to the branch to take in case a command allows multiple branches. For example; the Show Choice command would write the result of the choice (for example 2 for the third item) into the current indention level's entry in this array; and the script processor would later look for the Case subcommand with the corresponding ID; if any; and jump to that one (if none found; it would jump to the End Case subcommand). Once the jump is executed; the ID is set to 255 (probably a protection mechanism even though there should normally not be multiple subcommands with the same ID).
+994,SaveEventData,commands,SaveEventCommands,Array,0x01,,array
+995,SaveEventData,show_message,Boolean,,0x04,False,Show Message command has been executed in the current move route
+996,SaveEventData,abort_on_escape,Boolean,,0x0B,False,Flag which is set before a fight if the EnemyEncounter event command had battle_escape_mode set to 1 (abort event on escape). After the fight; the interpreter checks if the battle result was an escape and this flag was set and abort the event in that case.
+997,SaveEventData,wait_movement,Boolean,,0x0D,False,Whether Wait for all movement is in effect
+998,SaveEventData,keyinput_wait,Boolean,,0x15,False,
+999,SaveEventData,keyinput_variable,UInt8,,0x16,0,
+1000,SaveEventData,keyinput_all_directions,Boolean,,0x17,False,
+1001,SaveEventData,keyinput_decision,Boolean,,0x18,False,
+1002,SaveEventData,keyinput_cancel,Boolean,,0x19,False,
+1003,SaveEventData,keyinput_numbers,Boolean,,0x1A,False,In RM2k Value this is keyinput_shift
+1004,SaveEventData,keyinput_operators,Boolean,,0x1B,False,In Value keyinput_down
+1005,SaveEventData,keyinput_shift,Boolean,,0x1C,False,In Value keyinput_left
+1006,SaveEventData,keyinput_value_right,Boolean,,0x1D,False,Only in Value
+1007,SaveEventData,keyinput_value_up,Boolean,,0x1E,False,Only in Value
+1008,SaveEventData,wait_time,Int32,,0x1F,0,int
+1009,SaveEventData,keyinput_time_variable,Int32,,0x20,-1,
+1010,SaveEventData,keyinput_down,Boolean,,0x23,False,
+1011,SaveEventData,keyinput_left,Boolean,,0x24,False,
+1012,SaveEventData,keyinput_right,Boolean,,0x25,False,
+1013,SaveEventData,keyinput_up,Boolean,,0x26,False,
+1014,SaveEventData,keyinput_timed,Boolean,,0x29,False,
+1015,SaveEventData,unused_wait_for_key_or_enter,Boolean,,0x2a,False,If enabled; an event waits for either the confirmation key to be pressed or one of the keys defined by KeyInputProc before continuing. This flag seems to be unused though since it is never written to (keyinput_wait is used instead).
+1016,SaveMapEvent,active,Boolean,,0x01,True,Flag
+1017,SaveMapEvent,map_id,Int32,,0x0B,-1,?
+1018,SaveMapEvent,position_x,Int32,,0x0C,-1,?
+1019,SaveMapEvent,position_y,Int32,,0x0D,-1,?
+1020,SaveMapEvent,direction,Int32,,0x15,2,Facing direction
+1021,SaveMapEvent,sprite_direction,Int32,,0x16,2,Sprite direction
+1022,SaveMapEvent,anim_frame,Int32,,0x17,1,?
+1023,SaveMapEvent,transparency,Int32,,0x18,0,0 or 3 - Transparency level of the current event page
+1024,SaveMapEvent,remaining_step,Int32,,0x1F,0,From 0 to 255 - Remaining distance of the current move
+1025,SaveMapEvent,move_frequency,Int32,,0x20,2,?
+1026,SaveMapEvent,layer,Int32,,0x21,1,?
+1027,SaveMapEvent,overlap_forbidden,Boolean,,0x22,False,Flag
+1028,SaveMapEvent,animation_type,Int32,,0x23,1,
+1029,SaveMapEvent,lock_facing,Boolean,,0x24,False,facing locked
+1030,SaveMapEvent,move_speed,Int32,,0x25,-1,
+1031,SaveMapEvent,move_route,MoveRoute,,0x29,,chunks: RPG::MoveRoute
+1032,SaveMapEvent,move_route_overwrite,Boolean,,0x2A,False,Use custom move route
+1033,SaveMapEvent,move_route_index,Int32,,0x2B,0,Index of MoveEvent command route
+1034,SaveMapEvent,move_route_repeated,Boolean,,0x2C,False,Boolean - Repeating move route has been completed at least once
+1035,SaveMapEvent,route_through,Boolean,,0x2F,False,Whether the move route (MoveEvent or defined route) activated through mode. Almost the same as 0x33 (through). 0x2F represents that by MoveEvent the through mode has been activated; but 0x33 is what's actually checked for collisions. In several cases; 0x33 will be changed to indicate a condition in which an event or the hero is in through mode through other means than a MoveEvent; which can be: an event with an empty page being activated; player pressing Ctrl in test play; hero entering or exiting a vehicle (only very briefly)
+1036,SaveMapEvent,anim_paused,Int32,,0x30,0,?
+1037,SaveMapEvent,through,Boolean,,0x33,False,Can go through anything
+1038,SaveMapEvent,stop_count,Int32,,0x34,0,?
+1039,SaveMapEvent,anim_count,Int32,,0x35,0,?
+1040,SaveMapEvent,max_stop_count,Int32,,0x36,0,2^move_frequency unless it's a random move route - Once stop_count reaches it; the next move command is executed
+1041,SaveMapEvent,jumping,Boolean,,0x3D,False,?
+1042,SaveMapEvent,begin_jump_x,Int32,,0x3E,0,?
+1043,SaveMapEvent,begin_jump_y,Int32,,0x3F,0,?
+1044,SaveMapEvent,pause,Boolean,,0x47,False,Indicates paused movement for an event; set while the player is talking to the event so that it won't run away
+1045,SaveMapEvent,flying,Boolean,,0x48,False,Flag
+1046,SaveMapEvent,sprite_name,String,,0x49,'',?
+1047,SaveMapEvent,sprite_id,Int32,,0x4A,-1,?
+1048,SaveMapEvent,processed,Boolean,,0x4B,False,Flag whether an event (the hero is also an event) in the current frame processed their movement actions (may also be none). This is required because events are asked every frame to initiate their next movement step if required; but not necessarily in order; because checking passability for an event trying to move onto another tile will trigger any event's movement initiation which is on the target tile (because this way the target event may move away; allowing the other event to move to that tile). This flag ensures that every event processes their possible movements only once per frame even if it was already asked to do so out of order as part of another event's movement initiation.
+1049,SaveMapEvent,flash_red,Int32,,0x51,100,int
+1050,SaveMapEvent,flash_green,Int32,,0x52,100,int
+1051,SaveMapEvent,flash_blue,Int32,,0x53,100,int
+1052,SaveMapEvent,flash_current_level,Double,,0x54,0.0,double
+1053,SaveMapEvent,flash_time_left,Int32,,0x55,0,int
+1054,SaveMapEvent,running,Boolean,,0x65,False,?
+1055,SaveMapEvent,original_move_route_index,Int32,,0x66,0,Index of custom move route
+1056,SaveMapEvent,pending,Boolean,,0x67,False,If true; this event will run after the current running event stops running. FIXME: See issue #174
+1057,SaveMapEvent,event_data,SaveEventData,,0x6C,,chunks
+1058,SaveMapInfo,position_x,Int32,,0x01,0,int
+1059,SaveMapInfo,position_y,Int32,,0x02,0,int
+1060,SaveMapInfo,encounter_rate,Int32,,0x03,-1,int
+1061,SaveMapInfo,chipset_id,Int32,,0x05,-1,int
+1062,SaveMapInfo,events,SaveMapEvent,Array,0x0B,,? array
+1063,SaveMapInfo,lower_tiles,UInt8,Vector,0x15,,? [00 01 02 ... 8E 8F]
+1064,SaveMapInfo,upper_tiles,UInt8,Vector,0x16,,
+1065,SaveMapInfo,parallax_name,String,,0x20,'',string
+1066,SaveMapInfo,parallax_horz,Boolean,,0x21,False,bool
+1067,SaveMapInfo,parallax_vert,Boolean,,0x22,False,bool
+1068,SaveMapInfo,parallax_horz_auto,Boolean,,0x23,False,bool
+1069,SaveMapInfo,parallax_horz_speed,Int32,,0x24,0,int
+1070,SaveMapInfo,parallax_vert_auto,Boolean,,0x25,False,bool
+1071,SaveMapInfo,parallax_vert_speed,Int32,,0x26,0,int
+1072,SaveCommonEvent,event_data,SaveEventData,,0x01,,chunks
+1073,SavePanorama,pan_x,Int32,,0x01,0,Panorama X position
+1074,SavePanorama,pan_y,Int32,,0x02,0,Panorama Y position
+1075,Save,title,SaveTitle,,0x64,,RPG::SaveTitle
+1076,Save,system,SaveSystem,,0x65,,RPG::SaveSystem
+1077,Save,screen,SaveScreen,,0x66,,RPG::SaveScreen
+1078,Save,pictures,SavePicture,Array,0x67,,array of RPG::SavePicture
+1079,Save,party_location,SavePartyLocation,,0x68,,RPG::SavePartyLocation
+1080,Save,boat_location,SaveVehicleLocation,,0x69,,RPG::SaveVehicleLocation
+1081,Save,ship_location,SaveVehicleLocation,,0x6A,,RPG::SaveVehicleLocation
+1082,Save,airship_location,SaveVehicleLocation,,0x6B,,RPG::SaveVehicleLocation
+1083,Save,actors,SaveActor,Array,0x6C,,array of RPG::SaveActor
+1084,Save,inventory,SaveInventory,,0x6D,,RPG::SaveInventory
+1085,Save,targets,SaveTarget,Array,0x6E,,array of RPG::SaveTarget
+1086,Save,map_info,SaveMapInfo,,0x6F,,RPG::SaveMapInfo
+1087,Save,panorama,SavePanorama,,0x70,,Used to store panorama position data. Used by RPG_RT 2k3 1.12 in other versions an empty object.
+1088,Save,events,SaveEventData,,0x71,,RPG::SaveEventData
+1089,Save,common_events,SaveCommonEvent,Array,0x72,,array of RPG::SaveCommonEvent
+1090,Equipment,weapon_id,Int16,,,0,
+1091,Equipment,shield_id,Int16,,,0,
+1092,Equipment,armor_id,Int16,,,0,
+1093,Equipment,helmet_id,Int16,,,0,
+1094,Equipment,accessory_id,Int16,,,0,
+1095,EventCommand,code,Int32,,,0,
+1096,EventCommand,indent,Int32,,,0,
+1097,EventCommand,string,String,,,'',
+1098,EventCommand,parameters,Int32,List,,,
+1099,MoveCommand,command_id,Int32,,,0,
+1100,MoveCommand,parameter_string,String,,,'',
+1101,MoveCommand,parameter_a,Int32,,,0,
+1102,MoveCommand,parameter_b,Int32,,,0,
+1103,MoveCommand,parameter_c,Int32,,,0,
+1104,Parameters,maxhp,Int16,Tuple_99,,,
+1105,Parameters,maxsp,Int16,Tuple_99,,,
+1106,Parameters,attack,Int16,Tuple_99,,,
+1107,Parameters,defense,Int16,Tuple_99,,,
+1108,Parameters,spirit,Int16,Tuple_99,,,
+1109,Parameters,agility,Int16,Tuple_99,,,
+1110,Rect,l,UInt32,,,0,
+1111,Rect,t,UInt32,,,0,
+1112,Rect,r,UInt32,,,0,
+1113,Rect,b,UInt32,,,0,
+1114,TreeMap,maps,MapInfo,Array,,,
+1115,TreeMap,tree_order,Int32,List,,,
+1116,TreeMap,active_node,Int32,,,0,
+1117,TreeMap,start,Start,,,,
