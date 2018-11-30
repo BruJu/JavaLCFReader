@@ -87,9 +87,13 @@ public class LCFCarte implements RMMap {
 		if (evenements == null) {
 			String cheminComplet = lecteurDeLCF.racine + "Map" + String.format("%04d", id) + ".lmu";
 			EnsembleDeDonnees map = EnsembleDeDonnees.lireFichier(cheminComplet);
+
+			if (map == null) { // Map présente dans lmt mais sans fichier lmu
+				evenements = new HashMap<>();
+				return;
+			}
+
 			Map<Integer, EnsembleDeDonnees> events = map.getDonnee("events", Map.class);
-			
-			
 			evenements = new HashMap<>();
 			events.entrySet().forEach(entree -> evenements.put(entree.getKey(), new LCFEvenement(entree)));
 		}
